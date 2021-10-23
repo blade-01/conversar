@@ -1,30 +1,84 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <router-view />
 </template>
 
+<script>
+export default {};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+@import "@/scss/global.scss";
+body {
+  font-family: $font;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  color: $pri-color;
+  background: $main-bg;
+  font-size: 13px;
 }
 
-#nav {
-  padding: 30px;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+a {
+  font-weight: bold;
+  color: $sec-color;
+  &.router-link-exact-active {
+    color: #42b983;
+  }
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+svg {
+  width: 20px;
+  cursor: pointer;
+}
+
+img {
+  width: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.hide-on-sm {
+  display: none;
+}
+
+.hide-on-lg {
+  display: block;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 700px) {
+  .container {
+    width: 80%;
+  }
+  .hide-on-sm {
+    display: block;
+  }
+  .hide-on-lg {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .container {
+    width: 1000px;
   }
 }
 </style>
