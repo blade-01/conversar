@@ -6,6 +6,7 @@
         <p>Animashaun Taofiq</p>
       </div>
       <svg
+        @click="signOut"
         class="w-6 h-6"
         fill="none"
         stroke="currentColor"
@@ -24,7 +25,12 @@
 </template>
 
 <script>
-export default {};
+import { mapActions } from "vuex";
+export default {
+  methods: {
+    ...mapActions(["signOut"]),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
