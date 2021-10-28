@@ -37,6 +37,10 @@ svg {
   cursor: pointer;
 }
 
+button {
+  cursor: pointer;
+}
+
 img {
   width: 100%;
 }

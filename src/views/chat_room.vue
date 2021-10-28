@@ -7,6 +7,7 @@
     />
     <mainbar @openBar="openSidebar" />
   </div>
+  <router-view></router-view>
 </template>
 <script>
 import sidebar from "@/components/sidebar.vue";
