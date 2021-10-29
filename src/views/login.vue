@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-content">
-      <img src="@/assets/img/logo.png" alt="logo">
+      <img src="@/assets/img/logo.png" alt="logo" />
       <h2>Hello there 👋</h2>
       <p>Sign in to your conversar account.</p>
       <button class="btn" @click="signIn">Sign In</button>
@@ -50,8 +50,10 @@ export default {
     padding: 0.8rem 3rem;
     margin: 1rem 0 0.5rem;
     color: $pri-color;
-    background: linear-gradient(to top left, #2fd7ed, #2F80ED);
+    background: linear-gradient(to top left, #2fd7ed, #2f80ed);
     font-weight: bold;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12),
+      0 3px 1px -1px rgba(0, 0, 0, 0.2);
   }
 
   small {

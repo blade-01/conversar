@@ -6,7 +6,7 @@
         <p>Animashaun Taofiq</p>
       </div>
       <svg
-        @click="signOut"
+        @click="confirmSignout"
         class="w-6 h-6"
         fill="none"
         stroke="currentColor"
@@ -22,13 +22,27 @@
       </svg>
     </div>
   </div>
+  <signoutModal :signout="signout" @close-modal="closeModal" />
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import signoutModal from "@/components/signout-modal.vue";
 export default {
+  data() {
+    return {
+      signout: false,
+    };
+  },
+  components: {
+    signoutModal,
+  },
   methods: {
-    ...mapActions(["signOut"]),
+    confirmSignout() {
+      this.closeModal();
+    },
+    closeModal() {
+      this.signout = !this.signout;
+    },
   },
 };
 </script>
@@ -61,5 +75,8 @@ export default {
       border-radius: 5px;
     }
   }
+}
+
+.signout-modal {
 }
 </style>

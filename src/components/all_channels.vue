@@ -3,15 +3,42 @@
     <div class="title-tag" :class="{ showSidebar: slide }">
       <div class="flex-title">
         <p>Channels</p>
-        <svg @click="createChannel" class="w-6 h-6 add-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+        <svg
+          @click="createChannel"
+          class="w-6 h-6 add-icon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
       </div>
     </div>
     <div class="group-info">
       <div class="group-channels">
         <form @keyup="searchChannel" class="searchbar">
           <input type="search" id="search" placeholder="Search" />
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </form>        
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
+          </svg>
+        </form>
         <ul class="channels">
           <li v-for="channel in channels" :key="channel.id">
             <span class="initials">{{ makeInit(channel.name) }}</span>
@@ -41,13 +68,13 @@
   </svg>
 </template>
 <script>
-import user from "@/components/user.vue"
-import modal from "@/components/modal.vue"
+import user from "@/components/user.vue";
+import modal from "@/components/modal.vue";
 export default {
   props: ["slide"],
   components: {
     user,
-    modal
+    modal,
   },
   data() {
     return {
@@ -69,7 +96,7 @@ export default {
           name: "Denzel Barrett",
         },
       ],
-      scale: false
+      scale: false,
     };
   },
   emits: ["close-allchannel"],
@@ -81,13 +108,13 @@ export default {
       return value.substring(0, 2);
     },
     createChannel() {
-      this.scale = !this.scale
+      this.scale = !this.scale;
     },
     closeModal() {
-      this.scale = !this.scale
-    }
+      this.scale = !this.scale;
+    },
   },
-  computed: {}
+  computed: {},
 };
 </script>
 <style lang="scss" scoped>
@@ -143,7 +170,7 @@ export default {
   width: inherit;
   z-index: 1;
   background: inherit;
- 
+
   & .flex-title {
     font-weight: bold;
     padding: 0 2rem;
@@ -161,7 +188,7 @@ export default {
   padding: 1rem 2rem;
   margin-top: 4rem;
   font-size: 14px;
-  
+
   & .group-title {
     text-transform: uppercase;
     font-weight: bold;
@@ -201,7 +228,7 @@ export default {
 
 .channels {
   margin-top: 2rem;
-  
+
   & li {
     display: flex;
     justify-content: start;
@@ -211,7 +238,7 @@ export default {
     text-transform: uppercase;
     font-weight: 600;
   }
-  
+
   & span {
     margin-right: 1rem;
     border-radius: 5px;
