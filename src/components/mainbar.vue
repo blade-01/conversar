@@ -174,6 +174,7 @@ export default {
       display: flex;
       justify-content: start;
       align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 1rem;
       color: $sec-color;
 
