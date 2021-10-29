@@ -7,13 +7,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: chatRoom,
-    children: [
-      {
-        path: "login",
-        name: "login",
-        component: login,
-      },
-    ],
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: login,
   },
 ];
 

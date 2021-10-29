@@ -4,7 +4,7 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  signOut,
+  signOut, getRedirectResult, signInWithRedirect
 } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
 const db = getFirestore(firebaseApp);
@@ -34,6 +34,25 @@ const actions = {
       .catch((error) => {
         console.log(error.message);
       });
+  },
+  redirectIn({commit}) {
+    signInWithRedirect(auth, provider);
+    getRedirectResult(auth)
+    .then((result) => {
+      console.log(result.user.displayName);
+      return setDoc(doc(db, "users", result.user.uid), {
+        email: result.user.email,
+        name: result.user.displayName,
+        url: result.user.photoURL,
+      });
+    })
+    .then(() => {
+      router.push("/");
+      commit("signIn");
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
   },
   signOut({ commit }) {
     signOut(auth)
