@@ -4,7 +4,7 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  signOut, getRedirectResult, signInWithRedirect
+  signOut,
 } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
 const db = getFirestore(firebaseApp);
@@ -12,7 +12,7 @@ const auth = getAuth(firebaseApp);
 const provider = new GoogleAuthProvider();
 
 const state = {
-  user: "",
+  user: [],
 };
 
 const getters = {};
@@ -35,36 +35,19 @@ const actions = {
         console.log(error.message);
       });
   },
-  redirectIn({commit}) {
-    signInWithRedirect(auth, provider);
-    getRedirectResult(auth)
-    .then((result) => {
-      console.log(result.user.displayName);
-      return setDoc(doc(db, "users", result.user.uid), {
-        email: result.user.email,
-        name: result.user.displayName,
-        url: result.user.photoURL,
-      });
-    })
-    .then(() => {
-      router.push("/");
-      commit("signIn");
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-  },
   signOut({ commit }) {
     signOut(auth)
       .then(() => {
-        console.log("Sign-out successful.");
-        router.push("/");
+        router.push("/login");
         commit("signOut");
       })
       .catch((error) => {
         console.log(error);
       });
   },
+  // getUserDetails() {
+  //   const docRef = doc(db, "users", auth.currentUser)
+  // }
 };
 
 const mutations = {
