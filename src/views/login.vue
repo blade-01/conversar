@@ -1,10 +1,14 @@
 <template>
   <div class="login">
     <div class="login-content">
-      <h3>Hello 👋</h3>
-      <p>Sign In to your conversar account.</p>
+      <img src="@/assets/img/logo.png" alt="logo">
+      <h2>Hello there 👋</h2>
+      <p>Sign in to your conversar account.</p>
       <button class="btn" @click="signIn">Sign In</button>
       <small>powered by <span>Google</span></small>
+    </div>
+    <div class="aside hide-on-sm">
+      <img src="@/assets/img/conversar.png" alt="logo" />
     </div>
   </div>
 </template>
@@ -19,31 +23,21 @@ export default {
 <style lang="scss" scoped>
 @import "@/scss/global.scss";
 .login {
-  position: fixed;
-  background: $modal-backdrop;
-  z-index: 1000;
+  background: $side-bg;
   width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  height: 100vh;
 
   &-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: $accmod-bg;
-    border-radius: 10px;
-    padding: 1rem;
-    height: 200px;
-    width: 70%;
+    height: 100vh;
   }
 
-  h3,
+  h2 {
+    margin: 2rem 0 0.5rem;
+  }
   p {
     padding: 0.2rem 0;
   }
@@ -56,6 +50,7 @@ export default {
     padding: 0.8rem 3rem;
     margin: 1rem 0 0.5rem;
     color: $pri-color;
+    background: linear-gradient(to top left, #2fd7ed, #2F80ED);
     font-weight: bold;
   }
 
@@ -68,10 +63,42 @@ export default {
   }
 }
 
+img {
+  width: 100px;
+}
+
 @media screen and (min-width: 700px) {
-  .login-content {
-    width: 250px;
-    height: 250px;
+  .login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-content {
+      flex: 0 1 40vw;
+    }
+
+    & .aside {
+      flex: 0 1 60vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: $main-bg;
+      height: 100vh;
+
+      & img {
+        width: 130px;
+        animation: grow 2s linear forwards;
+      }
+
+      @keyframes grow {
+        from {
+          transform: scale(0.8);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+    }
   }
 }
 </style>
