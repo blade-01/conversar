@@ -5,17 +5,32 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
-import { doc, setDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  where,
+  query,
+  getFirestore,
+} from "firebase/firestore";
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 const provider = new GoogleAuthProvider();
 
 const state = {
-  user: [],
+  users: [],
+  user: "",
+  userState: false,
 };
 
-const getters = {};
+const getters = {
+  user: (state) => state.user,
+  users: (state) => state.users,
+  authState: (state) => state.userState,
+};
 
 const actions = {
   signIn({ commit }) {
@@ -45,9 +60,29 @@ const actions = {
         console.log(error);
       });
   },
-  // getUserDetails() {
-  //   const docRef = doc(db, "users", auth.currentUser)
-  // }
+  async getAllUsers({ commit }) {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      commit("getAllUsers", doc.data());
+    });
+  },
+  getCurrentUser({ commit, state }) {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userMail = auth.currentUser.email;
+        getDocs(
+          query(collection(db, "users"), where("email", "==", userMail))
+        ).then((docs) => {
+          docs.forEach((doc) => {
+            commit("getCurrentUser", doc.data());
+          });
+        });
+        state.userState = false;
+      } else {
+        state.userState = true;
+      }
+    });
+  },
 };
 
 const mutations = {
@@ -57,6 +92,8 @@ const mutations = {
   signOut(state) {
     state.user;
   },
+  getAllUsers: (state, users) => state.users.push(users),
+  getCurrentUser: (state, user) => (state.user = user),
 };
 
 export default {

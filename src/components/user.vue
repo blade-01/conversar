@@ -1,9 +1,9 @@
 <template>
   <div class="profile">
-    <div class="profile-dets">
+    <div class="profile-dets" v-if="!authState">
       <div class="user">
-        <img src="../assets/img/avatar-01.jpg" alt="user" />
-        <p>Animashaun Taofiq</p>
+        <img :src="user.url" alt="user" />
+        <p>{{ user.name }}</p>
       </div>
       <svg
         @click="confirmSignout"
@@ -21,12 +21,31 @@
         ></path>
       </svg>
     </div>
+    <div v-else class="profile-dets">
+      <p>Let's login shall we? 👉</p>
+      <svg
+        @click="login"
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+        ></path>
+      </svg>
+    </div>
   </div>
-  <signoutModal :signout="signout" @close-modal="closeModal" />
+  <signoutModal :signout="signout" @close-signout="closeModal" />
 </template>
 
 <script>
 import signoutModal from "@/components/signout-modal.vue";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -43,6 +62,12 @@ export default {
     closeModal() {
       this.signout = !this.signout;
     },
+    login() {
+      this.$router.push({ name: "login" });
+    },
+  },
+  computed: {
+    ...mapGetters(["user", "authState"]),
   },
 };
 </script>
@@ -75,8 +100,5 @@ export default {
       border-radius: 5px;
     }
   }
-}
-
-.signout-modal {
 }
 </style>

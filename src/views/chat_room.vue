@@ -11,6 +11,7 @@
 <script>
 import sidebar from "@/components/sidebar.vue";
 import Mainbar from "@/components/mainbar.vue";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -22,6 +23,7 @@ export default {
     Mainbar,
   },
   methods: {
+    ...mapActions(["getCurrentUser", "getAllUsers"]),
     openSidebar() {
       this.open = !this.open;
     },
@@ -31,6 +33,10 @@ export default {
     closeSidebar() {
       this.open = !this.open;
     },
+  },
+  mounted() {
+    this.getCurrentUser();
+    this.getAllUsers();
   },
 };
 </script>
