@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" v-show="signout" id="modal" @click="closeModal">
+  <div class="modal" v-show="signout" id="signout-modal" @click="closeModal">
     <div class="modal-content">
       <img src="@/assets/img/logo.png" alt="logo" />
       <h2>Byee 👋</h2>
@@ -12,13 +12,13 @@
 import { mapActions } from "vuex";
 export default {
   props: ["signout"],
-  emits: ["close-modal"],
+  emits: ["close-signout"],
   methods: {
     ...mapActions(["signOut"]),
     closeModal() {
       window.addEventListener("click", (e) => {
-        if (e.target.id == "modal") {
-          this.$emit("close-modal");
+        if (e.target.id == "signout-modal") {
+          this.$emit("close-signout");
         }
       });
     },

@@ -20,7 +20,7 @@
         All channels
       </p>
     </div>
-    <div class="group-info">
+    <div class="group-info" v-if="!authState">
       <p class="group-title">front-end developers</p>
       <p class="group-desc">
         Hi there! 👋, welcome to the Front-end developers group, we share news
@@ -30,12 +30,15 @@
       <div class="group-members">
         <p class="group-title">members</p>
         <ul class="members">
-          <li v-for="member in members" :key="member.id">
-            <img src="../assets/img/avatar-01.jpg" alt="avatar" />
-            <p>{{ member.name }}</p>
+          <li v-for="user in users" :key="user.email">
+            <img :src="user.url" alt="avatar" />
+            <p>{{ user.name }}</p>
           </li>
         </ul>
       </div>
+    </div>
+    <div v-else class="group-info">
+      <loginBot />
     </div>
     <user />
     <svg
@@ -59,12 +62,15 @@
 </template>
 <script>
 import allChannels from "@/components/all_channels.vue";
+import loginBot from "@/components/login_bot.vue";
 import user from "@/components/user.vue";
+import { mapGetters } from "vuex";
 export default {
   props: ["open"],
   components: {
     allChannels,
     user,
+    loginBot,
   },
   data() {
     return {
@@ -105,10 +111,9 @@ export default {
     closeChannels() {
       this.slide = !this.slide;
     },
-    getImgUrl(pic) {
-      const images = require.context("../assets/", false, /\.png$/);
-      return images("./" + pic + ".png");
-    },
+  },
+  computed: {
+    ...mapGetters(["users", "authState"]),
   },
 };
 </script>
