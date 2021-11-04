@@ -60,10 +60,16 @@ const actions = {
         console.log(error);
       });
   },
-  async getAllUsers({ commit }) {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      commit("getAllUsers", doc.data());
+  getAllUsers({ commit }) {
+    getDocs(collection(db, "users")).then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const data = {
+          id: doc.id,
+          name: doc.data().name,
+          url: doc.data().url,
+        };
+        commit("getAllUsers", data);
+      });
     });
   },
   getCurrentUser({ commit, state }) {

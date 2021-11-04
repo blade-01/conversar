@@ -3,7 +3,26 @@
 </template>
 
 <script>
-export default {};
+import { mapActions } from "vuex";
+export default {
+  methods: {
+    ...mapActions(["getCurrentUser", "getAllUsers", "getChannels"]),
+    openSidebar() {
+      this.open = !this.open;
+    },
+    openChannels() {
+      this.open = !this.open;
+    },
+    closeSidebar() {
+      this.open = !this.open;
+    },
+  },
+  created() {
+    this.getCurrentUser();
+    this.getAllUsers();
+    this.getChannels();
+  },
+};
 </script>
 
 <style lang="scss">

@@ -3,11 +3,15 @@
     <div class="modal-content">
       <h3>new channel</h3>
       <form @submit.prevent="submitChannel">
-        <input type="text" id="channel_name" placeholder="Channel Name" />
+        <div v-if="errMssg" class="errMssg">
+          <p>{{ errMssg }}</p>
+        </div>
+        <input type="text" id="channel_name" placeholder="Channel Name" v-model="channel_name" />
         <textarea
           placeholder="Channel Description"
           rows="5"
           cols="50"
+          v-model="description"
         ></textarea>
         <input type="submit" class="btn" value="Save" />
       </form>
@@ -15,10 +19,19 @@
   </div>
 </template>
 <script>
+import { mapActions } from "vuex"
 export default {
+  data() {
+    return {
+      channel_name: '',
+      description: '',
+      errMssg: ''
+    }
+  },
   props: ["scale"],
   emits: ["close-modal"],
   methods: {
+    ...mapActions(["addChannel"]),
     closeModal() {
       window.addEventListener("click", (e) => {
         if (e.target.id == "modal") {
@@ -26,6 +39,29 @@ export default {
         }
       });
     },
+    submitChannel() {
+      if (this.channel_name === '' && this.description === '') {
+        this.errAlert("Please fill all fields");
+      } else if(this.channel_name.length < 4) {
+        this.errAlert("Channel name must be at least 4 characters long");
+      } else if (this.description === '') {
+        this.errAlert("Channel description cannot be left empty")
+      } 
+      else {
+        const data = {
+          name: this.channel_name,
+          desc: this.description,
+        }
+        this.addChannel(data)
+        this.$emit("close-modal")
+        this.channel_name = ""
+        this.description = ''
+      }
+    },
+    errAlert(message) {
+      this.errMssg = message;
+      setTimeout(() => {this.errMssg = ''}, 2000);
+    }
   },
 };
 </script>
@@ -93,6 +129,21 @@ export default {
         margin: 0;
       }
     }
+  }
+}
+
+.errMssg {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: #fa5d5d;
+  margin-bottom: 0.5rem;
+  border: solid 1px #fa5d5d;
+  text-align: center;
+  border-radius: 5px;
+
+  & p {
+    padding: 0.5rem;
   }
 }
 
