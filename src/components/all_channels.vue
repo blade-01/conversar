@@ -4,6 +4,7 @@
       <div class="flex-title">
         <p>Channels</p>
         <svg
+          v-if="!authState"
           @click="createChannel"
           class="w-6 h-6 add-icon"
           fill="none"
@@ -18,10 +19,11 @@
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           ></path>
         </svg>
+        <svg v-else class="w-6 h-6 add-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       </div>
     </div>
     <div class="group-info">
-      <div class="group-channels">
+      <div class="group-channels" v-if="!authState">
         <form @keyup="searchChannel" class="searchbar">
           <input type="search" id="search" placeholder="Search" />
           <svg
@@ -40,12 +42,13 @@
           </svg>
         </form>
         <ul class="channels">
-          <li v-for="channel in channels" :key="channel.id">
+          <li v-for="channel in allChannels" :key="channel.id" @click="enterChannel(channel.name)">
             <span class="initials">{{ makeInit(channel.name) }}</span>
             <p>{{ channel.name }}</p>
           </li>
         </ul>
       </div>
+      <loginBot v-else />
     </div>
     <user />
   </div>
@@ -70,34 +73,22 @@
 <script>
 import user from "@/components/user.vue";
 import modal from "@/components/modal.vue";
+import loginBot from "@/components/login_bot.vue";
+import { mapGetters } from "vuex"
 export default {
   props: ["slide"],
   components: {
     user,
     modal,
+    loginBot
   },
   data() {
     return {
-      channels: [
-        {
-          id: 1,
-          name: "Xanche Neal",
-        },
-        {
-          id: 2,
-          name: "Annaliese Huynh",
-        },
-        {
-          id: 3,
-          name: "Zack Niche",
-        },
-        {
-          id: 4,
-          name: "Denzel Barrett",
-        },
-      ],
       scale: false,
     };
+  },
+  computed: {
+    ...mapGetters(["allChannels", "authState"])
   },
   emits: ["close-allchannel"],
   methods: {
@@ -108,13 +99,16 @@ export default {
       return value.substring(0, 2);
     },
     createChannel() {
-      this.scale = !this.scale;
+      this.scale = true;
     },
     closeModal() {
-      this.scale = !this.scale;
+      this.scale = false;
     },
-  },
-  computed: {},
+    enterChannel(channel) {
+      console.log(channel)
+      this.$emit("close-allchannel");
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -237,6 +231,7 @@ export default {
     color: $pri-color;
     text-transform: uppercase;
     font-weight: 600;
+    cursor: pointer;
   }
 
   & span {

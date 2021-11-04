@@ -57,10 +57,10 @@ export default {
   },
   methods: {
     confirmSignout() {
-      this.closeModal();
+      this.signout = true;
     },
     closeModal() {
-      this.signout = !this.signout;
+      this.signout = false;
     },
     login() {
       this.$router.push({ name: "login" });

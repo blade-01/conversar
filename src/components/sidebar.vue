@@ -30,8 +30,8 @@
       <div class="group-members">
         <p class="group-title">members</p>
         <ul class="members">
-          <li v-for="user in users" :key="user.email">
-            <img :src="user.url" alt="avatar" />
+          <li v-for="user in users" :key="user.id">
+            <img :src="user.url" :alt="user.name" />
             <p>{{ user.name }}</p>
           </li>
         </ul>
@@ -74,28 +74,6 @@ export default {
   },
   data() {
     return {
-      members: [
-        {
-          id: 1,
-          src: "avatar-01",
-          name: "Xanche Neal",
-        },
-        {
-          id: 2,
-          src: "avatar-02",
-          name: "Annaliese Huynh",
-        },
-        {
-          id: 3,
-          src: "avatar-03",
-          name: "Zack Niche",
-        },
-        {
-          id: 4,
-          src: "avatar-04",
-          name: "Denzel Barrett",
-        },
-      ],
       slide: false,
     };
   },
@@ -147,6 +125,8 @@ export default {
   border-radius: 10px;
   transition: left 0.5s 0.1s ease;
   z-index: 10;
+  box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
 
 .removeIcon {
