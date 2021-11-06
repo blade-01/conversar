@@ -6,7 +6,12 @@
         <div v-if="errMssg" class="errMssg">
           <p>{{ errMssg }}</p>
         </div>
-        <input type="text" id="channel_name" placeholder="Channel Name" v-model="channel_name" />
+        <input
+          type="text"
+          id="channel_name"
+          placeholder="Channel Name"
+          v-model="channel_name"
+        />
         <textarea
           placeholder="Channel Description"
           rows="5"
@@ -19,19 +24,20 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex"
+import firebaseApp from "@/fb/fb";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(firebaseApp);
 export default {
   data() {
     return {
-      channel_name: '',
-      description: '',
-      errMssg: ''
-    }
+      channel_name: "",
+      description: "",
+      errMssg: "",
+    };
   },
   props: ["scale"],
-  emits: ["close-modal"],
+  emits: ["close-modal", "add-channel"],
   methods: {
-    ...mapActions(["addChannel"]),
     closeModal() {
       window.addEventListener("click", (e) => {
         if (e.target.id == "modal") {
@@ -40,28 +46,34 @@ export default {
       });
     },
     submitChannel() {
-      if (this.channel_name === '' && this.description === '') {
+      if (this.channel_name === "" && this.description === "") {
         this.errAlert("Please fill all fields");
-      } else if(this.channel_name.length < 4) {
+      } else if (this.channel_name.length < 4) {
         this.errAlert("Channel name must be at least 4 characters long");
-      } else if (this.description === '') {
-        this.errAlert("Channel description cannot be left empty")
-      } 
-      else {
+      } else if (this.description === "") {
+        this.errAlert("Channel description cannot be left empty");
+      } else {
         const data = {
+          channelId: auth.currentUser.uid,
+          id: Math.random()
+            .toString(36)
+            .substring(7)
+            .toUpperCase(),
           name: this.channel_name,
           desc: this.description,
-        }
-        this.addChannel(data)
-        this.$emit("close-modal")
-        this.channel_name = ""
-        this.description = ''
+        };
+        this.$emit("add-channel", data);
+        this.$emit("close-modal");
+        this.channel_name = "";
+        this.description = "";
       }
     },
     errAlert(message) {
       this.errMssg = message;
-      setTimeout(() => {this.errMssg = ''}, 2000);
-    }
+      setTimeout(() => {
+        this.errMssg = "";
+      }, 2000);
+    },
   },
 };
 </script>
@@ -127,6 +139,7 @@ export default {
         padding: 0.7rem 1.5rem;
         width: auto;
         margin: 0;
+        cursor: pointer;
       }
     }
   }

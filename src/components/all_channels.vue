@@ -19,7 +19,21 @@
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           ></path>
         </svg>
-        <svg v-else class="w-6 h-6 add-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <svg
+          v-else
+          class="w-6 h-6 add-icon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
       </div>
     </div>
     <div class="group-info">
@@ -42,7 +56,11 @@
           </svg>
         </form>
         <ul class="channels">
-          <li v-for="channel in allChannels" :key="channel.id" @click="enterChannel(channel.name)">
+          <li
+            v-for="channel in channels"
+            :key="channel.id"
+            @click="enterChannel(channel.id)"
+          >
             <span class="initials">{{ makeInit(channel.name) }}</span>
             <p>{{ channel.name }}</p>
           </li>
@@ -52,7 +70,11 @@
     </div>
     <user />
   </div>
-  <modal :scale="scale" @close-modal="closeModal" />
+  <addChannel
+    :scale="scale"
+    @close-modal="closeModal"
+    @add-channel="addChannel"
+  />
   <svg
     @click="closeSidebar"
     class="w-6 h-6 close-icon hide-on-lg"
@@ -72,23 +94,34 @@
 </template>
 <script>
 import user from "@/components/user.vue";
-import modal from "@/components/modal.vue";
+import addChannel from "@/components/add_channel.vue";
 import loginBot from "@/components/login_bot.vue";
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  getFirestore,
+} from "firebase/firestore";
+import firebaseApp from "@/fb/fb";
+const db = getFirestore(firebaseApp);
 export default {
   props: ["slide"],
   components: {
     user,
-    modal,
-    loginBot
+    addChannel,
+    loginBot,
   },
   data() {
     return {
       scale: false,
+      channels: [],
     };
   },
   computed: {
-    ...mapGetters(["allChannels", "authState"])
+    ...mapGetters(["authState"]),
   },
   emits: ["close-allchannel"],
   methods: {
@@ -105,10 +138,28 @@ export default {
       this.scale = false;
     },
     enterChannel(channel) {
-      console.log(channel)
+      this.$router.push({ name: "channel", params: { id: channel } });
       this.$emit("close-allchannel");
-    }
-  }
+    },
+    getChannels() {
+      onSnapshot(
+        query(collection(db, "channels"), orderBy("name", "asc")),
+        (querySnapshot) => {
+          querySnapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              this.channels.push(change.doc.data());
+            }
+          });
+        }
+      );
+    },
+    addChannel(data) {
+      addDoc(collection(db, "channels"), data);
+    },
+  },
+  created() {
+    this.getChannels();
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -148,6 +199,8 @@ export default {
   border-radius: 10px;
   transition: left 0.5s 0.1s ease;
   z-index: 10;
+  box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
 
 .removeIcon {
@@ -240,11 +293,15 @@ export default {
     background: $main-bg;
     padding: 0.5rem;
   }
+
+  & .initials {
+    width: 20px;
+    text-align: center;
+  }
 }
 
 @media screen and (min-width: 700px) {
   .sidebar {
-    // left: 0;
     height: 100vh;
     width: 30%;
   }
