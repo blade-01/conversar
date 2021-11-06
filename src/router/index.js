@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import chatRoom from "../views/chat_room.vue";
 import login from "../views/login.vue";
+import channel from "../views/channel.vue";
 
 const routes = [
   {
@@ -12,6 +13,12 @@ const routes = [
     path: "/login",
     name: "login",
     component: login,
+  },
+  {
+    path: "/channel/:id",
+    name: "channel",
+    component: channel,
+    props: true
   },
 ];
 

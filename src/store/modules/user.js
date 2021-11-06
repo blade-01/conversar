@@ -60,18 +60,6 @@ const actions = {
         console.log(error);
       });
   },
-  getAllUsers({ commit }) {
-    getDocs(collection(db, "users")).then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = {
-          id: doc.id,
-          name: doc.data().name,
-          url: doc.data().url,
-        };
-        commit("getAllUsers", data);
-      });
-    });
-  },
   getCurrentUser({ commit, state }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -98,7 +86,6 @@ const mutations = {
   signOut(state) {
     state.user;
   },
-  getAllUsers: (state, users) => state.users.push(users),
   getCurrentUser: (state, user) => (state.user = user),
 };
 
