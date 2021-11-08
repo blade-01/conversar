@@ -39,7 +39,12 @@
     <div class="group-info">
       <div class="group-channels" v-if="!authState">
         <form @keyup="searchChannel" class="searchbar">
-          <input type="search" id="search" placeholder="Search" />
+          <input
+            type="search"
+            id="search"
+            placeholder="Search"
+            autocomplete="off"
+          />
           <svg
             class="w-6 h-6"
             fill="none"
@@ -70,11 +75,7 @@
     </div>
     <user />
   </div>
-  <addChannel
-    :scale="scale"
-    @close-modal="closeModal"
-    @add-channel="addChannel"
-  />
+  <addChannel :scale="scale" @close-modal="closeModal" />
   <svg
     @click="closeSidebar"
     class="w-6 h-6 close-icon hide-on-lg"
@@ -96,17 +97,7 @@
 import user from "@/components/user.vue";
 import addChannel from "@/components/add_channel.vue";
 import loginBot from "@/components/login_bot.vue";
-import { mapGetters } from "vuex";
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  getFirestore,
-} from "firebase/firestore";
-import firebaseApp from "@/fb/fb";
-const db = getFirestore(firebaseApp);
+import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["slide"],
   components: {
@@ -117,14 +108,14 @@ export default {
   data() {
     return {
       scale: false,
-      channels: [],
     };
   },
   computed: {
-    ...mapGetters(["authState"]),
+    ...mapGetters(["authState", "channels"]),
   },
   emits: ["close-allchannel"],
   methods: {
+    ...mapActions(["getChannels"]),
     closeSidebar() {
       this.$emit("close-allchannel");
     },
@@ -140,21 +131,6 @@ export default {
     enterChannel(channel) {
       this.$router.push({ name: "channel", params: { id: channel } });
       this.$emit("close-allchannel");
-    },
-    getChannels() {
-      onSnapshot(
-        query(collection(db, "channels"), orderBy("name", "asc")),
-        (querySnapshot) => {
-          querySnapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              this.channels.push(change.doc.data());
-            }
-          });
-        }
-      );
-    },
-    addChannel(data) {
-      addDoc(collection(db, "channels"), data);
     },
   },
   created() {

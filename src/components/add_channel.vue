@@ -11,6 +11,7 @@
           id="channel_name"
           placeholder="Channel Name"
           v-model="channel_name"
+          autocomplete="off"
         />
         <textarea
           placeholder="Channel Description"
@@ -24,8 +25,11 @@
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 import firebaseApp from "@/fb/fb";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 export default {
   data() {
@@ -36,14 +40,29 @@ export default {
     };
   },
   props: ["scale"],
-  emits: ["close-modal", "add-channel"],
+  emits: ["close-modal"],
   methods: {
+    ...mapMutations(["addChannel"]),
     closeModal() {
       window.addEventListener("click", (e) => {
         if (e.target.id == "modal") {
           this.$emit("close-modal");
         }
       });
+    },
+    addChannel() {
+      const data = {
+        channelId: auth.currentUser.uid,
+        id:
+          this.channel_name +
+          Math.random()
+            .toString(36)
+            .substring(7)
+            .toUpperCase(),
+        name: this.channel_name,
+        desc: this.description,
+      };
+      addDoc(collection(db, "channels"), data);
     },
     submitChannel() {
       if (this.channel_name === "" && this.description === "") {
@@ -53,16 +72,7 @@ export default {
       } else if (this.description === "") {
         this.errAlert("Channel description cannot be left empty");
       } else {
-        const data = {
-          channelId: auth.currentUser.uid,
-          id: Math.random()
-            .toString(36)
-            .substring(7)
-            .toUpperCase(),
-          name: this.channel_name,
-          desc: this.description,
-        };
-        this.$emit("add-channel", data);
+        this.addChannel();
         this.$emit("close-modal");
         this.channel_name = "";
         this.description = "";

@@ -10,6 +10,8 @@ export default {
   },
   created() {
     this.getCurrentUser();
+    // this.getAllUsers();
+    // this.getChannels();
   },
 };
 </script>

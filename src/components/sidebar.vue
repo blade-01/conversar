@@ -30,7 +30,7 @@
       <div class="group-members">
         <p class="group-title">members</p>
         <ul class="members">
-          <li v-for="user in users" :key="user.email">
+          <li v-for="user in users" :key="user.id">
             <img :src="user.url" :alt="user.name" />
             <p>{{ user.name }}</p>
           </li>
@@ -64,16 +64,7 @@
 import allChannels from "@/components/all_channels.vue";
 import loginBot from "@/components/login_bot.vue";
 import user from "@/components/user.vue";
-import { mapGetters } from "vuex";
-import firebaseApp from "@/fb/fb";
-import {
-  collection,
-  onSnapshot,
-  getFirestore,
-  orderBy,
-  query,
-} from "firebase/firestore";
-const db = getFirestore(firebaseApp);
+import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["open"],
   components: {
@@ -84,11 +75,11 @@ export default {
   data() {
     return {
       slide: false,
-      users: [],
     };
   },
   emits: ["close-sidebar", "show-channels"],
   methods: {
+    ...mapActions(["getAllUsers"]),
     closeSidebar() {
       this.$emit("close-sidebar");
     },
@@ -99,21 +90,9 @@ export default {
     closeChannels() {
       this.slide = !this.slide;
     },
-    getAllUsers() {
-      onSnapshot(
-        query(collection(db, "users"), orderBy("name")),
-        (querySnapshot) => {
-          querySnapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              this.users.push(change.doc.data());
-            }
-          });
-        }
-      );
-    },
   },
   computed: {
-    ...mapGetters(["authState"]),
+    ...mapGetters(["authState", "users"]),
   },
   created() {
     this.getAllUsers();

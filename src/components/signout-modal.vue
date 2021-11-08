@@ -9,12 +9,12 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapMutations } from "vuex";
 export default {
   props: ["signout"],
   emits: ["close-signout"],
   methods: {
-    ...mapActions(["signOut"]),
+    ...mapMutations(["signOut"]),
     closeModal() {
       window.addEventListener("click", (e) => {
         if (e.target.id == "signout-modal") {
