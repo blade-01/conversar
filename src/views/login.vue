@@ -13,10 +13,10 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapMutations } from "vuex";
 export default {
   methods: {
-    ...mapActions(["signIn"]),
+    ...mapMutations(["signIn"]),
   },
 };
 </script>

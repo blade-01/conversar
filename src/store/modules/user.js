@@ -13,7 +13,10 @@ import {
   collection,
   getDocs,
   where,
+  onSnapshot,
+  orderBy,
   query,
+  Timestamp,
   getFirestore,
 } from "firebase/firestore";
 const db = getFirestore(firebaseApp);
@@ -33,33 +36,6 @@ const getters = {
 };
 
 const actions = {
-  signIn({ commit }) {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        return setDoc(doc(db, "users", result.user.uid), {
-          email: result.user.email,
-          name: result.user.displayName,
-          url: result.user.photoURL,
-        });
-      })
-      .then(() => {
-        router.push("/");
-        commit("signIn");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  },
-  signOut({ commit }) {
-    signOut(auth)
-      .then(() => {
-        router.push("/login");
-        commit("signOut");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
   getCurrentUser({ commit, state }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -77,15 +53,58 @@ const actions = {
       }
     });
   },
+  getAllUsers({ commit, state }) {
+    onSnapshot(
+      query(collection(db, "users"), orderBy("createdAt")),
+      (querySnapshot) => {
+        querySnapshot.docChanges().forEach((change) => {
+          if (
+            change.type === "added" &&
+            !state.users.some((user) => user.id === change.doc.id)
+          ) {
+            const data = {
+              id: change.doc.id,
+              name: change.doc.data().name,
+              url: change.doc.data().url,
+              createdAt: change.doc.data().createdAt,
+            };
+            commit("getAllUsers", data);
+          }
+        });
+      }
+    );
+  },
 };
 
 const mutations = {
-  signIn(state) {
-    state.user;
+  signIn() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        return setDoc(doc(db, "users", result.user.uid), {
+          email: result.user.email,
+          name: result.user.displayName,
+          url: result.user.photoURL,
+          id: result.user.uid,
+          createdAt: Timestamp.now().seconds,
+        });
+      })
+      .then(() => {
+        router.push("/");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   },
-  signOut(state) {
-    state.user;
+  signOut() {
+    signOut(auth)
+      .then(() => {
+        router.push("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
+  getAllUsers: (state, users) => state.users.push(users),
   getCurrentUser: (state, user) => (state.user = user),
 };
 
