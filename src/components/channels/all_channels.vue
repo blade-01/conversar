@@ -94,9 +94,9 @@
   </svg>
 </template>
 <script>
-import user from "@/components/user.vue";
-import addChannel from "@/components/add_channel.vue";
-import loginBot from "@/components/login_bot.vue";
+import user from "@/components/auth/user.vue";
+import addChannel from "@/components/channels/add_channel.vue";
+import loginBot from "@/components/auth/login_bot.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["slide"],

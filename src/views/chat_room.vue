@@ -9,9 +9,8 @@
   </div>
 </template>
 <script>
-import sidebar from "@/components/sidebar.vue";
-import Mainbar from "@/components/mainbar.vue";
-// import { mapActions } from "vuex";
+import sidebar from "@/components/navbars/sidebar.vue";
+import Mainbar from "@/components/navbars/mainbar.vue";
 export default {
   data() {
     return {
@@ -23,7 +22,6 @@ export default {
     Mainbar,
   },
   methods: {
-    // ...mapActions(["getCurrentUser", "getAllUsers", "getChannels"]),
     openSidebar() {
       this.open = !this.open;
     },
@@ -33,11 +31,6 @@ export default {
     closeSidebar() {
       this.open = !this.open;
     },
-  },
-  created() {
-    // this.getCurrentUser();
-    // this.getAllUsers();
-    // this.getChannels();
   },
 };
 </script>

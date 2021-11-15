@@ -18,7 +18,7 @@
             ></path>
           </svg>
         </span>
-        front-end developers
+        {{ channel.name }}
       </p>
     </div>
     <div class="mainbar-content">
@@ -29,10 +29,10 @@
         :key="message.src"
         v-else
       >
-        <img src="../assets/img/avatar-01.jpg" alt="avatar" />
+        <img :src="message.url" :alt="message.name" />
         <div class="message">
           <div class="dets">
-            <p>{{ message.username }}</p>
+            <p>{{ message.name }}</p>
             <p>{{ message.createdAt }}</p>
           </div>
           <p>{{ message.message }}</p>
@@ -44,71 +44,30 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import messageBar from "@/components/message_bar.vue";
-import loginBot from "@/components/login_bot.vue";
+import { mapGetters, mapActions } from "vuex";
+import messageBar from "@/components/chat/message_bar.vue";
+import loginBot from "@/components/auth/login_bot.vue";
 export default {
   components: {
     messageBar,
     loginBot,
   },
   data() {
-    return {
-      messages: [
-        {
-          src: "1",
-          username: "Denzel Barrett",
-          message:
-            "Hi there! 👋, welcome to the Front-end developers group, we share news about front-end tools, jobs and youtube content that aid you in becoming a better developer, I welcome y'all once again.",
-          createdAt: "yesterday at 1:29 PM",
-        },
-        {
-          src: "2",
-          username: "Zack Niche",
-          message:
-            "Hi there! 👋, welcome to the Front-end developers group, we share news about front-end tools, jobs and youtube content that aid you in becoming a better developer, I welcome y'all once again.",
-          createdAt: "yesterday at 1:50 PM",
-        },
-        {
-          src: "3",
-          username: "Annaliese Huynh",
-          message:
-            "Hi there! 👋, welcome to the Front-end developers group, we share news about front-end tools, jobs and youtube content that aid you in becoming a better developer, I welcome y'all once again.",
-          createdAt: "yesterday at 2:20 PM",
-        },
-        {
-          src: "4",
-          username: "Xanche Neal",
-          message:
-            "Hi there! 👋, welcome to the Front-end developers group, we share news about front-end tools, jobs and youtube content that aid you in becoming a better developer, I welcome y'all once again.",
-          createdAt: "yesterdat at 3:00 PM",
-        },
-        {
-          src: "5",
-          username: "Annaliese Huynh",
-          message:
-            "Hi there! 👋, welcome to the Front-end developers group, we share news about front-end tools, jobs and youtube content that aid you in becoming a better developer, I welcome y'all once again.",
-          createdAt: "today at 10:40 AM",
-        },
-        {
-          src: "6",
-          username: "Zack Niche",
-          message:
-            "Hi there! 👋, welcome to the Front-end developers group, we share news about front-end tools, jobs and youtube content that aid you in becoming a better developer, I welcome y'all once again.",
-          createdAt: "today at 11:00 AM",
-        },
-      ],
-    };
+    return {};
   },
   emits: ["openBar"],
   computed: {
-    ...mapGetters(["authState"]),
+    ...mapGetters(["authState", "channel", "messages"]),
   },
   methods: {
+    ...mapActions(["getMessages"]),
     openSidebar() {
       this.$emit("openBar");
-    },
+    }
   },
+  mounted() {
+    this.getMessages()
+  }
 };
 </script>
 <style lang="scss" scoped>
