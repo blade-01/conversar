@@ -5,6 +5,6 @@ import channels from "./modules/channels";
 export default createStore({
   modules: {
     user,
-    channels
+    channels,
   },
 });

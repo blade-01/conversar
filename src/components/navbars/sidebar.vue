@@ -21,12 +21,8 @@
       </p>
     </div>
     <div class="group-info" v-if="!authState">
-      <p class="group-title">front-end developers</p>
-      <p class="group-desc">
-        Hi there! 👋, welcome to the Front-end developers group, we share news
-        about front-end tools, jobs and youtube content that aid you in becoming
-        a better developer, I welcome y'all once again.
-      </p>
+      <p class="group-title">{{ channel.name }}</p>
+      <p class="group-desc">{{ channel.desc }}</p>
       <div class="group-members">
         <p class="group-title">members</p>
         <ul class="members">
@@ -61,9 +57,9 @@
   <all-channels :slide="slide" @close-allchannel="closeChannels" />
 </template>
 <script>
-import allChannels from "@/components/all_channels.vue";
-import loginBot from "@/components/login_bot.vue";
-import user from "@/components/user.vue";
+import allChannels from "@/components/channels/all_channels.vue";
+import loginBot from "@/components/auth/login_bot.vue";
+import user from "@/components/auth/user.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["open"],
@@ -79,7 +75,7 @@ export default {
   },
   emits: ["close-sidebar", "show-channels"],
   methods: {
-    ...mapActions(["getAllUsers"]),
+    ...mapActions(["getAllUsers", "getAllDetails"]),
     closeSidebar() {
       this.$emit("close-sidebar");
     },
@@ -92,10 +88,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["authState", "users"]),
+    ...mapGetters(["authState", "users", "channel"]),
   },
   created() {
     this.getAllUsers();
+    this.getAllDetails();
   },
 };
 </script>

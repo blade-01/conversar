@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import signoutModal from "@/components/signout-modal.vue";
+import signoutModal from "@/components/modals/signout-modal.vue";
 import { mapGetters } from "vuex";
 export default {
   data() {
