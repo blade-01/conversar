@@ -9,8 +9,8 @@ interface Props {
   size?: "xs" | "sm" | "md" | "lg";
 }
 const props = withDefaults(defineProps<Props>(), {
-  prependSize: "24",
-  appendSize: "24",
+  prependSize: "20",
+  appendSize: "20",
   // size: "sm", // You can set default size if you want
 });
 

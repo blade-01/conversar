@@ -13,12 +13,12 @@
         secondary: '#213547',
         priBg: '#F5E6FE',
         priText: '#35AF8A',
-        darkBg: '#1E1E2E',
-        darkBgSec: '#27293D'
+        darkBg: '#121316',
+        darkBgSec: '#27293D',
+        btn: '#29292C'
       },
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
-        urbanist: ['Urbanist', 'sans-serif']
+        satoshi: ['Satoshi', 'sans-serif']
       },
       fontSize: {
         nl: ['56px', '64px']

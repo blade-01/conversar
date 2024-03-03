@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("./satoshi.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
   /* CONFIG STYLE */
+
   body {
-    @apply font-urbanist text-base font-normal text-secondary  bg-white  transition-all duration-100 ease-linear m-0 p-0 
+    @apply font-satoshi text-base font-normal text-secondary  bg-white  transition-all duration-100 ease-linear m-0 p-0 
     /* DARK MODE */
   dark:text-slate-200 dark:bg-darkBg;
   }
@@ -89,13 +89,13 @@
   }
 
   .input-group .input-style {
-    @apply relative bg-transparent border border-gray-500 focus:border-gray-700 outline-none rounded-[4px] h-[42px]  py-3 px-4 flex items-center w-full transition-all duration-200 ease-in-out
+    @apply relative bg-[#29292C] border border-[#3A3A3C] focus:border-gray-700 outline-none rounded-[4px] h-[42px] py-3 px-4 flex items-center w-full transition-all duration-200 ease-in-out
     /* Disabled */
     disabled:rounded-[4px] disabled:border disabled:border-gray-300 disabled:bg-gray-50 disabled:p-4 disabled:py-6 
     /* Placeholder */
     placeholder:font-light placeholder:text-secondary  
     /* DARK MODE */
-    dark:focus:border-white dark:placeholder:text-[#d8d8d8];
+    dark:focus:border-white/30 dark:placeholder:text-[#d8d8d8];
   }
 
   .input-group textarea.input-style {
@@ -132,9 +132,9 @@
 
   /* BUTTON */
   .btn {
-    @apply outline-none px-8 py-4 h-[56px] flex justify-center items-center gap-2 leading-5 text-darkBg text-xl text-center font-semibold transition-all ease-in-out duration-200 bg-white rounded-[4px] cursor-pointer shadow-sm hover:scale-[0.98]
+    @apply outline-none px-8 py-4 h-[56px] flex justify-center items-center gap-2 leading-5 text-darkBg text-xl text-center font-medium transition-all ease-in-out duration-200 bg-btn rounded-lg cursor-pointer shadow-sm hover:scale-[0.98]
     /* DARK MODE */
-    dark:text-white dark:bg-[#344675];
+    dark:text-white dark:bg-btn;
   }
 
   .btn-xs {
@@ -142,7 +142,7 @@
   }
 
   .btn-sm {
-    @apply btn h-[40px] px-6 py-3 text-sm;
+    @apply btn h-[40px] px-6 py-3.5 text-sm;
   }
 
   .btn-md {
