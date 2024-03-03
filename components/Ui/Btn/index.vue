@@ -1,0 +1,52 @@
+<script setup lang="ts">
+interface Props {
+  label?: string;
+  prependIcon?: boolean | string | "emoticon-sad";
+  appendIcon?: boolean | string | "emoticon-sad";
+  prependSize?: string;
+  appendSize?: string;
+  outerClass?: string;
+  size?: "xs" | "sm" | "md" | "lg";
+}
+const props = withDefaults(defineProps<Props>(), {
+  prependSize: "24",
+  appendSize: "24",
+  // size: "sm", // You can set default size if you want
+});
+
+const sizes = computed(() => {
+  return props.size === "xs"
+    ? "btn-xs"
+    : props.size === "sm"
+    ? "btn-sm"
+    : props.size === "md"
+    ? "btn-md"
+    : props.size === "lg"
+    ? "btn-lg"
+    : "btn";
+});
+
+const button = ref<HTMLElement | null>(null);
+
+function triggerClick() {
+  button.value?.click();
+}
+
+defineExpose({
+  triggerClick,
+});
+</script>
+
+<template>
+  <button
+    :class="[{ 'flex items-center gap-2': prependIcon || appendIcon }, outerClass, sizes]"
+    ref="button"
+  >
+    <Icon :name="`${prependIcon}`" :size="prependSize" v-if="prependIcon" />
+    <span v-if="label">{{ label }}</span>
+    <slot></slot>
+    <Icon :name="`${appendIcon}`" :size="appendSize" v-if="appendIcon" />
+  </button>
+</template>
+
+<style lang="scss" scoped></style>
