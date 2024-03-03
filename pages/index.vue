@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const { t } = useI18n();
 const router = useRouter();
 const reRoute = (values: any): void => {
   if (values.name) {
@@ -13,7 +12,6 @@ useHead({
 </script>
 
 <template>
-  <NavigationHeader />
   <Form
     @submit="reRoute"
     class="flex flex-col justify-center items-center gap-3 text-center"
@@ -22,10 +20,10 @@ useHead({
       required
       type="text"
       name="name"
-      :placeholder="$t('placeholder')"
+      placeholder="Placeholder"
       class="text-center mt-5"
     />
-    <UiBtn :label="$t('go')" class="px-6 h-[35px]" />
+    <UiBtn label="Go" class="px-6 h-[35px]" />
   </Form>
 </template>
 

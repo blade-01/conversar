@@ -50,7 +50,6 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@vueuse/nuxt",
     "nuxt-icon",
-    "@nuxtjs/i18n",
     "nuxt-headlessui",
     "@tailvue/nuxt",
     "@vee-validate/nuxt",
@@ -65,12 +64,6 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ["./store/**"]
     // autoImports: ["defineStore", "acceptHMRUpdate"]
-  },
-  /**
-   * Internalization configuration
-   */
-  i18n: {
-    vueI18n: "./i18n.config.ts"
   },
   /**
    * VeeValidate Configuration
