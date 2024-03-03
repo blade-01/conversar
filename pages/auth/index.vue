@@ -1,14 +1,12 @@
 <script setup lang="ts">
 // @ts-ignore
 definePageMeta({
-  middleware: ["auth"],
+  layout: "auth",
 });
 </script>
 
 <template>
-  <div></div>
+  <div>Hello</div>
 </template>
-
-<script setup lang="ts"></script>
 
 <style scoped></style>
