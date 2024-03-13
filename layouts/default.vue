@@ -1,30 +1,30 @@
 <script setup lang="ts">
-const nav = ref<boolean>(false);
+const { nav } = storeToRefs(useMainStore());
 
-const toggleSidebar = () => {
-  nav.value = !nav.value;
-};
+watch(
+  () => useRoute().path,
+  () => {
+    nav.value = false;
+  }
+);
 </script>
 
 <template>
   <div class="relative overflow-x-clip">
     <NavigationSidebar :nav="nav" />
-    <main class="sidebar-wrapper" :class="{ 'active-mainbar': nav }">
+    <main class="mainbar-wrapper" :class="{ 'mainbar-opened': nav }">
       <div class="relative">
-        <NavigationTopbar @toggle-sidebar="toggleSidebar" :isNavOpen="nav" />
-        <div class="p-4">
-          <NuxtPage />
-        </div>
+        <NuxtPage />
       </div>
     </main>
   </div>
 </template>
 
 <style scoped>
-.sidebar-wrapper {
-  @apply bg-gray-200 dark:bg-darkBg h-screen overflow-y-auto w-full md:ml-[260px] md:w-[calc(100%-260px)] transition-[margin-left];
+.mainbar-wrapper {
+  @apply bg-bg-primary dark:bg-bg-dark h-screen overflow-y-auto w-full md:ml-[var(--sidebar-width-md)] md:w-[calc(100%-var(--sidebar-width-md))] lg:ml-[var(--sidebar-width-lg)] lg:w-[calc(100%-var(--sidebar-width-lg))] transition-[margin-left] duration-500 md:transition-none;
 }
-.active-mainbar {
-  @apply ml-[260px] md:ml-0 md:w-full;
+.mainbar-opened {
+  @apply ml-[var(--sidebar-width)] md:ml-[var(--sidebar-width-md)] lg:ml-[var(--sidebar-width-lg)];
 }
 </style>
