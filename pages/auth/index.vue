@@ -8,19 +8,37 @@ useHead({
   title: "Welcome to Conversar",
 });
 
-function handleSubmit(values) {
+function handleSubmit(values: any) {
   console.log(values);
 }
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center text-center max-w-[340px]">
-    <img src="~/assets/svg/logo.svg" alt="logo" />
-    <h1 class="text-2xl lg:text-3xl font-bold text-white/80 my-2.5">
+    <img
+      src="~/assets/svg/logo-light.svg"
+      alt="logo"
+      v-if="$colorMode.value === 'dark'"
+    />
+    <img
+      src="~/assets/svg/logo-dark.svg"
+      alt="logo"
+      v-if="$colorMode.value === 'light'"
+    />
+    <h1
+      class="text-2xl lg:text-3xl font-bold text-text-primary/80 dark:text-white/80 my-2.5"
+    >
       Welcome to Conversar
     </h1>
-    <p class="text-sm text-white/[0.64]">Login or Register</p>
-    <UiBtn prepend-icon="mdi:google" size="sm" class="w-full mt-8 !bg-[#5047EB]">
+    <p class="text-sm text-text-primary/[0.64] dark:text-white/[0.64]">
+      Login or Register with your email
+    </p>
+    <UiBtn
+      prepend-icon="mdi:google"
+      size="sm"
+      class="w-full mt-8 !bg-bg-secondary !text-text-dark"
+      @click="$router.push('/')"
+    >
       Sign In With Google
     </UiBtn>
     <hr class="w-[80%] border-white/[0.38] my-6" />
@@ -30,12 +48,14 @@ function handleSubmit(values) {
         placeholder="Email"
         class="w-full text-center placeholder:!text-white/[0.54]"
       />
-      <UiInputPassword
+      <!-- <UiInputPassword
         name="password"
         placeholder="Password"
         class="w-full text-center placeholder:!text-white/[0.54]"
-      />
-      <UiBtn class="w-full font-normal border border-[#3A3A3C]" size="sm">Continue</UiBtn>
+      /> -->
+      <UiBtn class="w-full font-normal border border-border-primary" size="sm"
+        >Continue</UiBtn
+      >
     </Form>
   </div>
 </template>
