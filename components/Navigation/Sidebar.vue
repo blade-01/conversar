@@ -4,45 +4,50 @@ defineProps<{ nav: boolean }>();
 </script>
 
 <template>
-  <div class="sidebar" :class="{ 'active-sidebar': nav }">
-    <div>
+  <div class="sidebar" :class="{ 'sidebar-opened': nav }">
+    <div class="sidebar-channel">
+      <div class="flex flex-col gap-2 items-center">
+        <div
+          class="bg-bg-secondary rounded-xl w-[52px] h-[52px] flex justify-center items-center"
+        >
+          <img src="~/assets/svg/logo-light.svg" alt="logo" class="w-7 h-8" />
+        </div>
+        <hr class="border-t border-t-[#2F2E31] w-[50%]" />
+      </div>
+      <NuxtLink to="/auth" class="flex flex-col items-center gap-1 cursor-pointer">
+        <div
+          class="w-10 h-10 rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-text-primary dark:text-text-dark"
+        >
+          <Icon name="mdi:logout" width="20" />
+        </div>
+        <p class="text-xs text-text-primary dark:text-text-dark">Log out</p>
+      </NuxtLink>
+    </div>
+    <div class="w-full">
       <div class="sidebar-header">
-        <NuxtLink to="/">
-          <nuxt-img
-            provider="cloudinary"
-            :src="$colorMode.value === 'dark' ? '/nb-light.svg' : '/nb-dark.svg'"
-            alt="logo"
-            fit="inside"
-            height="60"
-            width="60"
-          />
-        </NuxtLink>
+        <PvAvatar
+          image="https://avatars.githubusercontent.com/u/47092407?v=4"
+          shape="circle"
+        />
+        <p>Salisu Blade</p>
       </div>
       <div class="sidebar-content">
         <ul class="flex flex-col gap-y-2">
-          <li v-for="(link, index) in links" :key="index">
-            <span v-if="!link.sub">
-              <RouterLink
-                :to="`${link.route}`"
-                active-class="sidebar-active"
-                class="sidebar-item"
-              >
-                <Icon v-if="link.icon" :name="`mdi:${link.icon}`" width="25" />
-                <span class="font-light">{{ link.name }}</span>
-              </RouterLink>
-            </span>
-            <span v-else>
+          <li v-for="(link, index) in links" :key="index" class="truncate">
+            <span>
               <span
                 class="flex items-center justify-between sidebar-item mb-2"
                 @click="toggleDropdown(link)"
               >
-                <span class="flex items-center gap-3">
+                <span class="flex items-center gap-3 font-medium">
                   <Icon v-if="link.icon" :name="`mdi:${link.icon}`" width="25" />
-                  <span class="font-light">{{ link.name }}</span>
+                  <span class="text-sm uppercase text-text-primary dark:text-text-dark">{{
+                    link.name
+                  }}</span>
                 </span>
                 <Icon
-                  name="mdi:menu-down-outline"
-                  width="18"
+                  name="mdi:chevron-down"
+                  width="20"
                   :class="
                     link.show
                       ? 'transition-all ease-in duration-300 transform rotate-180'
@@ -59,13 +64,20 @@ defineProps<{ nav: boolean }>();
                 ]"
               >
                 <span v-for="(sub, index) in link.sub" :key="index">
-                  <span class="block pl-[37px] pb-2">
+                  <span class="block pb-2">
                     <RouterLink
                       :to="`${sub.route}`"
-                      active-class="sidebar-active"
+                      active-class="sidebar-active-link"
                       class="sidebar-item"
                     >
-                      <span class="font-light">{{ sub.name }}</span>
+                      <span
+                        class="rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center w-8 h-8 cursor-pointer"
+                      >
+                        <Icon v-if="sub.icon" :name="`mdi:${sub.icon}`" width="15" />
+                      </span>
+                      <span class="font-light">{{
+                        truncateString(sub.name || "", 15)
+                      }}</span>
                     </RouterLink>
                   </span>
                 </span>
@@ -80,25 +92,29 @@ defineProps<{ nav: boolean }>();
 
 <style scoped>
 .sidebar {
-  @apply bg-white dark:bg-darkBgSec shadow-sm z-40 w-[260px] fixed top-0 md:left-0  -left-full transition-[left];
+  @apply bg-white dark:bg-bg-darkSidebar border-r border-r-border-topbar dark:border-r-border-darkTopbar z-40 w-[var(--sidebar-width)] md:w-[var(--sidebar-width-md)] lg:w-[var(--sidebar-width-lg)] fixed top-0 -left-full md:left-0 transition-[left] duration-500 flex;
+}
+
+.sidebar-channel {
+  @apply flex items-center flex-col gap-10 bg-bg-channelBar dark:bg-bg-darkChannelBar h-[inherit] p-2.5;
 }
 
 .sidebar-header {
-  @apply sticky top-0 bg-white dark:bg-darkBgSec w-full h-[60px] shadow-sm p-4 flex justify-between items-center;
+  @apply sticky top-0 text-text-primary dark:text-text-dark font-medium bg-white dark:bg-bg-darkSec w-full h-[var(--sidebar-height)] border-b border-b-border-topbar dark:border-b-border-darkTopbar p-4 flex items-center gap-2.5;
 }
 
 .sidebar-content {
-  @apply h-screen md:h-[calc(100vh-60px)] py-6 px-4 overflow-y-auto;
-}
-
-.active-sidebar {
-  @apply left-0 w-[260px] md:-left-full;
+  @apply h-[calc(100vh-var(--sidebar-height))] py-6 px-4 overflow-y-auto;
 }
 
 .sidebar-item {
-  @apply p-3 transition-all ease-in-out duration-300 hover:bg-[#00000042] hover:text-white hover:rounded-md cursor-pointer flex items-center gap-2;
+  @apply p-2 transition-all ease-in-out duration-300 hover:bg-hover-sidebar hover:text-text-primary dark:hover:text-text-dark hover:rounded-md cursor-pointer flex items-center gap-2 hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink;
 }
-.sidebar-active {
-  @apply bg-[rgb(140,139,139)] dark:bg-[rgba(225,225,225,0.1)] rounded-md text-white hover:bg-[rgb(169,169,169)] dark:hover:bg-[rgba(225,225,225,0.1)] !important;
+.sidebar-active-link {
+  @apply bg-bg-sidebarLink dark:bg-bg-darkSidebarLink rounded-md text-text-primary dark:text-text-dark  !important;
+}
+
+.sidebar-opened {
+  @apply left-0;
 }
 </style>
