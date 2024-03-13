@@ -6,7 +6,9 @@ definePageMeta({
 </script>
 
 <template>
-  <div></div>
+  <DashboardWrapper title="Dashboard">
+    <div>Hello</div>
+  </DashboardWrapper>
 </template>
 
 <script setup lang="ts"></script>
