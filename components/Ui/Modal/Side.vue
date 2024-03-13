@@ -59,7 +59,7 @@ watch(
       @click.self="handleOuterClick"
     >
       <div
-        class="flex bg-white dark:bg-darkBgSec h-full sheet"
+        class="flex bg-white dark:bg-bg-darkSec h-full sheet"
         :class="{
           'w-full sm:w-1/4': size === 'sm',
           'w-full md:w-1/2': size === 'md',
@@ -108,7 +108,7 @@ watch(
 
           <!-- Main Slot  -->
           <div
-            class="h-full overflow-y-scroll p-5 bg-white dark:bg-darkBgSec pb-32 sheet-body"
+            class="h-full overflow-y-scroll p-5 bg-white dark:bg-bg-darkSec pb-32 sheet-body"
             :class="{ '!h-auto': position === 'top' }"
           >
             <slot />
@@ -117,7 +117,7 @@ watch(
           <!-- Footer  -->
           <div
             v-if="$slots.footer"
-            class="footer fixed gap-3 sm:absolute bottom-0 sm:bottom-8 xl:bottom-0 right-0 left-0 bg-white dark:bg-darkBgSec px-4 py-2 flex justify-end border-t dark:border-t-gray-500 z-50"
+            class="footer fixed gap-3 sm:absolute bottom-0 sm:bottom-8 xl:bottom-0 right-0 left-0 bg-white dark:bg-bg-darkSec px-4 py-2 flex justify-end border-t dark:border-t-gray-500 z-50"
           >
             <slot name="footer"> </slot>
           </div>
@@ -180,18 +180,6 @@ watch(
   transform: translateY(100%);
   opacity: 0;
 }
-
-/* .sheet-body::-webkit-scrollbar {
-  @apply w-4 h-4;
-}
-
-.sheet-body::-webkit-scrollbar-thumb {
-  @apply bg-[#e8e8e8] rounded-[100vh] border-solid border-4 border-[#bebebe] shadow-md;
-}
-
-.sheet-body::-webkit-scrollbar-track {
-  @apply bg-[#e3e2e2];
-} */
 .footer {
   box-shadow: 0px -1px 5px 0px rgb(0 0 0 / 10%);
 }
