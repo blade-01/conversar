@@ -28,7 +28,7 @@ const visible = computed({
     :pt="{
       root: {
         class: [
-          'bg-white dark:bg-bg-darkSec dialog rounded-lg shadow-xl border',
+          'bg-bg-primary dark:bg-bg-dark dialog rounded-lg shadow-xl border',
           props.outerClass,
         ],
       },
