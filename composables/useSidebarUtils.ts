@@ -13,7 +13,7 @@ export default () => {
       show: true,
       sub: [
         {
-          name: "Hello World",
+          name: "Introduction",
           route: "/",
           icon: "pound"
         },
