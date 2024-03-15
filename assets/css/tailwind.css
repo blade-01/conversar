@@ -6,7 +6,7 @@
   /* CONFIG STYLE */
 
   body {
-    @apply font-satoshi text-base font-normal text-text-primary dark:text-text-dark  bg-bg-primary  transition-all duration-100 ease-linear m-0 p-0 
+    @apply font-satoshi text-base font-normal text-text-primary dark:text-text-dark  bg-bg-primary  transition-all duration-100 ease-linear m-0 p-0
     /* DARK MODE */
   dark:text-text-darkSec dark:bg-bg-dark;
   }
@@ -18,10 +18,12 @@
   :root {
     --sidebar-height: 60px;
     --sidebar-width: 85%;
-    --sidebar-width-md: 200px;
+    --sidebar-width-md: 40%;
     --sidebar-width-lg: 360px;
     --sidebar-width-xl: 260px;
-    --sidebar-width-2xl: 260px;
+    --sidebar-width-2xl: 400px;
+    --chat-width-lg: 620px;
+    --chat-width-2xl: 700px;
   }
 
   *,
@@ -128,9 +130,14 @@
   dark:accent-accent-dark;
   }
 
+  /* TEXT */
+  .text-style {
+    @apply text-text-primary dark:text-text-dark;
+  }
+
   /* ICONS */
   .icon-style {
-    @apply border rounded-full h-[30px] w-[30px] text-base flex justify-center items-center font-semibold transition-all ease-in-out duration-200 cursor-pointer;
+    @apply rounded-full text-text-primary dark:text-text-dark bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center w-8 h-8 cursor-pointer;
   }
 
   /* BUTTON */
