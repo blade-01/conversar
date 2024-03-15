@@ -41,7 +41,7 @@ function handleSubmit(values: any) {
     >
       Sign In With Google
     </UiBtn>
-    <hr class="w-[80%] border-white/[0.38] my-6" />
+    <hr class="w-[80%] border-[#E4E4E4] dark:border-white/[0.38] my-6" />
     <Form @submit="handleSubmit" class="w-full">
       <UiInputField
         name="email"
