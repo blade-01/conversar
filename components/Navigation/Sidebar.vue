@@ -16,11 +16,11 @@ defineProps<{ nav: boolean }>();
       </div>
       <NuxtLink to="/auth" class="flex flex-col items-center gap-1 cursor-pointer">
         <div
-          class="w-10 h-10 rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-text-primary dark:text-text-dark"
+          class="w-10 h-10 rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-style"
         >
           <Icon name="mdi:logout" width="20" />
         </div>
-        <p class="text-xs text-text-primary dark:text-text-dark">Log out</p>
+        <p class="text-xs text-style">Log out</p>
       </NuxtLink>
     </div>
     <div class="w-full">
@@ -41,9 +41,7 @@ defineProps<{ nav: boolean }>();
               >
                 <span class="flex items-center gap-3 font-medium">
                   <Icon v-if="link.icon" :name="`mdi:${link.icon}`" width="25" />
-                  <span class="text-sm uppercase text-text-primary dark:text-text-dark">{{
-                    link.name
-                  }}</span>
+                  <span class="text-sm uppercase text-style">{{ link.name }}</span>
                 </span>
                 <Icon
                   name="mdi:chevron-down"
@@ -70,10 +68,8 @@ defineProps<{ nav: boolean }>();
                       active-class="sidebar-active-link"
                       class="sidebar-item"
                     >
-                      <span
-                        class="rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center w-8 h-8 cursor-pointer"
-                      >
-                        <Icon v-if="sub.icon" :name="`mdi:${sub.icon}`" width="15" />
+                      <span class="icon-style">
+                        <Icon v-if="sub.icon" :name="`mdi:${sub.icon}`" size="15" />
                       </span>
                       <span class="font-light">{{
                         truncateString(sub.name || "", 15)
@@ -84,6 +80,14 @@ defineProps<{ nav: boolean }>();
               </span>
             </span>
           </li>
+          <li class="sidebar-item -mt-2">
+            <span class="icon-style">
+              <Icon name="mdi:plus" size="15" />
+            </span>
+            <span class="font-light text-text-secondary dark:text-text-darkSec"
+              >Create Channel</span
+            >
+          </li>
         </ul>
       </div>
     </div>
@@ -92,7 +96,9 @@ defineProps<{ nav: boolean }>();
 
 <style scoped>
 .sidebar {
-  @apply bg-white dark:bg-bg-darkSidebar border-r border-r-border-topbar dark:border-r-border-darkTopbar z-40 w-[var(--sidebar-width)] md:w-[var(--sidebar-width-md)] lg:w-[var(--sidebar-width-lg)] fixed top-0 -left-full md:left-0 transition-[left] duration-500 flex;
+  @apply bg-bg-sidebar dark:bg-bg-darkSidebar border-r border-r-border-topbar dark:border-r-border-darkTopbar z-40 fixed top-0 -left-full lg:left-0 transition-[left] lg:transition-none duration-500 flex
+  /* WIDTH */
+  w-[var(--sidebar-width)] md:w-[var(--sidebar-width-md)] lg:w-[var(--sidebar-width-lg)] 2xl:w-[var(--sidebar-width-2xl)];
 }
 
 .sidebar-channel {
@@ -100,7 +106,7 @@ defineProps<{ nav: boolean }>();
 }
 
 .sidebar-header {
-  @apply sticky top-0 text-text-primary dark:text-text-dark font-medium bg-white dark:bg-bg-darkSec w-full h-[var(--sidebar-height)] border-b border-b-border-topbar dark:border-b-border-darkTopbar p-4 flex items-center gap-2.5;
+  @apply sticky top-0 text-style font-medium bg-bg-sidebar dark:bg-bg-darkSidebar w-full h-[var(--sidebar-height)] border-b border-b-border-topbar dark:border-b-border-darkTopbar p-4 flex items-center gap-2.5;
 }
 
 .sidebar-content {
@@ -108,10 +114,10 @@ defineProps<{ nav: boolean }>();
 }
 
 .sidebar-item {
-  @apply p-2 transition-all ease-in-out duration-300 hover:bg-hover-sidebar hover:text-text-primary dark:hover:text-text-dark hover:rounded-md cursor-pointer flex items-center gap-2 hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink;
+  @apply p-2 transition-all ease-in-out duration-300 text-style hover:rounded-md cursor-pointer flex items-center gap-2 hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink;
 }
 .sidebar-active-link {
-  @apply bg-bg-sidebarLink dark:bg-bg-darkSidebarLink rounded-md text-text-primary dark:text-text-dark  !important;
+  @apply bg-bg-sidebarLink dark:bg-bg-darkSidebarLink rounded-md text-style  !important;
 }
 
 .sidebar-opened {
