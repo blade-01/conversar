@@ -1,6 +1,14 @@
 <script setup lang="ts">
-const { nav } = storeToRefs(useMainStore());
+// const { nav } = storeToRefs(useMainStore());
+const nav = ref<boolean>(false);
+const toggleSidebar = () => {
+  nav.value = !nav.value;
+};
 
+provide("collapsible", {
+  nav,
+  toggleSidebar,
+});
 watch(
   () => useRoute().path,
   () => {
@@ -13,18 +21,23 @@ watch(
   <div class="relative overflow-x-clip">
     <NavigationSidebar :nav="nav" />
     <main class="mainbar-wrapper" :class="{ 'mainbar-opened': nav }">
-      <div class="relative">
-        <NuxtPage />
-      </div>
+      <NuxtPage />
     </main>
   </div>
 </template>
 
 <style scoped>
 .mainbar-wrapper {
-  @apply bg-bg-primary dark:bg-bg-dark h-screen overflow-y-auto w-full md:ml-[var(--sidebar-width-md)] md:w-[calc(100%-var(--sidebar-width-md))] lg:ml-[var(--sidebar-width-lg)] lg:w-[calc(100%-var(--sidebar-width-lg))] transition-[margin-left] duration-500 md:transition-none;
+  @apply relative bg-bg-primary dark:bg-bg-dark h-screen overflow-y-auto w-full transition-[margin-left] lg:transition-none duration-500
+  /* MARGIN */
+  lg:ml-[var(--sidebar-width-lg)] 2xl:ml-[var(--sidebar-width-2xl)]
+  /* WIDTH */
+  lg:w-[calc(100%-var(--sidebar-width-lg))] 2xl:w-[calc(100%-var(--sidebar-width-2xl))];
 }
 .mainbar-opened {
-  @apply ml-[var(--sidebar-width)] md:ml-[var(--sidebar-width-md)] lg:ml-[var(--sidebar-width-lg)];
+  @apply ml-[var(--sidebar-width)] 
+          md:ml-[var(--sidebar-width-md)] 
+          lg:ml-[var(--sidebar-width-lg)] 
+          2xl:ml-[var(--sidebar-width-2xl)];
 }
 </style>
