@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const { links, toggleDropdown } = useSidebarUtils();
 defineProps<{ nav: boolean }>();
+const channelModal = ref(false);
+function handleSubmit(values: any) {
+  console.log("submitted", values);
+  channelModal.value = false;
+}
 </script>
 
 <template>
@@ -80,7 +85,7 @@ defineProps<{ nav: boolean }>();
               </span>
             </span>
           </li>
-          <li class="sidebar-item -mt-2">
+          <li class="sidebar-item -mt-2" @click="channelModal = !channelModal">
             <span class="icon-style">
               <Icon name="mdi:plus" size="15" />
             </span>
@@ -92,6 +97,49 @@ defineProps<{ nav: boolean }>();
       </div>
     </div>
   </div>
+
+  <UiModalCenter
+    v-model="channelModal"
+    header="Create Channel"
+    outer-class="w-[90%] lg:w-[500px]"
+  >
+    <Form :initial-values="{ switch: true }" @submit="handleSubmit" class="p-4 w-full">
+      <UiInputField
+        name="channelName"
+        label="CHANNEL NAME"
+        prepend-icon="mdi:pound"
+        outer-classes="!mb-0"
+      />
+      <p class="text-style text-xs mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
+        Channels are where conversations happen around a topic. Use a name that is easy to
+        find and understand.
+      </p>
+      <div class="flex justify-between items-center text-style mt-5 w-full">
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-1.5">
+            <Icon name="mdi:lock" size="20" />
+            <p class="text-sm lg:text-base font-medium">Private Channel</p>
+          </div>
+          <p class="text-xs">Channels created are only visible to you</p>
+        </div>
+        <UiInputSwitch name="switch" outer-classes="!w-fit" disabled />
+      </div>
+      <div class="flex justify-end mt-14 gap-2.5">
+        <UiBtn
+          class="!bg-transparent"
+          size="sm"
+          label="Cancel"
+          type="button"
+          @click="channelModal = !channelModal"
+        />
+        <UiBtn
+          label="Create Channel"
+          class="btn !bg-bg-secondary !text-white"
+          size="sm"
+        />
+      </div>
+    </Form>
+  </UiModalCenter>
 </template>
 
 <style scoped>
