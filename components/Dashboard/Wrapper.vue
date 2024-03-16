@@ -16,6 +16,10 @@ const items = [
 ];
 
 const memberSheet = ref(false);
+
+function handleSubmit(values: any) {
+  console.log("submitted", values);
+}
 </script>
 
 <template>
@@ -46,12 +50,22 @@ const memberSheet = ref(false);
       <div
         class="sticky w-full left-0 bottom-0 z-50 bg-bg-primary dark:bg-bg-dark p-4 mt-auto"
       >
-        <Form class="w-full">
-          <UiInputField
+        <Form @submit="handleSubmit" class="w-full">
+          <UiInputChat
             name="message"
+            as="textarea"
+            rows="1"
             placeholder="Send a message"
-            outer-classes="!mb-0 !w-full box-border"
-          />
+            append-icon="carbon:send-alt-filled"
+          >
+            <template #appendIcon>
+              <div
+                class="w-8 h-8 text-gray-700/[0.6] dark:text-white/[0.6] bg-[rgba(219,219,219,0.93)] dark:bg-[#515151] rounded-xl flex justify-center items-center hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer"
+              >
+                <Icon name="carbon:send-alt-filled" />
+              </div>
+            </template>
+          </UiInputChat>
         </Form>
       </div>
       <!-- ./ INPUT WRAPPER -->
