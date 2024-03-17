@@ -6,10 +6,6 @@ import {
 
 export default () => {
   const { $auth } = useNuxtApp();
-  // if (window.location.hostname === "localhost") {
-  //   connectAuthEmulator($auth, "http://127.0.0.1:9099");
-  // }
-  // connectAuthEmulator($auth, "http://127.0.0.1:9099");
   const provider = new GoogleAuthProvider();
   async function signInWithGoogle() {
     try {
