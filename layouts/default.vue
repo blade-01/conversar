@@ -28,7 +28,7 @@ watch(
 
 <style scoped>
 .mainbar-wrapper {
-  @apply relative bg-bg-primary dark:bg-bg-dark h-screen overflow-hidden w-full transition-[margin-left] lg:transition-none duration-500
+  @apply relative bg-bg-primary dark:bg-bg-dark w-full transition-[margin-left] lg:transition-none duration-500
   /* MARGIN */
   lg:ml-[var(--sidebar-width-lg)] 2xl:ml-[var(--sidebar-width-2xl)]
   /* WIDTH */
