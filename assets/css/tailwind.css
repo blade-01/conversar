@@ -15,6 +15,11 @@
     scroll-behavior: smooth;
   }
 
+  html,
+  body {
+    @apply h-full m-0 overflow-y-auto;
+  }
+
   :root {
     --sidebar-height: 60px;
     --sidebar-width: 85%;
