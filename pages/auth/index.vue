@@ -5,12 +5,14 @@ definePageMeta({
 });
 
 useHead({
-  title: "Welcome to Conversar",
+  title: "Sign In",
 });
 
 function handleSubmit(values: any) {
   console.log(values);
 }
+
+const { signInWithGoogle } = useAuth();
 </script>
 
 <template>
@@ -39,7 +41,7 @@ function handleSubmit(values: any) {
       prepend-icon="mdi:google"
       size="sm"
       class="w-full mt-8 !bg-bg-secondary !text-text-dark"
-      @click="$router.push('/')"
+      @click="signInWithGoogle"
     >
       Sign In With Google
     </UiBtn>
@@ -50,11 +52,6 @@ function handleSubmit(values: any) {
         placeholder="Email"
         class="w-full text-center placeholder:!text-white/[0.54]"
       />
-      <!-- <UiInputPassword
-        name="password"
-        placeholder="Password"
-        class="w-full text-center placeholder:!text-white/[0.54]"
-      /> -->
       <UiBtn class="w-full font-normal border border-border-primary" size="sm"
         >Continue</UiBtn
       >

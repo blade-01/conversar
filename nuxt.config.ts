@@ -25,7 +25,8 @@ export default defineNuxtConfig({
   plugins: [
     "~/plugins/directives.client.ts",
     "~/plugins/vue-tel-input.ts",
-    "~/plugins/primevue.ts"
+    "~/plugins/primevue.ts",
+    "~/plugins/firebase.client.ts"
   ],
   build: {
     transpile: ["primevue"]
@@ -38,7 +39,14 @@ export default defineNuxtConfig({
    */
   runtimeConfig: {
     public: {
-      baseURL: ""
+      firebase: {
+        apiKey: process.env.API_KEY,
+        authDomain: process.env.AUTH_DOMAIN,
+        projectId: process.env.PROJECT_ID,
+        storageBucket: process.env.STORAGE_BUCKET,
+        messagingSenderId: process.env.MESSAGING_SENDER_ID,
+        appId: process.env.APP_ID
+      }
     }
   },
   /**
