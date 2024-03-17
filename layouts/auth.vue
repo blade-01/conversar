@@ -4,9 +4,7 @@ const { setTheme } = useTheme();
 </script>
 
 <template>
-  <div
-    class="flex flex-col justify-center gap-2.5 text-center h-screen overflow-hidden px-4"
-  >
+  <div class="flex flex-col justify-center gap-2.5 text-center px-4">
     <div class="fixed top-5 right-5">
       <Icon
         :name="$colorMode.value === 'dark' ? 'mdi:weather-night' : 'mdi:weather-sunny'"

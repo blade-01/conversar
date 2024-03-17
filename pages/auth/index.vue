@@ -15,7 +15,7 @@ function handleSubmit(values: any) {
 
 <template>
   <div
-    class="flex flex-col items-center justify-center text-center w-[90%] md:w-[340px] mx-auto"
+    class="flex flex-col items-center justify-center text-center absolute inset-y-0 inset-x-0 w-[90%] md:w-[340px] mx-auto"
   >
     <img
       src="~/assets/svg/logo-light.svg"
