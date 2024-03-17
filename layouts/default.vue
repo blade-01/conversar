@@ -18,7 +18,7 @@ watch(
 </script>
 
 <template>
-  <div class="relative overflow-x-clip">
+  <div class="relative overflow-x-clip overflow-y-hidden">
     <NavigationSidebar :nav="nav" />
     <main class="mainbar-wrapper" :class="{ 'mainbar-opened': nav }">
       <NuxtPage />
@@ -28,7 +28,7 @@ watch(
 
 <style scoped>
 .mainbar-wrapper {
-  @apply relative bg-bg-primary dark:bg-bg-dark h-screen overflow-hidden w-full transition-[margin-left] lg:transition-none duration-500
+  @apply relative bg-bg-primary dark:bg-bg-dark h-screen  w-full transition-[margin-left] lg:transition-none duration-500
   /* MARGIN */
   lg:ml-[var(--sidebar-width-lg)] 2xl:ml-[var(--sidebar-width-2xl)]
   /* WIDTH */
@@ -39,5 +39,9 @@ watch(
           md:ml-[var(--sidebar-width-md)] 
           lg:ml-[var(--sidebar-width-lg)] 
           2xl:ml-[var(--sidebar-width-2xl)];
+}
+
+.mainbar-wrapper::-webkit-scrollbar {
+  @apply !w-0 !h-0 hidden;
 }
 </style>
