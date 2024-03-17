@@ -17,7 +17,7 @@
 
   html,
   body {
-    @apply h-full m-0 overflow-y-auto;
+    @apply h-full m-0 overflow-hidden;
   }
 
   :root {
