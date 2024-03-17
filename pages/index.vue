@@ -23,7 +23,7 @@ definePageMeta({
       </div>
       <!-- ./ DATE -->
 
-      <div class="mt-5 flex flex-col gap-5">
+      <div class="my-5 flex flex-col gap-5">
         <!-- MESSAGE DATA -->
         <div class="flex items-start gap-2.5" v-for="i in 50" :key="i">
           <img
@@ -49,6 +49,7 @@ definePageMeta({
             <!-- ./ MESSAGE -->
           </div>
         </div>
+        <div class="mt-5 text-center">This is the end of the page</div>
         <!-- ./ MESSAGE DATA -->
       </div>
     </div>

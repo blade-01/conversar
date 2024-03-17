@@ -49,7 +49,9 @@ function handleSubmit(values: any) {
       <!-- ./ CONTENT WRAPPER -->
 
       <!-- INPUT WRAPPER -->
-      <div class="sticky w-full left-0 bottom-0 z-50 bg-bg-primary dark:bg-bg-dark p-4">
+      <div
+        class="fixed md:sticky w-full left-0 bottom-0 z-50 bg-bg-primary dark:bg-bg-dark p-4"
+      >
         <Form @submit="handleSubmit" class="w-full">
           <UiInputChat
             name="message"
