@@ -41,7 +41,7 @@ function handleSubmit(values: any) {
           <li v-for="(link, index) in links" :key="index" class="truncate">
             <span>
               <span
-                class="flex items-center justify-between sidebar-item mb-2"
+                class="flex items-center justify-between sidebar-item hover:!bg-transparent mb-2"
                 @click="toggleDropdown(link)"
               >
                 <span class="flex items-center gap-3 font-medium">
