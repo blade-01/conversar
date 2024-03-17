@@ -42,7 +42,7 @@ function handleSubmit(values: any) {
             {{ description || `This is the start of ${title} channel` }}
           </p>
         </div>
-        <div class="mt-5 mb-[85px]">
+        <div class="mt-5 mb-[100px] lg:mb-0">
           <slot />
         </div>
       </div>
