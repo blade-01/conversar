@@ -27,7 +27,7 @@ function handleSubmit(values: any) {
   <!-- CHATS WRAPPER -->
   <div class="xl:flex overflow-hidden">
     <div
-      class="relative pb-[50px] w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+      class="relative mb-[50px] w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
     >
       <!-- CONTENT WRAPPER -->
       <div class="py-4 px-4 flex-1 h-[calc(100vh-142px)] overflow-y-auto">
@@ -78,7 +78,7 @@ function handleSubmit(values: any) {
     <div
       class="xl:basis-[var(--sidebar-width-lg)] 2xl:basis-[var(--sidebar-width-2xl)] hidden xl:block"
     >
-      <div class="p-4 sticky top-[var(--sidebar-height)]">
+      <div class="p-4 sticky top-0">
         <div class="flex flex-col gap-5">
           <p class="uppercase text-sm font-medium text-style">Members</p>
           <div v-for="item in items" :key="item.name" class="flex gap-2.5 items-center">
