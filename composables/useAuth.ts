@@ -1,8 +1,4 @@
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  connectAuthEmulator
-} from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default () => {
   const { $auth } = useNuxtApp();
