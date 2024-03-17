@@ -25,7 +25,7 @@ function handleSubmit(values: any) {
 <template>
   <NavigationTopbar :title="title" @toggle-members="memberSheet = !memberSheet" />
   <!-- CHATS WRAPPER -->
-  <div class="xl:flex h-auto overflow-hidden">
+  <div class="xl:flex">
     <div
       class="relative w-full border-r border-r-border-topbar dark:border-r-border-darkTopbar"
     >
