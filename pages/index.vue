@@ -6,7 +6,7 @@ definePageMeta({
 </script>
 
 <template>
-  <DashboardWrapper title="Introduction" description="Hello there, let's create magic 🪄">
+  <DashboardWrapper title="Introduction">
     <div>
       <!-- DATE -->
       <div class="flex justify-between items-center gap-5 text-center mb-5">
