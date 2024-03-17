@@ -27,10 +27,10 @@ function handleSubmit(values: any) {
   <!-- CHATS WRAPPER -->
   <div class="xl:flex">
     <div
-      class="relative top-[var(--sidebar-height)] h-[calc(100vh-var(--sidebar-height))] overflow-y-auto pb-[50px] mb-[50px] lg:pb-0 w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+      class="relative top-[var(--sidebar-height)] h-[calc(100vh-142px)] lg:h-auto overflow-y-auto pb-[50px] mb-[50px] lg:pb-0 lg:mb-0 w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
     >
       <!-- CONTENT WRAPPER -->
-      <div class="py-4 px-4 flex-1 overflow-y-auto">
+      <div class="py-4 px-4 flex-1 lg:h-[calc(100vh-142px)] overflow-y-auto">
         <div>
           <div class="icon-style h-12 w-12 lg:h-16 lg:w-16 mb-3">
             <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
