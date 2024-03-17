@@ -18,7 +18,7 @@ const { toggleSidebar, nav } = inject("collapsible") as {
   <div
     class="flex items-center fixed top-0 w-full lg:w-[calc(100%-var(--sidebar-width-lg))] 2xl:w-[calc(100%-var(--sidebar-width-2xl))] h-[var(--sidebar-height)] z-30 bg-bg-topbar dark:bg-bg-darkTopbar border-b border-b-border-topbar dark:border-b-border-darkTopbar"
     :class="{
-      'ml-0': nav,
+      'w-[calc(100%-var(--sidebar-width))] lg:w-[calc(100%-var(--sidebar-width-lg))] 2xl:w-[calc(100%-var(--sidebar-width-2xl))]': nav,
     }"
   >
     <div class="p-4 w-full">
