@@ -29,6 +29,7 @@
     "@vee-validate/yup": "^4.11.8",
     "@vueuse/nuxt": "^10.5.0",
     "@vueuse/router": "^10.6.1",
+    "firebase": "^10.9.0",
     "pinia": "^2.1.7",
     "primeicons": "^6.0.1",
     "primevue": "^3.39.0",
