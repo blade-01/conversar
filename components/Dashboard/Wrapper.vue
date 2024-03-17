@@ -27,7 +27,7 @@ function handleSubmit(values: any) {
   <!-- CHATS WRAPPER -->
   <div class="xl:flex">
     <div
-      class="relative top-[var(--sidebar-height)] h-[calc(100vh-142px)] lg:h-auto overflow-y-auto pb-[50px] mb-[50px] lg:pb-0 lg:mb-0 w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+      class="relative top-[var(--sidebar-height)] h-[calc(100vh-142px)] lg:h-auto overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
     >
       <!-- CONTENT WRAPPER -->
       <div class="py-4 px-4 flex-1 lg:h-[calc(100vh-142px)] overflow-y-auto">
