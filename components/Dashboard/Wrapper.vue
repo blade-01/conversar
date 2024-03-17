@@ -25,20 +25,22 @@ function handleSubmit(values: any) {
 <template>
   <NavigationTopbar :title="title" @toggle-members="memberSheet = !memberSheet" />
   <!-- CHATS WRAPPER -->
-  <div class="xl:flex">
+  <div class="xl:flex h-auto overflow-hidden">
     <div
-      class="relative w-full h-[calc(100vh-var(--sidebar-height))] overflow-y-auto flex flex-col border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+      class="relative w-full border-r border-r-border-topbar dark:border-r-border-darkTopbar"
     >
       <!-- CONTENT WRAPPER -->
-      <div class="py-4 px-4 flex-1">
+      <div class="py-4 px-4 flex-1 h-[calc(100vh-142px)] overflow-y-auto">
         <div>
           <div class="icon-style h-12 w-12 lg:h-16 lg:w-16 mb-3">
             <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
           </div>
           <h1 class="text-xl lg:text-2xl font-bold text-style mb-1">
-            {{ message || `Welcome to ${title} Channel` }}
+            {{ message || `Welcome to ${title} channel` }}
           </h1>
-          <p class="text-sm lg:text-base text-style">{{ description }}</p>
+          <p class="text-sm lg:text-base text-style">
+            {{ description || `This is the start of ${title} channel` }}
+          </p>
         </div>
         <div class="mt-5">
           <slot />
