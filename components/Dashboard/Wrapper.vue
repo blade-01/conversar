@@ -27,7 +27,7 @@ function handleSubmit(values: any) {
   <!-- CHATS WRAPPER -->
   <div class="xl:flex">
     <div
-      class="relative top-[var(--sidebar-height)] h-[calc(100vh-142px)] lg:h-auto overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+      class="relative top-[var(--sidebar-height)] h-[calc(100vh-60px)] lg:h-auto overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar bg-red-300"
     >
       <!-- CONTENT WRAPPER -->
       <div class="py-4 px-4 flex-1 lg:h-[calc(100vh-142px)] overflow-y-auto">
@@ -42,7 +42,7 @@ function handleSubmit(values: any) {
             {{ description || `This is the start of ${title} channel` }}
           </p>
         </div>
-        <div class="mt-5">
+        <div class="mt-5 mb-[85px]">
           <slot />
         </div>
       </div>
