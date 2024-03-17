@@ -15,7 +15,7 @@ const { toggleSidebar } = inject("collapsible") as {
 
 <template>
   <div
-    class="flex items-center fixed top-0 w-[inherit] h-[var(--sidebar-height)] z-30 bg-bg-topbar dark:bg-bg-darkTopbar border-b border-b-border-topbar dark:border-b-border-darkTopbar"
+    class="flex items-center fixed top-0 w-full lg:w-[inherit] h-[var(--sidebar-height)] z-30 bg-bg-topbar dark:bg-bg-darkTopbar border-b border-b-border-topbar dark:border-b-border-darkTopbar"
   >
     <div class="p-4 w-full">
       <div class="flex justify-between items-center w-full">
