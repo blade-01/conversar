@@ -18,7 +18,7 @@ watch(
 </script>
 
 <template>
-  <div class="relative flex w-full h-full overflow-hidden">
+  <div class="relative overflow-x-clip">
     <NavigationSidebar :nav="nav" />
     <main class="mainbar-wrapper" :class="{ 'mainbar-opened': nav }">
       <NuxtPage />
@@ -28,7 +28,7 @@ watch(
 
 <style scoped>
 .mainbar-wrapper {
-  @apply relative bg-bg-primary dark:bg-bg-dark w-full h-full flex-1 flex-col overflow-hidden transition-[margin-left] lg:transition-none duration-500
+  @apply relative bg-bg-primary dark:bg-bg-dark h-screen overflow-hidden w-full transition-[margin-left] lg:transition-none duration-500
   /* MARGIN */
   lg:ml-[var(--sidebar-width-lg)] 2xl:ml-[var(--sidebar-width-2xl)]
   /* WIDTH */
