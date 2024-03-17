@@ -59,9 +59,9 @@ watch(
       @click.self="handleOuterClick"
     >
       <div
-        class="flex bg-white dark:bg-darkBgSec h-full sheet"
+        class="flex bg-white dark:bg-bg-dark h-full sheet"
         :class="{
-          'w-full sm:w-1/4': size === 'sm',
+          'w-full sm:w-1/4 md:w-1/3 lg:w-1/4': size === 'sm',
           'w-full md:w-1/2': size === 'md',
           'w-full lg:w-3/4': size === 'lg',
           'w-full': size === 'full',
@@ -85,21 +85,8 @@ watch(
                 </h4>
               </slot>
               <slot name="close">
-                <button
-                  class="text-gray-800 dark:text-gray-300 border rounded-xl dark:border-gray-600 p-1"
-                  @click="handleClose"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="m16.192 6.344l-4.243 4.242l-4.242-4.242l-1.414 1.414L10.535 12l-4.242 4.242l1.414 1.414l4.242-4.242l4.243 4.242l1.414-1.414L13.364 12l4.242-4.242z"
-                    />
-                  </svg>
+                <button class="text-style pb-0.5" @click="handleClose">
+                  <Icon name="mdi:arrow-left" size="20" />
                 </button>
               </slot>
             </div>
@@ -108,7 +95,7 @@ watch(
 
           <!-- Main Slot  -->
           <div
-            class="h-full overflow-y-scroll p-5 bg-white dark:bg-darkBgSec pb-32 sheet-body"
+            class="h-full overflow-y-scroll p-5 bg-white dark:bg-bg-dark pb-32 sheet-body"
             :class="{ '!h-auto': position === 'top' }"
           >
             <slot />
@@ -117,7 +104,7 @@ watch(
           <!-- Footer  -->
           <div
             v-if="$slots.footer"
-            class="footer fixed gap-3 sm:absolute bottom-0 sm:bottom-8 xl:bottom-0 right-0 left-0 bg-white dark:bg-darkBgSec px-4 py-2 flex justify-end border-t dark:border-t-gray-500 z-50"
+            class="footer fixed gap-3 sm:absolute bottom-0 sm:bottom-8 xl:bottom-0 right-0 left-0 bg-white dark:bg-bg-dark px-4 py-2 flex justify-end border-t dark:border-t-gray-500 z-50"
           >
             <slot name="footer"> </slot>
           </div>
@@ -180,18 +167,6 @@ watch(
   transform: translateY(100%);
   opacity: 0;
 }
-
-/* .sheet-body::-webkit-scrollbar {
-  @apply w-4 h-4;
-}
-
-.sheet-body::-webkit-scrollbar-thumb {
-  @apply bg-[#e8e8e8] rounded-[100vh] border-solid border-4 border-[#bebebe] shadow-md;
-}
-
-.sheet-body::-webkit-scrollbar-track {
-  @apply bg-[#e3e2e2];
-} */
 .footer {
   box-shadow: 0px -1px 5px 0px rgb(0 0 0 / 10%);
 }

@@ -31,10 +31,11 @@ defineProps<{
         :class="{ 'p-invalid !border !border-red-500': error }"
         :pt="{ 
           slider: ({ props }: any) => ({
-            class: props.modelValue ? 'bg-green-400' : 'bg-gray-300'
+            class: props.modelValue ? 'bg-bg-secondary' : 'bg-gray-300'
           })
         }"
         @update:modelValue="handleChange"
+        v-bind="$attrs"
       />
       <label
         v-if="label"

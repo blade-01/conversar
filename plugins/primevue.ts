@@ -14,7 +14,6 @@ import FileUpload from "primevue/fileupload";
 import InputNumber from "primevue/inputnumber";
 import InputSwitch from "primevue/inputswitch";
 import MultiSelect from "primevue/multiselect";
-import Tooltip from "primevue/tooltip";
 import Chips from "primevue/chips";
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -35,5 +34,4 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component("PvInputSwitch", InputSwitch);
   nuxtApp.vueApp.component("PvMultiSelect", MultiSelect);
   nuxtApp.vueApp.component("PvChips", Chips);
-  nuxtApp.vueApp.directive("tooltip", Tooltip);
 });

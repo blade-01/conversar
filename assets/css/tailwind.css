@@ -1,18 +1,29 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("./satoshi.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
   /* CONFIG STYLE */
+
   body {
-    @apply font-urbanist text-base font-normal text-secondary  bg-white  transition-all duration-100 ease-linear m-0 p-0 
+    @apply font-satoshi text-base font-normal text-text-primary dark:text-text-dark  bg-bg-primary  transition-all duration-100 ease-linear m-0 p-0
     /* DARK MODE */
-  dark:text-slate-200 dark:bg-darkBg;
+  dark:text-text-darkSec dark:bg-bg-dark;
   }
 
   html {
     scroll-behavior: smooth;
+  }
+
+  :root {
+    --sidebar-height: 60px;
+    --sidebar-width: 85%;
+    --sidebar-width-md: 40%;
+    --sidebar-width-lg: 360px;
+    --sidebar-width-xl: 260px;
+    --sidebar-width-2xl: 400px;
+    --chat-width-lg: 620px;
+    --chat-width-2xl: 700px;
   }
 
   *,
@@ -22,17 +33,11 @@
   }
 
   ::-webkit-scrollbar {
-    @apply w-4 h-4;
+    @apply w-2 h-4;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-[100vh] border-solid border-4 
-    /* DARK MODE */
-    dark:bg-[#344675] dark:border-darkBgSec;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply dark:bg-darkBgSec;
+    @apply rounded-[100vh] bg-bg-thumb;
   }
 }
 
@@ -52,7 +57,7 @@
 
   /* NAVBAR TOGGLER */
   .toggler {
-    @apply w-5 bg-primary h-0.5 mb-1 transition ease-in-out duration-500 last:mb-0;
+    @apply w-5 bg-bg-primary h-0.5 mb-1 transition ease-in-out duration-500 last:mb-0;
   }
 
   .change .toggler:nth-child(1) {
@@ -83,19 +88,19 @@
   }
 
   .input-group label {
-    @apply block mb-2 text-gray-700  capitalize text-sm font-semibold 
+    @apply block mb-2 text-text-label  capitalize text-sm font-semibold 
     /* DARK MODE */
-  dark:text-white;
+  dark:text-text-darkLabel;
   }
 
   .input-group .input-style {
-    @apply relative bg-transparent border border-gray-500 focus:border-gray-700 outline-none rounded-[4px] h-[42px]  py-3 px-4 flex items-center w-full transition-all duration-200 ease-in-out
+    @apply relative bg-bg-input border border-border-primary focus:border-border-focus outline-none rounded-[4px] h-[42px] py-3 px-4 flex items-center w-full transition-all duration-200 ease-in-out
     /* Disabled */
-    disabled:rounded-[4px] disabled:border disabled:border-gray-300 disabled:bg-gray-50 disabled:p-4 disabled:py-6 
+    disabled:rounded-[4px] disabled:border disabled:border-border-disabled disabled:bg-bg-disabled disabled:p-4 disabled:py-6 
     /* Placeholder */
-    placeholder:font-light placeholder:text-secondary  
+    placeholder:font-light placeholder:!text-text-placeholder  
     /* DARK MODE */
-    dark:focus:border-white dark:placeholder:text-[#d8d8d8];
+    dark:bg-bg-darkInput dark:border-border-dark dark:focus:border-border-darkFocus dark:placeholder:!text-text-darkPlaceholder;
   }
 
   .input-group textarea.input-style {
@@ -120,21 +125,26 @@
 
   input[type="checkbox"].input-style,
   input[type="radio"].input-style {
-    @apply w-4 h-4 rounded p-0 accent-darkBgSec 
+    @apply w-4 h-4 rounded p-0 accent-accent-primary 
     /* DARK MODE */
-  dark:accent-slate-500;
+  dark:accent-accent-dark;
+  }
+
+  /* TEXT */
+  .text-style {
+    @apply text-text-primary dark:text-text-dark;
   }
 
   /* ICONS */
   .icon-style {
-    @apply border rounded-full h-[30px] w-[30px] text-base flex justify-center items-center font-semibold transition-all ease-in-out duration-200 cursor-pointer;
+    @apply rounded-full text-text-primary dark:text-text-dark bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center w-8 h-8 cursor-pointer;
   }
 
   /* BUTTON */
   .btn {
-    @apply outline-none px-8 py-4 h-[56px] flex justify-center items-center gap-2 leading-5 text-darkBg text-xl text-center font-semibold transition-all ease-in-out duration-200 bg-white rounded-[4px] cursor-pointer shadow-sm hover:scale-[0.98]
+    @apply outline-none px-8 py-4 h-[56px] flex justify-center items-center gap-2 leading-5 text-text-primary text-xl text-center font-medium transition-all ease-in-out duration-200 bg-btn-primary rounded-lg cursor-pointer shadow-sm hover:scale-[0.98] border-border-primary
     /* DARK MODE */
-    dark:text-white dark:bg-[#344675];
+    dark:text-text-dark dark:bg-btn-dark dark:border-border-dark;
   }
 
   .btn-xs {
@@ -142,7 +152,7 @@
   }
 
   .btn-sm {
-    @apply btn h-[40px] px-6 py-3 text-sm;
+    @apply btn h-[40px] px-6 py-3.5 text-sm;
   }
 
   .btn-md {
@@ -158,15 +168,15 @@
     @apply !bg-gray-200 !text-gray-700 hover:bg-gray-300 transition-all duration-300;
   }
   .btn-primary {
-    @apply bg-darkBg text-white hover:bg-darkBgSec transition-all duration-300 border border-darkBg;
+    @apply bg-bg-dark text-text-dark hover:bg-bg-darkSec transition-all duration-300 border border-bg-dark;
   }
 
   .btn-primary-inverse {
-    @apply bg-darkBg opacity-95 text-darkBgSec hover:bg-gray-100 transition-all duration-300 border border-darkBgSec;
+    @apply bg-bg-dark opacity-95 text-bg-darkSec hover:bg-gray-100 transition-all duration-300 border border-bg-darkSec;
   }
 
   .btn-success {
-    @apply bg-green-500 text-white hover:bg-green-600 transition-all duration-300;
+    @apply bg-green-500 text-text-dark hover:bg-green-600 transition-all duration-300;
   }
 
   .btn-success-inverse {
@@ -174,7 +184,7 @@
   }
 
   .btn-danger {
-    @apply bg-red-500 text-white hover:bg-red-600 transition-all duration-300;
+    @apply bg-red-500 text-text-dark hover:bg-red-600 transition-all duration-300;
   }
 
   .btn-danger-inverse {
@@ -182,7 +192,7 @@
   }
 
   .btn-warning {
-    @apply bg-yellow-500 text-white hover:bg-yellow-600 transition-all duration-300;
+    @apply bg-yellow-500 text-text-dark hover:bg-yellow-600 transition-all duration-300;
   }
 
   .btn-warning-inverse {
@@ -190,7 +200,7 @@
   }
 
   .btn-info {
-    @apply bg-blue-500 text-white hover:bg-blue-600 transition-all duration-300;
+    @apply bg-blue-500 text-text-dark hover:bg-blue-600 transition-all duration-300;
   }
 
   .btn-info-inverse {
@@ -236,23 +246,23 @@
   }
 
   .badge-primary {
-    @apply bg-blue-500 text-white;
+    @apply bg-blue-500 text-text-dark;
   }
 
   .badge-success {
-    @apply bg-green-500 text-white;
+    @apply bg-green-500 text-text-dark;
   }
 
   .badge-danger {
-    @apply bg-red-500 text-white;
+    @apply bg-red-500 text-text-dark;
   }
 
   .badge-warning {
-    @apply bg-yellow-500 text-white;
+    @apply bg-yellow-500 text-text-dark;
   }
 
   .badge-info {
-    @apply bg-blue-500 text-white;
+    @apply bg-blue-500 text-text-dark;
   }
 
   .badge-white {
@@ -298,36 +308,36 @@
     @apply input-style !p-0 ring-0;
   }
   .dropdown-text {
-    @apply text-secondary dark:text-white;
+    @apply text-text-secondary dark:text-text-dark;
   }
   .dropdown-filter-input {
-    @apply h-[42px] px-4 bg-white dark:bg-darkBgSec dropdown-text border border-gray-500 focus:border-gray-700 focus:ring-0;
+    @apply h-[42px] px-4 bg-bg-primary dark:bg-bg-darkSec dropdown-text border border-gray-500 focus:border-border-focus focus:ring-0;
   }
   .dropdown-icon {
     @apply absolute top-1/2 -translate-y-1/2 xs;
   }
   .dropdown-item {
-    @apply px-4 py-2 bg-inherit hover:bg-gray-100 dark:hover:bg-darkBgSec dropdown-text;
+    @apply px-4 py-2 bg-inherit hover:bg-gray-100 dark:hover:bg-bg-darkSec dropdown-text;
   }
 
   .dropdown-item-selected {
-    @apply bg-gray-200 dark:bg-darkBgSec dropdown-text;
+    @apply bg-gray-200 dark:bg-bg-darkSec dropdown-text;
   }
 
   /* DROPDOWN - MULTISELECT */
   .dropdown-checkbox-container {
-    @apply bg-[#bbbbbbb3] dark:bg-slate-500 rounded-md;
+    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox rounded-md;
   }
   .dropdown-checkbox {
-    @apply bg-[#bbbbbbb3] dark:bg-slate-500;
+    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox;
   }
   .dropdown-token {
-    @apply bg-[#bbbbbbb3] dark:bg-slate-500 px-2.5;
+    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox px-2.5;
   }
   .dropdown-token-label {
-    @apply text-secondary dark:text-white pr-1;
+    @apply text-text-secondary dark:text-text-dark pr-1;
   }
   .dropdown-token-icon {
-    @apply text-secondary dark:text-white;
+    @apply text-text-secondary dark:text-text-dark;
   }
 }

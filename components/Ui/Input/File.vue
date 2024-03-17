@@ -59,7 +59,7 @@ withDefaults(
       />
       <label :for="name">
         <span
-          class="input-style font-light !text-secondary dark:!text-[#d8d8d8] flex gap-2.5"
+          class="input-style font-light !text-text-secondary dark:!text-text-placeholder flex gap-2.5"
           :class="{
             '!pl-10': prependIcon,
           }"
@@ -103,13 +103,13 @@ withDefaults(
           :alt="fileName(value)"
           class="w-full h-full object-cover"
         />
-        <span class="input-style font-light !text-secondary dark:!text-[#d8d8d8]" v-else>
+        <span class="input-style font-light !text-text-secondary dark:!text-text-placeholder" v-else>
           {{ fileName(value) }}
         </span>
         <Icon
           name="mdi:close-circle-outline"
           size="24"
-          class="absolute -top-2.5 -right-2.5 text-secondary dark:text-[#d8d8d8] cursor-pointer"
+          class="absolute -top-2.5 -right-2.5 text-text-secondary dark:text-text-placeholder cursor-pointer"
           @click="handleChange(null)"
         />
       </div>
@@ -128,7 +128,7 @@ withDefaults(
               class="w-full h-full object-cover"
             />
             <span
-              class="input-style font-light !text-secondary dark:!text-[#d8d8d8]"
+              class="input-style font-light !text-text-secondary dark:!text-text-placeholder"
               v-else
             >
               {{ fileName(file) }}
@@ -136,7 +136,7 @@ withDefaults(
             <Icon
               name="mdi:close-circle-outline"
               size="24"
-              class="absolute -top-2.5 -right-2.5 text-secondary dark:text-[#d8d8d8] cursor-pointer"
+              class="absolute -top-2.5 -right-2.5 text-text-secondary dark:text-text-placeholder cursor-pointer"
               @click="handleChange(value.filter((f: any) => f.name !== file.name))"
             />
           </div>

@@ -1,9 +1,11 @@
-// import { defineStore } from 'pinia';
-
 export const useMainStore = defineStore("main", () => {
-  const name = ref<string>("Blade");
+  const nav = ref(false);
+  const toggleSidebar = () => {
+    nav.value = !nav.value;
+  };
 
   return {
-    name
+    nav,
+    toggleSidebar
   };
 });

@@ -27,13 +27,10 @@ const visible = computed({
     unstyled
     :pt="{
       root: {
-        class: [
-          'bg-white dark:bg-darkBgSec dialog rounded-lg shadow-xl border',
-          props.outerClass,
-        ],
+        class: ['bg-bg-primary dark:bg-bg-dark dialog rounded-lg shadow-xl', outerClass],
       },
       header: {
-        class: ['p-4 flex justify-between items-center border-b', headerClass],
+        class: ['p-4 flex justify-between items-center text-style', headerClass],
       },
       headerTitle: {
         class: 'font-semibold',
@@ -42,7 +39,7 @@ const visible = computed({
         class: 'p-2 max-h-[80vh] overflow-y-auto',
       },
       footer: {
-        class: 'p-2 border-t flex justify-end items-center',
+        class: 'p-2 flex justify-end items-center',
       },
     }"
     @hide="() => emit('hide')"

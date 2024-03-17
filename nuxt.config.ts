@@ -2,14 +2,14 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      titleTemplate: "%s | NuxtBoost",
-      title: "NuxtBoost",
+      titleTemplate: "%s | Conversar",
+      title: "Conversar",
       meta: [
         { charset: "utf-8" },
         {
           name: "description",
           content:
-            "Boost your productivity with NuxtBoost - work smarter, not harder."
+            "Boost your productivity with Conversar - work smarter, not harder."
         },
         { name: "theme-color", content: "#1e1e2e" }
       ],
