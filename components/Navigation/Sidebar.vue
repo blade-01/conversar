@@ -144,7 +144,7 @@ function handleSubmit(values: any) {
 
 <style scoped>
 .sidebar {
-  @apply bg-bg-sidebar dark:bg-bg-darkSidebar border-r border-r-border-topbar dark:border-r-border-darkTopbar z-40 fixed top-0 -left-full lg:left-0 transition-[left] lg:transition-none duration-500 flex flex-shrink-0 overflow-x-hidden
+  @apply bg-bg-sidebar dark:bg-bg-darkSidebar border-r border-r-border-topbar dark:border-r-border-darkTopbar z-40 fixed top-0 -left-full lg:left-0 transition-[left] lg:transition-none duration-500 flex
   /* WIDTH */
   w-[var(--sidebar-width)] md:w-[var(--sidebar-width-md)] lg:w-[var(--sidebar-width-lg)] 2xl:w-[var(--sidebar-width-2xl)];
 }

@@ -25,9 +25,9 @@ function handleSubmit(values: any) {
 <template>
   <NavigationTopbar :title="title" @toggle-members="memberSheet = !memberSheet" />
   <!-- CHATS WRAPPER -->
-  <div class="xl:flex">
+  <div class="xl:flex overflow-hidden">
     <div
-      class="relative w-full border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+      class="relative pb-[50px] w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
     >
       <!-- CONTENT WRAPPER -->
       <div class="py-4 px-4 flex-1 h-[calc(100vh-142px)] overflow-y-auto">
@@ -50,7 +50,7 @@ function handleSubmit(values: any) {
 
       <!-- INPUT WRAPPER -->
       <div
-        class="fixed md:sticky w-full left-0 bottom-0 z-50 bg-bg-primary dark:bg-bg-dark p-4"
+        class="fixed md:sticky w-full left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4"
       >
         <Form @submit="handleSubmit" class="w-full">
           <UiInputChat
