@@ -7,10 +7,7 @@ export default {
 <script lang="ts" setup>
 defineProps<{
   name: string;
-  prependIcon?: string;
   appendIcon?: string;
-  label?: string;
-  error?: string;
   innerClasses?: string;
   outerClasses?: string;
   required?: boolean;
@@ -44,55 +41,44 @@ onMounted(() => {
     :name="name"
     as="div"
     class="input-group !mb-0"
-    :class="{
-      error: error,
-      [outerClasses || '']: outerClasses,
-    }"
+    :class="outerClasses"
     v-slot="{ value, handleChange }"
   >
-    <label v-if="label" :for="name">
-      {{ label }}
-      <span v-if="required" class="required-mark">*</span>
-    </label>
     <div class="relative">
-      <button
-        v-if="prependIcon"
-        type="button"
-        class="absolute inset-y-0 left-0 flex items-center pl-3 icon-button prepend"
-      >
-        <slot name="prependIcon">
-          <Icon :name="prependIcon" class="w-5 h-5 text-gray-400 icon" />
-        </slot>
-      </button>
       <textarea
         v-bind="$attrs"
         class="chat-style"
-        :class="{
-          '!pl-10': prependIcon,
-          [innerClasses || '']: innerClasses,
-        }"
+        :class="innerClasses"
         ref="chatInput"
         :model-value="value"
         @update:modelValue="handleChange"
       />
-      <!-- <button
-        v-if="appendIcon"
-        class="absolute inset-y-0 right-10 flex items-center pr-3 icon-button append"
+      <div
+        class="absolute inset-y-0 right-0 flex items-center gap-2.5 pr-3 icon-button append m-0"
       >
-        <slot name="appendIcon">
-          <Icon :name="appendIcon" class="w-5 h-5 text-gray-400 icon" />
-        </slot>
-      </button> -->
-      <button
-        v-if="appendIcon"
-        class="absolute inset-y-0 right-0 flex items-center pr-3 icon-button append m-0"
-      >
-        <slot name="appendIcon">
-          <Icon :name="appendIcon" class="w-5 h-5 text-gray-400 icon" />
-        </slot>
-      </button>
+        <button type="button">
+          <Icon
+            name="emojione-monotone:slightly-smiling-face"
+            size="17"
+            class="text-gray-700/[0.6] dark:text-white/[0.6] hover:scale-95 transition-all duration-300"
+          />
+        </button>
+
+        <button type="button">
+          <Icon
+            name="mdi:paperclip"
+            size="17"
+            class="text-gray-700/[0.6] dark:text-white/[0.6] hover:scale-95 transition-all duration-300"
+          />
+        </button>
+
+        <button
+          class="w-8 h-8 text-gray-700/[0.6] dark:text-white/[0.6] bg-[rgba(219,219,219,0.93)] dark:bg-[#515151] rounded-xl flex justify-center items-center hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer"
+        >
+          <Icon name="carbon:send-alt-filled" size="20" />
+        </button>
+      </div>
     </div>
-    <span v-if="error" class="error-message">{{ error }}</span>
   </Field>
 </template>
 
