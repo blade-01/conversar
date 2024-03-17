@@ -121,7 +121,7 @@ watch(
 .fade-left-enter-active .sheet,
 .fade-left-leave-active,
 .fade-left-leave-active .sheet {
-  transition: all 0.2s ease;
+  transition: all 0.5s ease;
 }
 .fade-left-enter-from .sheet,
 .fade-left-leave-to .sheet {
@@ -134,7 +134,7 @@ watch(
 .fade-right-enter-active .sheet,
 .fade-right-leave-active,
 .fade-right-leave-active .sheet {
-  transition: all 0.2s ease;
+  transition: all 0.5s ease;
 }
 .fade-right-enter-from .sheet,
 .fade-right-leave-to .sheet {
@@ -147,7 +147,7 @@ watch(
 .fade-top-enter-active .sheet,
 .fade-top-leave-active,
 .fade-top-leave-active .sheet {
-  transition: all 0.2s ease;
+  transition: all 0.5s ease;
 }
 .fade-top-enter-from .sheet,
 .fade-top-leave-to .sheet {
@@ -160,7 +160,7 @@ watch(
 .fade-bottom-enter-active .sheet,
 .fade-bottom-leave-active,
 .fade-bottom-leave-active .sheet {
-  transition: all 0.2s ease;
+  transition: all 0.5s ease;
 }
 .fade-bottom-enter-from .sheet,
 .fade-bottom-leave-to .sheet {
