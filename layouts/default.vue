@@ -40,8 +40,4 @@ watch(
           lg:ml-[var(--sidebar-width-lg)] 
           2xl:ml-[var(--sidebar-width-2xl)];
 }
-
-.mainbar-wrapper::-webkit-scrollbar {
-  @apply !w-0 !h-0 hidden;
-}
 </style>
