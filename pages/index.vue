@@ -25,7 +25,7 @@ definePageMeta({
 
       <div class="mt-5 flex flex-col gap-5">
         <!-- MESSAGE DATA -->
-        <div class="flex items-start gap-2.5" v-for="i in 10" :key="i">
+        <div class="flex items-start gap-2.5" v-for="i in 50" :key="i">
           <img
             src="https://avatars.githubusercontent.com/u/47092407?v=4"
             alt="avatar"
