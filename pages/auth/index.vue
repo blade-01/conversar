@@ -12,7 +12,7 @@ function handleSubmit(values: any) {
   console.log(values);
 }
 
-const { signInWithGoogle } = useAuth();
+const { signInWithGoogle, isSigningIn } = useAuth();
 </script>
 
 <template>
@@ -42,6 +42,7 @@ const { signInWithGoogle } = useAuth();
       size="sm"
       class="w-full mt-8 !bg-bg-secondary !text-text-dark"
       @click="signInWithGoogle"
+      :is-loading="isSigningIn"
     >
       Sign In With Google
     </UiBtn>
