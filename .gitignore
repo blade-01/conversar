@@ -6,6 +6,7 @@
 .cache
 dist
 service-account.json
+vercel.json
 
 # Node dependencies
 node_modules
