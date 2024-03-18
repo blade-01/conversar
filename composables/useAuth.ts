@@ -3,7 +3,13 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 export default () => {
   const { $auth } = useNuxtApp();
   const provider = new GoogleAuthProvider();
+  const isSigningIn = ref(false);
   async function signInWithGoogle() {
+    if (isSigningIn.value) {
+      // Prevent sign-in if already in progress
+      return;
+    }
+    isSigningIn.value = true;
     try {
       const result = await signInWithPopup($auth, provider);
       // This gives you a Google Access Token. You can use it to access the Google API.
@@ -24,8 +30,10 @@ export default () => {
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
       console.error(errorCode, errorMessage, email, credential);
+    } finally {
+      isSigningIn.value = false;
     }
   }
 
-  return { signInWithGoogle };
+  return { signInWithGoogle, isSigningIn };
 };
