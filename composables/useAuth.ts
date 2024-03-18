@@ -1,39 +1,21 @@
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-
+import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
+import { useFirebaseAuth, useCurrentUser } from "vuefire";
 export default () => {
-  const { $auth } = useNuxtApp();
   const provider = new GoogleAuthProvider();
   const isSigningIn = ref(false);
+  const auth: any = useFirebaseAuth();
+  const user: any = useCurrentUser(auth);
   async function signInWithGoogle() {
-    if (isSigningIn.value) {
-      // Prevent sign-in if already in progress
-      return;
-    }
     isSigningIn.value = true;
     try {
-      const result = await signInWithPopup($auth, provider);
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential!.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-      console.log(user, token, credential);
+      await signInWithPopup(auth!, provider);
+      useRouter().push("/");
     } catch (error: any) {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-      console.error(errorCode, errorMessage, email, credential);
+      return Promise.reject(error);
     } finally {
       isSigningIn.value = false;
     }
   }
 
-  return { signInWithGoogle, isSigningIn };
+  return { signInWithGoogle, isSigningIn, user, auth };
 };
