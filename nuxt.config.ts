@@ -25,8 +25,8 @@ export default defineNuxtConfig({
   plugins: [
     "~/plugins/directives.client.ts",
     "~/plugins/vue-tel-input.ts",
-    "~/plugins/primevue.ts",
-    "~/plugins/firebase.ts"
+    "~/plugins/primevue.ts"
+    // "~/plugins/firebase.ts"
   ],
   build: {
     transpile: ["primevue"]
@@ -64,7 +64,8 @@ export default defineNuxtConfig({
     "dayjs-nuxt",
     "vue3-carousel-nuxt",
     "@nuxt/devtools",
-    "@nuxtjs/color-mode"
+    "@nuxtjs/color-mode",
+    "nuxt-vuefire"
   ],
   /**
    * Pinia configuration
@@ -108,6 +109,22 @@ export default defineNuxtConfig({
   image: {
     cloudinary: {
       baseURL: "https://res.cloudinary.com/bladencove/image/upload/RC"
+    }
+  },
+  /**
+   * Vuefire configuration
+   */
+  vuefire: {
+    config: {
+      apiKey: process.env.API_KEY,
+      authDomain: process.env.AUTH_DOMAIN,
+      projectId: process.env.PROJECT_ID,
+      storageBucket: process.env.STORAGE_BUCKET,
+      messagingSenderId: process.env.MESSAGING_SENDER_ID,
+      appId: process.env.APP_ID
+    },
+    auth: {
+      enabled: true
     }
   }
 });
