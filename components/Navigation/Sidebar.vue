@@ -1,10 +1,16 @@
 <script setup lang="ts">
-const { links, toggleDropdown } = useSidebarUtils();
+import { signOut } from "firebase/auth";
 defineProps<{ nav: boolean }>();
+const { links, toggleDropdown } = useSidebarUtils();
 const channelModal = ref(false);
 function handleSubmit(values: any) {
   console.log("submitted", values);
   channelModal.value = false;
+}
+const { auth, user } = useAuth();
+async function logout() {
+  await signOut(auth);
+  useRouter().push("/auth");
 }
 </script>
 
@@ -19,22 +25,19 @@ function handleSubmit(values: any) {
         </div>
         <hr class="border-t border-t-[#2F2E31] w-[50%]" />
       </div>
-      <NuxtLink to="/auth" class="flex flex-col items-center gap-1 cursor-pointer">
+      <div @click="logout" class="flex flex-col items-center gap-1 cursor-pointer">
         <div
           class="w-10 h-10 rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-style"
         >
           <Icon name="mdi:logout" width="20" />
         </div>
         <p class="text-xs text-style">Log out</p>
-      </NuxtLink>
+      </div>
     </div>
     <div class="w-full">
       <div class="sidebar-header">
-        <PvAvatar
-          image="https://avatars.githubusercontent.com/u/47092407?v=4"
-          shape="circle"
-        />
-        <p>Salisu Blade</p>
+        <PvAvatar :image="user.photoURL" shape="circle" />
+        <p>{{ user?.displayName }}</p>
       </div>
       <div class="sidebar-content">
         <ul class="flex flex-col gap-y-2">
