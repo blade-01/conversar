@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     "~/plugins/directives.client.ts",
     "~/plugins/vue-tel-input.ts",
     "~/plugins/primevue.ts"
-    // "~/plugins/firebase.ts"
   ],
   build: {
     transpile: ["primevue"]
@@ -124,7 +123,8 @@ export default defineNuxtConfig({
       appId: process.env.APP_ID
     },
     auth: {
-      enabled: true
+      enabled: true,
+      sessionCookie: true
     }
   }
 });
