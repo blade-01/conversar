@@ -7238,6 +7238,11 @@ vue-demi@>=0.14.5, vue-demi@>=0.14.6:
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.6.tgz"
   integrity sha512-8QA7wrYSHKaYgUxDA5ZC24w+eHm3sYCbp0EzcDwKqN3p6HqtTCGR/GVsPyZW92unff4UlcSh++lmqDWN3ZIq4w==
 
+vue-demi@latest:
+  version "0.14.7"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.7.tgz#8317536b3ef74c5b09f268f7782e70194567d8f2"
+  integrity sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==
+
 vue-devtools-stub@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/vue-devtools-stub/-/vue-devtools-stub-0.1.0.tgz"
@@ -7289,6 +7294,13 @@ vue@^3.2.21, vue@^3.2.47, vue@^3.3.4, vue@^3.3.7:
     "@vue/runtime-dom" "3.3.7"
     "@vue/server-renderer" "3.3.7"
     "@vue/shared" "3.3.7"
+
+vuefire@^3.1.23:
+  version "3.1.23"
+  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-3.1.23.tgz#632758d3d2468691bda7938e8d3bfb8f93692d71"
+  integrity sha512-bCz/3hw50+oilLBrUWQRRQccfhj0VeU8E+NZmFRnUe6D70yAMblRahLrQLmG6KBesJJeXexOEpRElP4pMq6zxA==
+  dependencies:
+    vue-demi latest
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
