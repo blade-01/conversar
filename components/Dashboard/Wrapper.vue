@@ -9,20 +9,20 @@ const { user } = useAuth();
 async function handleSubmit(values: any, { resetForm }: any) {
   if (values.message) {
     try {
-      // await addDoc(
-      //   collection(
-      //     collection(db, "channels"),
-      //     props.title.toLocaleLowerCase(),
-      //     "messages"
-      //   ),
-      //   {
-      //     message: values.message,
-      //     createdAt: Timestamp.now(),
-      //     uid: user.value.uid,
-      //     name: user.value.displayName,
-      //     avatar: user.value.photoURL,
-      //   }
-      // );
+      await addDoc(
+        collection(
+          collection(db, "channels"),
+          props.title.toLocaleLowerCase(),
+          "messages"
+        ),
+        {
+          message: values.message,
+          createdAt: Timestamp.now(),
+          uid: user.value.uid,
+          name: user.value.displayName,
+          avatar: user.value.photoURL,
+        }
+      );
       resetForm();
     } catch (error) {
       return Promise.reject(error);
