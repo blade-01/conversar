@@ -32,7 +32,7 @@ defineProps<{
       <button
         v-if="prependIcon"
         type="button"
-        class="absolute inset-y-0 left-0 flex items-center pl-3 icon-button prepend"
+        class="absolute inset-y-0 left-0 flex items-center pl-3 icon-button prepend z-10"
       >
         <slot name="prependIcon">
           <Icon :name="prependIcon" class="w-5 h-5 text-gray-400 icon" />
