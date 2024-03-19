@@ -5,24 +5,18 @@ export default () => {
       show?: boolean;
       icon?: string;
       route?: string;
-      sub?: { name: string; icon?: string; route?: string; sub?: object[] }[];
+      sub?: {
+        name: string;
+        icon?: string;
+        route?: string;
+        sub?: object[];
+        params?: string;
+      }[];
     }[]
   >([
     {
       name: "Channels",
-      show: true,
-      sub: [
-        {
-          name: "Introduction",
-          route: "/",
-          icon: "pound"
-        },
-        {
-          name: "General",
-          route: "/channels/general",
-          icon: "pound"
-        }
-      ]
+      show: true
     }
   ]);
 
