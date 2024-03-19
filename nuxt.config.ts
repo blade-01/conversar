@@ -25,7 +25,8 @@ export default defineNuxtConfig({
   plugins: [
     "~/plugins/directives.client.ts",
     "~/plugins/vue-tel-input.ts",
-    "~/plugins/primevue.ts"
+    "~/plugins/primevue.ts",
+    "~/plugins/firebase.ts"
   ],
   build: {
     transpile: ["primevue"]
