@@ -99,7 +99,7 @@
   }
 
   .input-group .input-style {
-    @apply relative bg-bg-input border border-border-primary focus:border-border-focus outline-none rounded-[4px] h-[42px] py-3 px-4 flex items-center w-full transition-all duration-200 ease-in-out
+    @apply relative bg-bg-input border border-border-primary focus:border-border-focus outline-none rounded-[4px] h-[42px] py-3 px-4 flex items-center w-full transition-all duration-200 ease-in-out text-text-primary dark:text-text-dark
     /* Disabled */
     disabled:rounded-[4px] disabled:border disabled:border-border-disabled disabled:bg-bg-disabled disabled:p-4 disabled:py-6 
     /* Placeholder */
