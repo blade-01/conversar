@@ -1,13 +1,20 @@
 <script setup lang="ts">
+import { doc, collection, query, orderBy } from "firebase/firestore";
 // @ts-ignore
 definePageMeta({
   middleware: ["auth"],
 });
+
+const db = useFirestore();
+const channel = useDocument(doc(db, "channels", "introduction"));
+const { data: messages, pending } = useCollection(
+  query(collection(db, "channels", "introduction", "messages"), orderBy("createdAt"))
+);
 </script>
 
 <template>
-  <DashboardWrapper title="Introduction">
-    <div>
+  <DashboardWrapper :title="channel?.name">
+    <div v-if="!pending">
       <!-- DATE -->
       <div class="flex justify-between items-center gap-5 text-center mb-5">
         <hr
@@ -25,37 +32,17 @@ definePageMeta({
 
       <div class="my-5 flex flex-col gap-5">
         <!-- MESSAGE DATA -->
-        <div class="flex items-start gap-2.5" v-for="i in 50" :key="i">
-          <img
-            src="https://avatars.githubusercontent.com/u/47092407?v=4"
-            alt="avatar"
-            class="w-10 h-10 rounded-full"
-          />
-          <div class="flex flex-col gap-1">
-            <div class="flex items-center gap-1">
-              <p class="text-style text-sm leading-[18.9px] xl:text-base font-medium">
-                Robert Kiyasoky
-              </p>
-              <Icon name="mdi:circle" size="4" class="text-style" />
-              <p class="text-[10px] font-light text-style leading-[13.5px] xl:text-xs">
-                3:55AM
-              </p>
-            </div>
-            <!-- MESSAGE -->
-            <p class="text-style text-sm xl:text-base">
-              Popular tools like Figma, Sketch, and Adobe XD are great for UI/UX design.
-              Experiment to find the one that suits your workflow.
-            </p>
-            <!-- ./ MESSAGE -->
-          </div>
-        </div>
+        <DisplayMessage
+          v-for="message in messages"
+          :key="message.uid"
+          :message="message"
+        />
         <div class="mt-5 text-center">This is the end of the page</div>
         <!-- ./ MESSAGE DATA -->
       </div>
     </div>
+    <div v-else>Loading....</div>
   </DashboardWrapper>
 </template>
-
-<script setup lang="ts"></script>
 
 <style scoped></style>
