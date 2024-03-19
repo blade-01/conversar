@@ -47,7 +47,7 @@ onMounted(() => {
     <div class="relative">
       <textarea
         v-bind="$attrs"
-        class="chat-style"
+        class="chat-style !pr-10"
         :class="innerClasses"
         ref="chatInput"
         :model-value="value"
@@ -84,7 +84,7 @@ onMounted(() => {
 
 <style scoped>
 .input-group .chat-style {
-  @apply relative bg-bg-input border border-border-primary focus:border-border-focus outline-none rounded-xl py-3 px-4 w-full transition-all duration-200 ease-in-out min-h-[50px] max-h-[200px] overflow-y-hidden resize-none flex items-center
+  @apply relative bg-bg-input border border-border-primary focus:border-border-focus outline-none rounded-xl py-3 px-4 w-full transition-all duration-200 ease-in-out min-h-[50px] max-h-[200px] overflow-y-hidden resize-none flex items-center !pr-[100px] text-text-primary dark:text-text-dark
     /* Placeholder */
     placeholder:font-light placeholder:!text-text-placeholder  
     /* DARK MODE */
