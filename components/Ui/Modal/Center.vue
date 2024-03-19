@@ -30,7 +30,10 @@ const visible = computed({
         class: ['bg-bg-primary dark:bg-bg-dark dialog rounded-lg shadow-xl', outerClass],
       },
       header: {
-        class: ['p-4 flex justify-between items-center text-style', headerClass],
+        class: [
+          'p-4 flex justify-between items-center text-style border-b border-b-border-topbar dark:border-b-border-darkTopbar',
+          headerClass,
+        ],
       },
       headerTitle: {
         class: 'font-semibold',

@@ -3,13 +3,12 @@ import UiBtn from "~/components/Ui/Btn/index.vue";
 import useTheme from "~/composables/useTheme";
 const { setTheme } = useTheme();
 defineProps<{
-  title: string;
+  title: string | undefined;
 }>();
 defineEmits<{
   (e: "toggleMembers"): void;
 }>();
-const { toggleSidebar, nav } = inject("collapsible") as {
-  nav: string;
+const { toggleSidebar } = inject("collapsible") as {
   toggleSidebar: () => void;
 };
 </script>
@@ -31,7 +30,7 @@ const { toggleSidebar, nav } = inject("collapsible") as {
           <span class="icon-style">
             <Icon name="mdi:pound" size="15" />
           </span>
-          <p class="font-bold text-style">{{ title }}</p>
+          <p class="font-bold text-style capitalize">{{ title }}</p>
         </div>
         <div class="flex items-center gap-4">
           <Icon

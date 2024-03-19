@@ -1,13 +1,44 @@
 <script setup lang="ts">
 import { signOut } from "firebase/auth";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  Timestamp,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 defineProps<{ nav: boolean }>();
+const { auth, user } = useAuth();
+const db = useFirestore();
+const channels = useCollection(
+  query(collection(db, "channels"), where("id", "==", user.value.uid), orderBy("name"))
+);
 const { links, toggleDropdown } = useSidebarUtils();
 const channelModal = ref(false);
-function handleSubmit(values: any) {
-  console.log("submitted", values);
-  channelModal.value = false;
+const isLoading = ref(false);
+async function handleSubmit(values: any, { resetForm }: any) {
+  if (values.channelName) {
+    try {
+      isLoading.value = true;
+      await setDoc(
+        doc(db, "channels", values.channelName.toLowerCase()),
+        {
+          name: values.channelName.toLowerCase(),
+          id: user.value.uid,
+          createdAt: Timestamp.now(),
+        },
+        { merge: true }
+      );
+      resetForm();
+      channelModal.value = false;
+      isLoading.value = false;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
-const { auth, user } = useAuth();
 async function logout() {
   await signOut(auth);
   useRouter().push("/auth");
@@ -16,7 +47,7 @@ async function logout() {
 
 <template>
   <div class="sidebar" :class="{ 'sidebar-opened': nav }">
-    <div class="sidebar-channel">
+    <div class="sidebar-community">
       <div class="flex flex-col gap-2 items-center">
         <div
           class="bg-bg-secondary rounded-xl w-[52px] h-[52px] flex justify-center items-center"
@@ -40,17 +71,17 @@ async function logout() {
         <p>{{ user?.displayName }}</p>
       </div>
       <div class="sidebar-content">
-        <ul class="flex flex-col gap-y-2">
-          <li v-for="(link, index) in links" :key="index" class="truncate">
-            <span>
-              <span
+        <div class="flex flex-col gap-y-2">
+          <div v-for="(link, index) in links" :key="index" class="truncate">
+            <div>
+              <div
                 class="flex items-center justify-between sidebar-item hover:!bg-transparent mb-2"
                 @click="toggleDropdown(link)"
               >
-                <span class="flex items-center gap-3 font-medium">
+                <p class="flex items-center gap-3 font-medium">
                   <Icon v-if="link.icon" :name="`mdi:${link.icon}`" width="25" />
                   <span class="text-sm uppercase text-style">{{ link.name }}</span>
-                </span>
+                </p>
                 <Icon
                   name="mdi:chevron-down"
                   width="20"
@@ -60,8 +91,8 @@ async function logout() {
                       : 'transition-all ease-out duration-300 transform rotate-40'
                   "
                 ></Icon>
-              </span>
-              <span
+              </div>
+              <div
                 class="flex flex-col"
                 :class="[
                   link.show
@@ -69,25 +100,38 @@ async function logout() {
                     : 'transition-[max-height] max-h-0 duration-300 ease-out overflow-hidden',
                 ]"
               >
-                <span v-for="(sub, index) in link.sub" :key="index">
-                  <span class="block pb-2">
-                    <RouterLink
-                      :to="`${sub.route}`"
-                      active-class="sidebar-active-link"
-                      class="sidebar-item"
-                    >
-                      <span class="icon-style">
-                        <Icon v-if="sub.icon" :name="`mdi:${sub.icon}`" size="15" />
-                      </span>
-                      <span class="font-light">{{
-                        truncateString(sub.name || "", 15)
-                      }}</span>
-                    </RouterLink>
+                <NuxtLink
+                  to="/"
+                  active-class="sidebar-active-link"
+                  class="sidebar-item mb-2"
+                >
+                  <span class="icon-style">
+                    <Icon name="mdi:pound" size="15" />
                   </span>
-                </span>
-              </span>
-            </span>
-          </li>
+                  <span class="font-light">{{
+                    truncateString("Introduction" || "", 15)
+                  }}</span>
+                </NuxtLink>
+                <NuxtLink
+                  v-for="channel in channels"
+                  :key="channel.id"
+                  :to="{
+                    name: 'channel-id',
+                    params: { id: channel.id },
+                  }"
+                  active-class="sidebar-active-link"
+                  class="sidebar-item mb-2"
+                >
+                  <span class="icon-style">
+                    <Icon name="mdi:pound" size="15" />
+                  </span>
+                  <span class="font-light">{{
+                    truncateString(channel.name || "", 15)
+                  }}</span>
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
           <li class="sidebar-item -mt-2" @click="channelModal = !channelModal">
             <span class="icon-style">
               <Icon name="mdi:plus" size="15" />
@@ -96,7 +140,7 @@ async function logout() {
               >Create Channel</span
             >
           </li>
-        </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -127,9 +171,9 @@ async function logout() {
         </div>
         <UiInputSwitch name="switch" outer-classes="!w-fit" disabled />
       </div>
-      <div class="flex justify-end mt-14 gap-2.5">
+      <div class="flex justify-end mt-14 gap-5">
         <UiBtn
-          class="!bg-transparent"
+          class="!bg-transparent !px-0"
           size="sm"
           label="Cancel"
           type="button"
@@ -139,6 +183,7 @@ async function logout() {
           label="Create Channel"
           class="btn !bg-bg-secondary !text-white"
           size="sm"
+          :is-loading="isLoading"
         />
       </div>
     </Form>
@@ -152,7 +197,7 @@ async function logout() {
   w-[var(--sidebar-width)] md:w-[var(--sidebar-width-md)] lg:w-[var(--sidebar-width-lg)] 2xl:w-[var(--sidebar-width-2xl)];
 }
 
-.sidebar-channel {
+.sidebar-community {
   @apply flex items-center flex-col gap-10 bg-bg-channelBar dark:bg-bg-darkChannelBar h-[inherit] p-2.5;
 }
 
@@ -165,7 +210,7 @@ async function logout() {
 }
 
 .sidebar-item {
-  @apply p-2 transition-all ease-in-out duration-300 text-style hover:rounded-md cursor-pointer flex items-center gap-2 hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink;
+  @apply capitalize p-2 transition-all ease-in-out duration-300 text-style hover:rounded-md cursor-pointer flex items-center gap-2 hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink;
 }
 .sidebar-active-link {
   @apply bg-bg-sidebarLink dark:bg-bg-darkSidebarLink rounded-md text-style  !important;

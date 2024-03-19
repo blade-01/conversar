@@ -1,37 +1,52 @@
 <script setup lang="ts">
-defineProps<{ title: string; message?: string; description?: string }>();
-const items = [
-  {
-    name: "Taofiq Animashaun",
-    avatar: "https://randomuser.me/api/port",
-  },
-  {
-    name: "Moses Ajor",
-    avatar: "https://randomuser.me/api/port",
-  },
-  {
-    name: "Oluwaseun Salisu",
-    avatar: "https://randomuser.me/api/port",
-  },
-];
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+const props = defineProps<{ title: string; message?: string; description?: string }>();
 
 const memberSheet = ref(false);
 
-function handleSubmit(values: any) {
-  console.log("submitted", values);
+const { user } = useAuth();
+
+async function handleSubmit(values: any, { resetForm }: any) {
+  if (values.message) {
+    try {
+      await addDoc(
+        collection(
+          collection(db, "channels"),
+          props.title.toLocaleLowerCase(),
+          "messages"
+        ),
+        {
+          message: values.message,
+          createdAt: Timestamp.now(),
+          uid: user.value.uid,
+          name: user.value.displayName,
+          avatar: user.value.photoURL,
+        }
+      );
+      resetForm();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  resetForm();
 }
+
+const db = useFirestore();
+const users = useCollection(collection(db, "users"));
 </script>
 
 <template>
   <div>
     <NavigationTopbar :title="title" @toggle-members="memberSheet = !memberSheet" />
     <!-- CHATS WRAPPER -->
-    <div class="xl:flex overflow-hidden">
+    <div
+      class="xl:flex md:h-[calc(100vh-var(--sidebar-height))] overflow-hidden md:overflow-auto"
+    >
       <div
-        class="relative h-[calc(100vh-142px)] md:h-auto overflow-hidden overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+        class="relative h-[calc(100vh-142px)] md:h-full md:flex md:flex-col overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
       >
         <!-- CONTENT WRAPPER -->
-        <div class="py-4 px-4 flex-1 md:h-[calc(100vh-142px)] md:overflow-y-auto">
+        <div class="py-4 px-4 flex-1 md:overflow-y-auto">
           <div>
             <div class="icon-style h-12 w-12 lg:h-16 lg:w-16 mb-3">
               <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
@@ -82,12 +97,11 @@ function handleSubmit(values: any) {
         <div class="p-4 sticky top-0">
           <div class="flex flex-col gap-5">
             <p class="uppercase text-sm font-medium text-style">Members</p>
-            <div v-for="item in items" :key="item.name" class="flex gap-2.5 items-center">
-              <PvAvatar
-                image="https://avatars.githubusercontent.com/u/47092407?v=4"
-                shape="circle"
-              />
-              <p class="text-style text-sm">{{ truncateString(item.name || "", 20) }}</p>
+            <div v-for="user in users" :key="user.uid" class="flex gap-2.5 items-center">
+              <PvAvatar :image="user.avatar" shape="circle" />
+              <p class="text-style text-sm">
+                {{ truncateString(user.name || "", 20) }}
+              </p>
             </div>
           </div>
         </div>
@@ -99,12 +113,11 @@ function handleSubmit(values: any) {
     <div class="xl:hidden">
       <UiModalSide v-model="memberSheet" title="Members" size="sm">
         <div class="flex flex-col gap-5">
-          <div v-for="item in items" :key="item.name" class="flex gap-2.5 items-center">
-            <PvAvatar
-              image="https://avatars.githubusercontent.com/u/47092407?v=4"
-              shape="circle"
-            />
-            <p class="text-style text-sm">{{ truncateString(item.name || "", 20) }}</p>
+          <div v-for="user in users" :key="user.uid" class="flex gap-2.5 items-center">
+            <PvAvatar :image="user.avatar" shape="circle" />
+            <p class="text-style text-sm">
+              {{ truncateString(user.name || "", 20) }}
+            </p>
           </div>
         </div>
       </UiModalSide>

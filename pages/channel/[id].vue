@@ -4,11 +4,12 @@ import { doc, collection, query, orderBy } from "firebase/firestore";
 definePageMeta({
   middleware: ["auth"],
 });
+const { id } = useRoute().params;
 
 const db = useFirestore();
-const channel = useDocument(doc(db, "channels", "introduction"));
+const channel = useDocument(doc(db, "channels", id as string));
 const { data: messages, pending } = useCollection(
-  query(collection(db, "channels", "introduction", "messages"), orderBy("createdAt"))
+  query(collection(db, "channels", id as string, "messages"), orderBy("createdAt"))
 );
 </script>
 
