@@ -8,7 +8,7 @@ const { id } = useRoute().params;
 
 const db = useFirestore();
 const channel = useDocument(doc(db, "channels", id as string));
-const { data: messages, pending } = useCollection(
+const { data: messages, pending } = useCollection<MessageIndexData>(
   query(collection(db, "channels", id as string, "messages"), orderBy("createdAt"))
 );
 </script>
@@ -38,11 +38,18 @@ const { data: messages, pending } = useCollection(
           :key="message.uid"
           :message="message"
         />
-        <div class="mt-5 text-center">This is the end of the page</div>
         <!-- ./ MESSAGE DATA -->
       </div>
     </div>
-    <div v-else>Loading....</div>
+    <div v-else class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <client-only>
+        <Vue3Lottie
+          animationLink="https://res.cloudinary.com/bladencove/raw/upload/v1710981038/loading-lottie_dicrfr.json"
+          :height="200"
+          :width="200"
+        />
+      </client-only>
+    </div>
   </DashboardWrapper>
 </template>
 
