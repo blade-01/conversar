@@ -15,7 +15,7 @@ defineProps<{
         </p>
         <Icon name="mdi:circle" size="4" class="text-style" />
         <p class="text-[10px] font-light text-style leading-[13.5px] xl:text-xs">
-          {{ $dayjs(message?.createdAt.toDate()).format("h:mm A") }}
+          {{ $dayjs(message?.createdAt?.toDate()).format("h:mm A") }}
         </p>
       </div>
       <!-- MESSAGE -->

@@ -58,7 +58,7 @@ const users = useCollection(collection(db, "users"));
               {{ description || `This is the start of ${title} channel` }}
             </p>
           </div>
-          <div class="mt-5 mb-[100px] lg:mb-0">
+          <div class="mt-5 mb-7 lg:mb-0">
             <slot />
           </div>
         </div>

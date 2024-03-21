@@ -35,28 +35,28 @@ const { signInWithGoogle, isSigningIn } = useAuth();
       Welcome to Conversar
     </h1>
     <p class="text-sm text-text-primary/[0.64] dark:text-white/[0.64]">
-      Login or Register with your email
+      Where Chat Meets Charm! ✨
     </p>
-    <UiBtn
-      prepend-icon="mdi:google"
-      size="sm"
-      class="w-full mt-8 !bg-bg-secondary !text-text-dark"
-      @click="signInWithGoogle"
-      :is-loading="isSigningIn"
-    >
-      Sign In With Google
-    </UiBtn>
-    <hr class="w-[80%] border-[#E4E4E4] dark:border-white/[0.38] my-6" />
-    <Form @submit="handleSubmit" class="w-full">
-      <UiInputField
-        name="email"
-        placeholder="Email"
-        class="w-full text-center placeholder:!text-white/[0.54]"
-      />
-      <UiBtn class="w-full font-normal border border-border-primary" size="sm"
-        >Continue</UiBtn
+    <div class="flex flex-col gap-5 w-full mt-8">
+      <UiBtn
+        prepend-icon="mdi:google"
+        size="sm"
+        class="w-full !bg-bg-secondary !text-text-dark"
+        @click="signInWithGoogle"
+        :is-loading="isSigningIn"
       >
-    </Form>
+        Sign In With Google
+      </UiBtn>
+      <!-- <UiBtn
+        prepend-icon="mdi:apple"
+        size="sm"
+        class="w-full !bg-bg-apple !text-text-dark"
+        @click="signInWithGoogle"
+        :is-loading="isSigningIn"
+      >
+        Sign In With Apple
+      </UiBtn> -->
+    </div>
   </div>
 </template>
 
