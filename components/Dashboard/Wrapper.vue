@@ -1,38 +1,83 @@
 <script setup lang="ts">
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, query, orderBy } from "firebase/firestore";
 const props = defineProps<{ title: string; message?: string; description?: string }>();
 
 const memberSheet = ref(false);
 
 const { user } = useAuth();
-
-async function handleSubmit(values: any, { resetForm }: any) {
-  if (values.message) {
-    try {
-      await addDoc(
-        collection(
-          collection(db, "channels"),
-          props.title.toLocaleLowerCase(),
-          "messages"
-        ),
-        {
-          message: values.message,
-          createdAt: Timestamp.now(),
-          uid: user.value.uid,
-          name: user.value.displayName,
-          avatar: user.value.photoURL,
-        }
-      );
-      resetForm();
-    } catch (error) {
-      return Promise.reject(error);
-    }
+const chat = ref("");
+const chatBox = ref<HTMLElement | null>(null);
+const resetForm = ref<HTMLFormElement | null>(null);
+async function handleSubmit() {
+  try {
+    await addDoc(
+      collection(collection(db, "channels"), props.title.toLocaleLowerCase(), "messages"),
+      {
+        message: chat.value,
+        createdAt: Timestamp.now(),
+        uid: user.value.uid,
+        name: user.value.displayName,
+        avatar: user.value.photoURL,
+      }
+    );
+    resetForm.value?.reset();
+    resetForm.value?.focus();
+    const inputElement = chatBox.value;
+    console.log(inputElement);
+    // if (inputElement) {
+    //   inputElement.style.height = "initial"; // Set to default height
+    //   inputElement.style.overflowY = "hidden"; // Hide scrollbars
+    // }
+    // chatBox.value?.style.height = "50px";
+    scrollToBottom();
+  } catch (error) {
+    return Promise.reject(error);
   }
-  resetForm();
 }
 
 const db = useFirestore();
-const users = useCollection(collection(db, "users"));
+const users = useCollection(query(collection(db, "users"), orderBy("name")));
+// const messageContainer = ref<HTMLElement | null>(null);
+// function scrollToBottom() {
+//   const messageContainer = document.querySelector(".message-container") as HTMLElement;
+//   messageContainer.scrollTop = messageContainer.scrollHeight;
+//   // nextTick(() => {
+//   //   if (messageContainer.value) {
+//   //     messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+//   //   }
+//   // });
+// }
+
+// const messageContainer = ref<HTMLElement | null>(null);
+
+// const scrollToBottom = () => {
+//   // Vue.nextTick ensures that the DOM is updated before scrolling
+//   nextTick(() => {
+//     const container = messageContainer.value;
+//     if (container) {
+//       container.scrollTop = container.scrollHeight;
+//     }
+//   });
+// };
+
+onMounted(() => {
+  setTimeout(() => {
+    scrollToBottom();
+  }, 1000);
+});
+
+const contentWrapper = ref<HTMLElement | null>(null);
+
+// After a new message is sent, call this function
+const scrollToBottom = () => {
+  nextTick(() => {
+    const contentElement = contentWrapper.value;
+    if (contentElement) {
+      // contentElement.scrollTop = contentElement.scrollHeight;
+      contentElement.scrollTo({ top: contentElement.scrollHeight, behavior: "smooth" });
+    }
+  });
+};
 </script>
 
 <template>
@@ -40,13 +85,13 @@ const users = useCollection(collection(db, "users"));
     <NavigationTopbar :title="title" @toggle-members="memberSheet = !memberSheet" />
     <!-- CHATS WRAPPER -->
     <div
-      class="xl:flex md:h-[calc(100vh-var(--sidebar-height))] overflow-hidden md:overflow-auto"
+      class="xl:flex md:h-[calc(100vh-var(--sidebar-height))] overflow-hidden md:overflow-auto break-all"
     >
       <div
         class="relative h-[calc(100vh-142px)] md:h-full md:flex md:flex-col overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
       >
         <!-- CONTENT WRAPPER -->
-        <div class="py-4 px-4 flex-1 md:overflow-y-auto">
+        <div class="py-4 px-4 flex-1 md:overflow-y-auto" ref="contentWrapper">
           <div>
             <div class="icon-style h-12 w-12 lg:h-16 lg:w-16 mb-3">
               <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
@@ -58,7 +103,7 @@ const users = useCollection(collection(db, "users"));
               {{ description || `This is the start of ${title} channel` }}
             </p>
           </div>
-          <div class="mt-5 mb-7 lg:mb-0">
+          <div class="mt-5 mb-[80px] lg:mb-0">
             <slot />
           </div>
         </div>
@@ -66,25 +111,17 @@ const users = useCollection(collection(db, "users"));
 
         <!-- INPUT WRAPPER -->
         <div
-          class="fixed md:sticky w-full left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4"
+          class="fixed md:sticky w-[inherit] left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4 message-container"
+          ref="messageContainer"
         >
-          <Form @submit="handleSubmit" class="w-full">
+          <form @submit.prevent="handleSubmit" class="w-full" ref="resetForm">
             <UiInputChat
+              v-model="chat"
               name="message"
-              as="textarea"
-              rows="1"
               placeholder="Send a message"
-              append-icon="carbon:send-alt-filled"
-            >
-              <template #appendIcon>
-                <div
-                  class="w-8 h-8 text-gray-700/[0.6] dark:text-white/[0.6] bg-[rgba(219,219,219,0.93)] dark:bg-[#515151] rounded-xl flex justify-center items-center hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer"
-                >
-                  <Icon name="carbon:send-alt-filled" />
-                </div>
-              </template>
-            </UiInputChat>
-          </Form>
+              ref="chatBox"
+            />
+          </form>
         </div>
         <!-- ./ INPUT WRAPPER -->
       </div>
