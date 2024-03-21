@@ -35,7 +35,7 @@ const { signInWithGoogle, isSigningIn } = useAuth();
       Welcome to Conversar
     </h1>
     <p class="text-sm text-text-primary/[0.64] dark:text-white/[0.64]">
-      Login or Register with your email
+      Where Chat Meets Charm! ✨
     </p>
     <div class="flex flex-col gap-5 w-full mt-8">
       <UiBtn
@@ -47,7 +47,7 @@ const { signInWithGoogle, isSigningIn } = useAuth();
       >
         Sign In With Google
       </UiBtn>
-      <UiBtn
+      <!-- <UiBtn
         prepend-icon="mdi:apple"
         size="sm"
         class="w-full !bg-bg-apple !text-text-dark"
@@ -55,7 +55,7 @@ const { signInWithGoogle, isSigningIn } = useAuth();
         :is-loading="isSigningIn"
       >
         Sign In With Apple
-      </UiBtn>
+      </UiBtn> -->
     </div>
   </div>
 </template>
