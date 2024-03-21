@@ -53,7 +53,14 @@ defineExpose({
     :disabled="isLoading"
     ref="button"
   >
-    <div v-if="!isLoading">
+    <div
+      v-if="!isLoading"
+      :class="[
+        {
+          'flex items-center gap-2': prependIcon || appendIcon,
+        },
+      ]"
+    >
       <Icon :name="`${prependIcon}`" :size="prependSize" v-if="prependIcon" />
       <span v-if="label">{{ label }}</span>
       <slot></slot>
