@@ -19,7 +19,7 @@ defineProps<{
         </p>
       </div>
       <!-- MESSAGE -->
-      <p class="text-style text-sm xl:text-base">
+      <p class="text-style text-sm xl:text-base break-all">
         {{ message.message }}
       </p>
       <!-- ./ MESSAGE -->
