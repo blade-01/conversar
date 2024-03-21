@@ -11,7 +11,12 @@ export default defineNuxtConfig({
           content:
             "Boost your productivity with Conversar - work smarter, not harder."
         },
-        { name: "theme-color", content: "#1e1e2e" }
+        { name: "theme-color", content: "#1e1e2e" },
+        {
+          name: "viewport",
+          content:
+            "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        }
       ],
       link: [{ rel: "icon", href: "/favicon.ico" }]
     }
