@@ -1,70 +1,58 @@
 <script setup lang="ts">
 import { collection, addDoc, Timestamp, query, orderBy } from "firebase/firestore";
+import UiInputChat from "~/components/Ui/Input/Chat.vue";
+
+const chatInput = ref<InstanceType<typeof UiInputChat> | null>(null);
+
 const props = defineProps<{ title: string; message?: string; description?: string }>();
 
 const memberSheet = ref(false);
 
 const { user } = useAuth();
 const chat = ref("");
-const chatBox = ref<HTMLElement | null>(null);
 const resetForm = ref<HTMLFormElement | null>(null);
+const isLoading = ref(false);
 async function handleSubmit() {
-  try {
-    await addDoc(
-      collection(collection(db, "channels"), props.title.toLocaleLowerCase(), "messages"),
-      {
-        message: chat.value,
-        createdAt: Timestamp.now(),
-        uid: user.value.uid,
-        name: user.value.displayName,
-        avatar: user.value.photoURL,
-      }
-    );
-    resetForm.value?.reset();
-    resetForm.value?.focus();
-    const inputElement = chatBox.value;
-    console.log(inputElement);
-    // if (inputElement) {
-    //   inputElement.style.height = "initial"; // Set to default height
-    //   inputElement.style.overflowY = "hidden"; // Hide scrollbars
-    // }
-    // chatBox.value?.style.height = "50px";
-    scrollToBottom();
-  } catch (error) {
-    return Promise.reject(error);
+  isLoading.value = true;
+  if (chat.value.trim()) {
+    try {
+      resetForm.value?.reset();
+      await addDoc(
+        collection(
+          collection(db, "channels"),
+          props.title.toLocaleLowerCase(),
+          "messages"
+        ),
+        {
+          message: chat.value,
+          createdAt: Timestamp.now(),
+          uid: user.value.uid,
+          name: user.value.displayName,
+          avatar: user.value.photoURL,
+        }
+      );
+      chatInput?.value?.reduceChatBoxHeight();
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      isLoading.value = false;
+      scrollToBottom();
+    }
   }
 }
 
+const handleEnterPress = () => {
+  if (!chat.value.trim()) {
+    console.log("Empty chat, not submitting");
+  } else {
+    handleSubmit();
+  }
+};
+
 const db = useFirestore();
-const users = useCollection(query(collection(db, "users"), orderBy("name")));
-// const messageContainer = ref<HTMLElement | null>(null);
-// function scrollToBottom() {
-//   const messageContainer = document.querySelector(".message-container") as HTMLElement;
-//   messageContainer.scrollTop = messageContainer.scrollHeight;
-//   // nextTick(() => {
-//   //   if (messageContainer.value) {
-//   //     messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
-//   //   }
-//   // });
-// }
-
-// const messageContainer = ref<HTMLElement | null>(null);
-
-// const scrollToBottom = () => {
-//   // Vue.nextTick ensures that the DOM is updated before scrolling
-//   nextTick(() => {
-//     const container = messageContainer.value;
-//     if (container) {
-//       container.scrollTop = container.scrollHeight;
-//     }
-//   });
-// };
-
-onMounted(() => {
-  setTimeout(() => {
-    scrollToBottom();
-  }, 1000);
-});
+const { data: users, pending } = useCollection(
+  query(collection(db, "users"), orderBy("name"))
+);
 
 const contentWrapper = ref<HTMLElement | null>(null);
 
@@ -74,10 +62,16 @@ const scrollToBottom = () => {
     const contentElement = contentWrapper.value;
     if (contentElement) {
       // contentElement.scrollTop = contentElement.scrollHeight;
-      contentElement.scrollTo({ top: contentElement.scrollHeight, behavior: "smooth" });
+      contentElement.scrollTo({ top: contentElement.scrollHeight });
     }
   });
 };
+
+onMounted(() => {
+  setTimeout(() => {
+    scrollToBottom();
+  }, 1000);
+});
 </script>
 
 <template>
@@ -114,12 +108,18 @@ const scrollToBottom = () => {
           class="fixed md:sticky w-[inherit] left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4 message-container"
           ref="messageContainer"
         >
-          <form @submit.prevent="handleSubmit" class="w-full" ref="resetForm">
+          <form
+            @submit.prevent="handleSubmit"
+            @keydown.enter.prevent="handleEnterPress"
+            class="w-full"
+            ref="resetForm"
+          >
             <UiInputChat
               v-model="chat"
               name="message"
               placeholder="Send a message"
-              ref="chatBox"
+              ref="chatInput"
+              :is-loading="isLoading"
             />
           </form>
         </div>
@@ -134,12 +134,18 @@ const scrollToBottom = () => {
         <div class="p-4 sticky top-0">
           <div class="flex flex-col gap-5">
             <p class="uppercase text-sm font-medium text-style">Members</p>
-            <div v-for="user in users" :key="user.uid" class="flex gap-2.5 items-center">
+            <div
+              v-for="user in users"
+              :key="user.uid"
+              class="flex gap-2.5 items-center"
+              v-if="!pending"
+            >
               <PvAvatar :image="user.avatar" shape="circle" />
               <p class="text-style text-sm">
                 {{ truncateString(user.name || "", 20) }}
               </p>
             </div>
+            <UiLoaderUsers v-for="i in 5" :key="i" v-else />
           </div>
         </div>
       </div>
@@ -150,12 +156,18 @@ const scrollToBottom = () => {
     <div class="xl:hidden">
       <UiModalSide v-model="memberSheet" title="Members" size="sm">
         <div class="flex flex-col gap-5">
-          <div v-for="user in users" :key="user.uid" class="flex gap-2.5 items-center">
+          <div
+            v-for="user in users"
+            :key="user.uid"
+            class="flex gap-2.5 items-center"
+            v-if="!pending"
+          >
             <PvAvatar :image="user.avatar" shape="circle" />
             <p class="text-style text-sm">
               {{ truncateString(user.name || "", 20) }}
             </p>
           </div>
+          <UiLoaderUsers v-for="i in 5" :key="i" v-else />
         </div>
       </UiModalSide>
     </div>

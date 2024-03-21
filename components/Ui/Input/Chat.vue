@@ -11,6 +11,7 @@ const props = defineProps<{
   innerClasses?: string;
   outerClasses?: string;
   required?: boolean;
+  isLoading?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -48,12 +49,20 @@ function handleInput(event: Event) {
   emits("update:modelValue", textarea.value);
 }
 
-watch(
-  () => props.modelValue,
-  (value) => {
-    console.log(value);
+function reduceChatBoxHeight() {
+  const inputElement = chatInput.value;
+  if (inputElement) {
+    inputElement.style.height = "initial"; // Set to default height
+    inputElement.style.overflowY = "hidden"; // Hide scrollbars
+    inputElement.focus();
+    emits("update:modelValue", "");
+    activateButton.value = false;
   }
-);
+}
+
+defineExpose({
+  reduceChatBoxHeight,
+});
 </script>
 
 <template>
@@ -92,7 +101,8 @@ watch(
           :class="{ '!bg-bg-secondary !text-white': activateButton }"
           :disabled="!activateButton"
         >
-          <Icon name="carbon:send-alt-filled" size="20" />
+          <Icon name="carbon:send-alt-filled" size="20" v-if="!isLoading" />
+          <Icon name="bx:loader" class="animate-spin" size="16" v-else />
         </button>
       </div>
     </div>
