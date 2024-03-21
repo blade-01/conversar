@@ -12,7 +12,7 @@ import {
 defineProps<{ nav: boolean }>();
 const { auth, user } = useAuth();
 const db = useFirestore();
-const channels = useCollection(
+const { data: channels, pending } = useCollection(
   query(collection(db, "channels"), where("id", "==", user.value.uid), orderBy("name"))
 );
 const { links, toggleDropdown } = useSidebarUtils();
@@ -117,23 +117,28 @@ const comingSoon = ref(false);
                     truncateString("Introduction" || "", 15)
                   }}</span>
                 </NuxtLink>
-                <NuxtLink
-                  v-for="channel in channels"
-                  :key="channel.id"
-                  :to="{
-                    name: 'channel-id',
-                    params: { id: channel.id },
-                  }"
-                  active-class="sidebar-active-link"
-                  class="sidebar-item mb-2"
-                >
-                  <span class="icon-style">
-                    <Icon name="mdi:pound" size="15" />
-                  </span>
-                  <span class="font-light">{{
-                    truncateString(channel.name || "", 15)
-                  }}</span>
-                </NuxtLink>
+                <div v-if="!pending">
+                  <NuxtLink
+                    v-for="channel in channels"
+                    :key="channel.id"
+                    :to="{
+                      name: 'channel-id',
+                      params: { id: channel.id },
+                    }"
+                    active-class="sidebar-active-link"
+                    class="sidebar-item mb-2"
+                  >
+                    <span class="icon-style">
+                      <Icon name="mdi:pound" size="15" />
+                    </span>
+                    <span class="font-light">{{
+                      truncateString(channel.name || "", 15)
+                    }}</span>
+                  </NuxtLink>
+                </div>
+                <div v-else>
+                  <UiLoaderLinks v-for="i in 3" :key="i" />
+                </div>
               </div>
             </div>
           </div>
