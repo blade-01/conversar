@@ -5,12 +5,16 @@ export default {
 </script>
 
 <script lang="ts" setup>
-defineProps<{
-  name: string;
+const props = defineProps<{
+  modelValue: string;
   appendIcon?: string;
   innerClasses?: string;
   outerClasses?: string;
   required?: boolean;
+}>();
+
+const emits = defineEmits<{
+  (event: "update:modelValue", value: string): void;
 }>();
 
 const chatInput = ref<HTMLElement | null>(null);
@@ -34,24 +38,35 @@ onMounted(() => {
     });
   }
 });
+
+const activateButton = ref(false);
+function handleInput(event: Event) {
+  activateButton.value = (event.target as HTMLTextAreaElement).value.length > 0;
+  const textarea = event.target as HTMLTextAreaElement;
+  // Reset field height
+  textarea.style.height = "auto";
+  emits("update:modelValue", textarea.value);
+}
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    console.log(value);
+  }
+);
 </script>
 
 <template>
-  <Field
-    :name="name"
-    as="div"
-    class="input-group !mb-0"
-    :class="outerClasses"
-    v-slot="{ value, handleChange }"
-  >
+  <div class="input-group !mb-0" :class="outerClasses">
     <div class="relative">
       <textarea
         v-bind="$attrs"
+        rows="1"
         class="chat-style !pr-10"
         :class="innerClasses"
         ref="chatInput"
-        :model-value="value"
-        @update:modelValue="handleChange"
+        :model-value="modelValue"
+        @input="handleInput"
       />
       <div
         class="absolute inset-y-0 right-0 flex items-center gap-2.5 pr-3 icon-button append m-0"
@@ -73,13 +88,15 @@ onMounted(() => {
         </button>
 
         <button
-          class="w-8 h-8 text-gray-700/[0.6] dark:text-white/[0.6] bg-[rgba(219,219,219,0.93)] dark:bg-[#515151] rounded-xl flex justify-center items-center hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer"
+          class="w-8 h-8 text-gray-700/[0.6] dark:text-white/[0.6] bg-[rgba(219,219,219,0.93)] dark:bg-[#515151] rounded-xl flex justify-center items-center hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer disabled:!pointer-events-none"
+          :class="{ '!bg-bg-secondary !text-white': activateButton }"
+          :disabled="!activateButton"
         >
           <Icon name="carbon:send-alt-filled" size="20" />
         </button>
       </div>
     </div>
-  </Field>
+  </div>
 </template>
 
 <style scoped>

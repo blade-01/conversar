@@ -30,7 +30,7 @@ const { data: messages, pending } = useCollection<MessageIndexData>(
       </div>
       <!-- ./ DATE -->
 
-      <div class="my-5 flex flex-col gap-5">
+      <div class="my-5 flex flex-col gap-1">
         <!-- MESSAGE DATA -->
         <DisplayMessage
           v-for="message in messages"
@@ -41,13 +41,7 @@ const { data: messages, pending } = useCollection<MessageIndexData>(
       </div>
     </div>
     <div v-else class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      <client-only>
-        <Vue3Lottie
-          animationLink="https://res.cloudinary.com/bladencove/raw/upload/v1710981038/loading-lottie_dicrfr.json"
-          :height="200"
-          :width="200"
-        />
-      </client-only>
+      <DisplayLoader />
     </div>
   </DashboardWrapper>
 </template>

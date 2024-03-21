@@ -111,7 +111,7 @@ const comingSoon = ref(false);
                   class="sidebar-item mb-2"
                 >
                   <span class="icon-style">
-                    <Icon name="mdi:pound" size="15" class="icon-style" />
+                    <Icon name="mdi:pound" size="15" />
                   </span>
                   <span class="font-light">{{
                     truncateString("Introduction" || "", 15)
@@ -199,10 +199,12 @@ const comingSoon = ref(false);
     header-class="!justify-end !border-none"
     outer-class="w-[90%] lg:w-[411px]"
   >
-    <div class="flex flex-col justify-center items-center gap-5 text-center px-5 pb-5">
-      <img src="~/assets/svg/coming-soon.svg" alt="coming-soon" />
-      <p class="text-style text-xl font-bold">Updates Coming Soon!!</p>
-      <p class="text-style text-sm leading-6">
+    <div class="flex flex-col justify-center items-center gap-2.5 text-center px-5 pb-5">
+      <img src="~/assets/svg/coming-soon.svg" alt="coming-soon" class="mb-2.5" />
+      <p class="text-style text-xl font-bold mb-1.5">Updates Coming Soon!!</p>
+      <p
+        class="text-text-primary/[0.64] dark:text-white/[0.64] text-sm leading-6 text-center"
+      >
         "Uh-oh! Looks like our Channel Creation feature is playing hide-and-seek! 🙈 Don't
         fret, our detective squad is on it. Meanwhile, chat away with our other cool
         features! 😄🚀"

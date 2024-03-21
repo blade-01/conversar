@@ -6,7 +6,9 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex items-start gap-2.5">
+  <div
+    class="px-4 py-2.5 flex items-start gap-2.5 hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink transition-colors ease-in-out"
+  >
     <img :src="message.avatar" alt="avatar" class="w-10 h-10 rounded-full" />
     <div class="flex flex-col gap-1">
       <div class="flex items-center gap-1">
@@ -19,7 +21,7 @@ defineProps<{
         </p>
       </div>
       <!-- MESSAGE -->
-      <p class="text-style text-sm xl:text-base">
+      <p class="text-style text-sm xl:text-base !font-normal">
         {{ message.message }}
       </p>
       <!-- ./ MESSAGE -->
