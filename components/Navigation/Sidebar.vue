@@ -43,6 +43,8 @@ async function logout() {
   await signOut(auth);
   useRouter().push("/auth");
 }
+
+const comingSoon = ref(false);
 </script>
 
 <template>
@@ -56,9 +58,12 @@ async function logout() {
         </div>
         <hr class="border-t border-t-[#2F2E31] w-[50%]" />
       </div>
-      <div @click="logout" class="flex flex-col items-center gap-1 cursor-pointer">
+      <div class="icon-style w-[50px] h-[50px]" @click="comingSoon = !comingSoon">
+        <Icon name="mdi:plus" size="20" class="text-[#23A559]" />
+      </div>
+      <div @click="logout" class="flex flex-col items-center gap-2 cursor-pointer">
         <div
-          class="w-10 h-10 rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-style"
+          class="w-[50px] h-[50px] rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-style"
         >
           <Icon name="mdi:logout" width="20" />
         </div>
@@ -106,7 +111,7 @@ async function logout() {
                   class="sidebar-item mb-2"
                 >
                   <span class="icon-style">
-                    <Icon name="mdi:pound" size="15" />
+                    <Icon name="mdi:pound" size="15" class="icon-style" />
                   </span>
                   <span class="font-light">{{
                     truncateString("Introduction" || "", 15)
@@ -188,6 +193,22 @@ async function logout() {
       </div>
     </Form>
   </UiModalCenter>
+
+  <UiModalCenter
+    v-model="comingSoon"
+    header-class="!justify-end !border-none"
+    outer-class="w-[90%] lg:w-[411px]"
+  >
+    <div class="flex flex-col justify-center items-center gap-5 text-center px-5 pb-5">
+      <img src="~/assets/svg/coming-soon.svg" alt="coming-soon" />
+      <p class="text-style text-xl font-bold">Updates Coming Soon!!</p>
+      <p class="text-style text-sm leading-6">
+        "Uh-oh! Looks like our Channel Creation feature is playing hide-and-seek! 🙈 Don't
+        fret, our detective squad is on it. Meanwhile, chat away with our other cool
+        features! 😄🚀"
+      </p>
+    </div>
+  </UiModalCenter>
 </template>
 
 <style scoped>
@@ -198,7 +219,7 @@ async function logout() {
 }
 
 .sidebar-community {
-  @apply flex items-center flex-col gap-10 bg-bg-channelBar dark:bg-bg-darkChannelBar h-[inherit] p-2.5;
+  @apply flex items-center flex-col gap-5 bg-bg-channelBar dark:bg-bg-darkChannelBar h-[inherit] p-2.5;
 }
 
 .sidebar-header {
