@@ -68,6 +68,7 @@
           darkInput: "#29292c",
           sidebarLink:'#EEEEEE',
           darkSidebarLink:'#27292D',
+          apple: '#EB5B47'
         },
         hover: {
           sidebar: '#00000042'
