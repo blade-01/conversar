@@ -9,17 +9,55 @@ import {
   setDoc,
   doc,
 } from "firebase/firestore";
+
 defineProps<{ nav: boolean }>();
+
 const { auth, user } = useAuth();
+
+const channelModal = ref(false);
+const comingSoon = ref(false);
+const isLoading = ref(false);
+
 const db = useFirestore();
-const { data: channels, pending } = useCollection(
+
+const { data: userChannels, pending } = useCollection(
   query(collection(db, "channels"), where("id", "==", user.value.uid), orderBy("name"))
 );
+
+const { data: defaultChannel } = useCollection(
+  query(collection(db, "channels"), where("id", "==", "introduction"))
+);
+
+const channels = ref();
+watchEffect(() => {
+  channels.value = [...defaultChannel.value, ...userChannels.value];
+});
+
 const { links, toggleDropdown } = useSidebarUtils();
-const channelModal = ref(false);
-const isLoading = ref(false);
+
+const channelTaken = ref(false);
+const channelExceededModal = ref(false);
+const channelExceeded = computed(() => {
+  return userChannels.value.length === 2;
+});
+
+function createChannel() {
+  if (channelExceeded.value) {
+    channelExceededModal.value = true;
+    return;
+  }
+  channelModal.value = true;
+}
+
 async function handleSubmit(values: any, { resetForm }: any) {
   if (values.channelName) {
+    const channelExists = channels.value.find(
+      (channel: any) => channel.name === values.channelName.toLowerCase()
+    );
+    if (channelExists) {
+      channelTaken.value = true;
+      return;
+    }
     try {
       isLoading.value = true;
       await setDoc(
@@ -33,18 +71,19 @@ async function handleSubmit(values: any, { resetForm }: any) {
       );
       resetForm();
       channelModal.value = false;
-      isLoading.value = false;
     } catch (error) {
       return Promise.reject(error);
+    } finally {
+      isLoading.value = false;
+      channelTaken.value = false;
     }
   }
 }
+
 async function logout() {
   await signOut(auth);
   useRouter().push("/auth");
 }
-
-const comingSoon = ref(false);
 </script>
 
 <template>
@@ -105,36 +144,12 @@ const comingSoon = ref(false);
                     : 'transition-[max-height] max-h-0 duration-300 ease-out overflow-hidden',
                 ]"
               >
-                <NuxtLink
-                  to="/"
-                  active-class="sidebar-active-link"
-                  class="sidebar-item mb-2"
-                >
-                  <span class="icon-style">
-                    <Icon name="mdi:pound" size="15" />
-                  </span>
-                  <span class="font-light">{{
-                    truncateString("Introduction" || "", 15)
-                  }}</span>
-                </NuxtLink>
                 <div v-if="!pending">
-                  <NuxtLink
+                  <DisplayLink
+                    :channel="channel"
                     v-for="channel in channels"
                     :key="channel.id"
-                    :to="{
-                      name: 'channel-id',
-                      params: { id: channel.id },
-                    }"
-                    active-class="sidebar-active-link"
-                    class="sidebar-item mb-2"
-                  >
-                    <span class="icon-style">
-                      <Icon name="mdi:pound" size="15" />
-                    </span>
-                    <span class="font-light">{{
-                      truncateString(channel.name || "", 15)
-                    }}</span>
-                  </NuxtLink>
+                  />
                 </div>
                 <div v-else>
                   <UiLoaderLinks v-for="i in 3" :key="i" />
@@ -142,7 +157,7 @@ const comingSoon = ref(false);
               </div>
             </div>
           </div>
-          <li class="sidebar-item -mt-2" @click="channelModal = !channelModal">
+          <li class="sidebar-item -mt-2" @click="createChannel">
             <span class="icon-style">
               <Icon name="mdi:plus" size="15" />
             </span>
@@ -155,6 +170,7 @@ const comingSoon = ref(false);
     </div>
   </div>
 
+  <!-- Channel Modal -->
   <UiModalCenter
     v-model="channelModal"
     header="Create Channel"
@@ -167,7 +183,10 @@ const comingSoon = ref(false);
         prepend-icon="mdi:pound"
         outer-classes="!mb-0"
       />
-      <p class="text-style text-xs mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
+      <p class="text-xs text-[#C62828] pt-1.5" v-if="channelTaken">
+        Channel name is already taken. Let's brainstorm for a fresh and unique name!
+      </p>
+      <p class="text-xs mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
         Channels are where conversations happen around a topic. Use a name that is easy to
         find and understand.
       </p>
@@ -198,7 +217,31 @@ const comingSoon = ref(false);
       </div>
     </Form>
   </UiModalCenter>
+  <!-- ./ Channel Modal -->
 
+  <!-- Channel Exceeded Modal -->
+  <UiModalCenter
+    v-model="channelExceededModal"
+    outer-class="w-[90%] lg:w-[400px]"
+    header-class="!justify-end !border-none"
+  >
+    <div
+      class="p-4 pb-8 w-full flex flex-col justify-center items-center text-center gap-2.5"
+    >
+      <img
+        src="~/assets/svg/exceeded-avatar.svg"
+        alt="exceeded avatar"
+        class="rounded-full border-[15px] border-border-topbar dark:border-border-darkTopbar"
+      />
+      <p class="text-sm mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
+        Oops! You've hit the channel creation limit. Take a moment to organize your
+        channels.
+      </p>
+    </div>
+  </UiModalCenter>
+  <!-- ./ Channel Exceeded Modal -->
+
+  <!-- Coming Soon Modal -->
   <UiModalCenter
     v-model="comingSoon"
     header-class="!justify-end !border-none"
@@ -216,6 +259,7 @@ const comingSoon = ref(false);
       </p>
     </div>
   </UiModalCenter>
+  <!-- ./ Coming Soon Modal -->
 </template>
 
 <style scoped>
