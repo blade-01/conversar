@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import useValidations from "~/composables/useValidations";
 import { collection, addDoc, Timestamp, query, orderBy } from "firebase/firestore";
 import UiInputChat from "~/components/Ui/Input/Chat.vue";
+
+const { mainSchema } = useValidations();
 
 const chatInput = ref<InstanceType<typeof UiInputChat> | null>(null);
 
@@ -12,6 +15,7 @@ const { user } = useAuth();
 const chat = ref("");
 const resetForm = ref<HTMLFormElement | null>(null);
 const isLoading = ref(false);
+
 async function handleSubmit() {
   isLoading.value = true;
   if (chat.value.trim()) {
@@ -72,6 +76,13 @@ onMounted(() => {
     scrollToBottom();
   }, 1000);
 });
+
+const memberExceeded = computed(() => {
+  return users.value.length === 3;
+});
+const memberExceededModal = ref(false);
+
+const memberModal = ref(false);
 </script>
 
 <template>
@@ -91,10 +102,10 @@ onMounted(() => {
               <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
             </div>
             <h1 class="text-xl lg:text-2xl font-bold text-style mb-1">
-              {{ message || `Welcome to ${title} channel` }}
+              {{ message || `Welcome to ${title || "..."} channel` }}
             </h1>
             <p class="text-sm lg:text-base text-style">
-              {{ description || `This is the start of ${title} channel` }}
+              {{ description || `This is the start of ${title || "..."} channel` }}
             </p>
           </div>
           <div class="mt-5 mb-[80px] lg:mb-0">
@@ -129,23 +140,34 @@ onMounted(() => {
 
       <!-- MEMBERS -->
       <div
-        class="xl:basis-[var(--sidebar-width-lg)] 2xl:basis-[var(--sidebar-width-2xl)] hidden xl:block"
+        class="xl:basis-[var(--sidebar-width-lg)] 2xl:basis-[var(--sidebar-width-2xl)] hidden xl:block overflow-y-auto"
       >
-        <div class="p-4 sticky top-0">
-          <div class="flex flex-col gap-5">
-            <p class="uppercase text-sm font-medium text-style">Members</p>
+        <div class="sticky top-0">
+          <div class="flex flex-col gap-5 pb-5">
             <div
-              v-for="user in users"
-              :key="user.uid"
-              class="flex gap-2.5 items-center"
-              v-if="!pending"
+              class="flex justify-between items-center sticky top-0 bg-bg-primary dark:bg-bg-dark p-4"
             >
-              <PvAvatar :image="user.avatar" shape="circle" />
-              <p class="text-style text-sm">
-                {{ truncateString(user.name || "", 20) }}
-              </p>
+              <p class="uppercase text-sm font-medium text-style">Members</p>
+              <span class="icon-style" @click="memberModal = !memberModal">
+                <Icon name="mdi:plus" size="15" />
+              </span>
             </div>
-            <UiLoaderUsers v-for="i in 5" :key="i" v-else />
+            <div class="px-4 flex flex-col gap-5" v-if="!pending">
+              <div
+                v-for="user in users"
+                :key="user.uid"
+                class="flex gap-2.5 items-center"
+                v-if="!pending"
+              >
+                <PvAvatar :image="user.avatar" shape="circle" />
+                <p class="text-style text-sm">
+                  {{ truncateString(user.name || "", 20) }}
+                </p>
+              </div>
+            </div>
+            <div class="px-4" v-else>
+              <UiLoaderUsers v-for="i in 5" :key="i" />
+            </div>
           </div>
         </div>
       </div>
@@ -169,9 +191,89 @@ onMounted(() => {
           </div>
           <UiLoaderUsers v-for="i in 5" :key="i" v-else />
         </div>
+        <template #footer>
+          <div
+            class="flex gap-2.5 justify-end items-center"
+            @click="memberModal = !memberModal"
+          >
+            <span class="icon-style">
+              <Icon name="mdi:plus" size="15" />
+            </span>
+            <span class="text-style">Add member</span>
+          </div>
+        </template>
       </UiModalSide>
     </div>
     <!-- ./ MEMBERS: MOBILE AND IPAD -->
+
+    <!-- Member Modal -->
+    <UiModalCenter
+      v-model="memberModal"
+      header="Invite members"
+      outer-class="w-[90%] lg:w-[500px]"
+    >
+      <Form
+        :initial-values="{ users: [] }"
+        @submit="handleSubmit"
+        :validation-schema="mainSchema"
+        v-slot="{ errors }"
+        class="p-4 w-full"
+      >
+        <UiInputMultiSelect
+          name="users"
+          :options="users"
+          option-label="name"
+          label="Select Members"
+          filter
+          show-clear
+          :error="errors.users"
+          display="chip"
+        />
+        <p class="text-xs mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
+          Each channel can have up to 2 members. Ensure you don't exceed this limit when
+          adding users.
+        </p>
+
+        <div class="flex justify-end mt-14 gap-5">
+          <UiBtn
+            class="!bg-transparent !px-0"
+            size="sm"
+            label="Cancel"
+            type="button"
+            @click="memberModal = !memberModal"
+          />
+          <UiBtn
+            label="Add member"
+            class="btn !bg-bg-secondary !text-white"
+            size="sm"
+            :is-loading="isLoading"
+          />
+        </div>
+      </Form>
+    </UiModalCenter>
+    <!-- ./ Member Modal -->
+
+    <!-- Member Exceeded Modal -->
+    <UiModalCenter
+      v-model="memberExceededModal"
+      outer-class="w-[90%] lg:w-[400px]"
+      header-class="!justify-end !border-none"
+    >
+      <div
+        class="p-4 pb-8 w-full flex flex-col justify-center items-center text-center gap-2.5"
+      >
+        <img
+          src="~/assets/svg/exceeded-avatar.svg"
+          alt="exceeded avatar"
+          class="rounded-full border-[15px] border-border-topbar dark:border-border-darkTopbar"
+        />
+        <p class="text-sm mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
+          Oops! You've hit the member invite limit. Take a moment to organize your remove
+          the weak link in your members.
+        </p>
+      </div>
+    </UiModalCenter>
+    <!-- ./ member Exceeded Modal -->
   </div>
 </template>
 
