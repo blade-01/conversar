@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import useValidations from "~/composables/useValidations";
-import { collection, addDoc, Timestamp, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  query,
+  orderBy,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import UiInputChat from "~/components/Ui/Input/Chat.vue";
 
 const { mainSchema } = useValidations();
@@ -83,6 +91,28 @@ const memberExceeded = computed(() => {
 const memberExceededModal = ref(false);
 
 const memberModal = ref(false);
+async function handleAddMembers(values: any, { resetForm }: any) {
+  if (values.channelName) {
+    try {
+      isLoading.value = true;
+      await setDoc(
+        doc(collection(db, "channels"), props.title.toLocaleLowerCase(), "messages"),
+        {
+          message: chat.value,
+          createdAt: Timestamp.now(),
+          uid: user.value.uid,
+          name: user.value.displayName,
+          avatar: user.value.photoURL,
+        }
+      );
+      resetForm();
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+}
 </script>
 
 <template>
@@ -214,7 +244,7 @@ const memberModal = ref(false);
     >
       <Form
         :initial-values="{ users: [] }"
-        @submit="handleSubmit"
+        @submit="handleAddMembers"
         :validation-schema="mainSchema"
         v-slot="{ errors }"
         class="p-4 w-full"
@@ -273,7 +303,7 @@ const memberModal = ref(false);
         </p>
       </div>
     </UiModalCenter>
-    <!-- ./ member Exceeded Modal -->
+    <!-- ./ Member Exceeded Modal -->
   </div>
 </template>
 
