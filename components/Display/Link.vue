@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 const db = useFirestore();
-const props = defineProps<{
+interface Props {
   channel: any;
-}>();
+  isEditable?: boolean;
+  hasQuery?: boolean;
+}
+const props = withDefaults(defineProps<Props>(), {
+  isEditable: true,
+});
+
 const { $modal } = useNuxtApp();
 
 const isEditing = ref(false);
@@ -56,6 +62,11 @@ function toggleEdit() {
       :to="{
         name: 'channel-id',
         params: { id: channel.id },
+        query: hasQuery
+          ? {
+              type: 'invited',
+            }
+          : {},
       }"
       active-class="sidebar-active-link"
       class="sidebar-item mb-2 relative group"
@@ -81,7 +92,10 @@ function toggleEdit() {
       </span>
       <div
         class="absolute right-5 -top-4 w-[80px] h-9 rounded-lg invisible bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5"
-        :class="{ 'group-hover:visible': channel?.id !== 'introduction' }"
+        :class="{
+          'group-hover:visible': channel?.id !== 'introduction',
+          '!hidden': !isEditable,
+        }"
       >
         <Icon name="bx:pencil" size="15" @click.prevent.stop="toggleEdit" />
         <Icon
