@@ -41,8 +41,9 @@ useHead({
         <!-- MESSAGE DATA -->
         <DisplayMessage
           v-for="message in messages"
-          :key="message.uid"
+          :key="message.id"
           :message="message"
+          :ref="message.id"
         />
         <!-- ./ MESSAGE DATA -->
       </div>
