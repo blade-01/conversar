@@ -15,7 +15,7 @@ export default () => {
         class: "right-3 dropdown-icon"
       },
       panel: {
-        class: "bg-white dark:bg-bg-dark "
+        class: "bg-white dark:bg-bg-dark"
       },
       header: {
         class: "p-2 bg-inherit dropdown-text"
@@ -76,6 +76,9 @@ export default () => {
       },
       removeTokenIcon: {
         class: "dropdown-token-icon"
+      },
+      panel: {
+        class: "bg-bg-primary dark:bg-bg-darkSec !w-[20%] !mx-auto"
       }
     };
   });
