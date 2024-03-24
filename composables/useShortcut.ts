@@ -11,6 +11,7 @@ export function useShortcut(
     esc: () => void;
     meta_enter: () => void;
     toggle: () => void;
+    enter: () => void;
   }>
 ) {
   onMounted(() => {
@@ -56,6 +57,12 @@ export function useShortcut(
         if (e.key === "[") {
           e.preventDefault();
           config.toggle?.();
+        }
+
+        // Enter
+        if (e.key === "Enter") {
+          e.preventDefault();
+          config.enter?.();
         }
       },
       false
