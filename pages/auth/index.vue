@@ -8,10 +8,6 @@ useHead({
   title: "Sign In",
 });
 
-function handleSubmit(values: any) {
-  console.log(values);
-}
-
 const { signInWithGoogle, isSigningIn } = useAuth();
 </script>
 
@@ -19,16 +15,18 @@ const { signInWithGoogle, isSigningIn } = useAuth();
   <div
     class="flex flex-col items-center justify-center text-center absolute inset-y-0 inset-x-0 w-[90%] md:w-[340px] mx-auto"
   >
-    <img
-      src="~/assets/svg/logo-light.svg"
-      alt="logo"
-      v-if="$colorMode.value === 'dark'"
-    />
-    <img
-      src="~/assets/svg/logo-dark.svg"
-      alt="logo"
-      v-if="$colorMode.value === 'light'"
-    />
+    <div v-if="$colorMode">
+      <img
+        src="~/assets/svg/logo-light.svg"
+        alt="logo"
+        v-if="$colorMode?.value === 'dark'"
+      />
+      <img
+        src="~/assets/svg/logo-dark.svg"
+        alt="logo"
+        v-if="$colorMode?.value === 'light'"
+      />
+    </div>
     <h1
       class="text-2xl lg:text-3xl font-bold text-text-primary/80 dark:text-white/80 my-2.5"
     >
@@ -47,15 +45,6 @@ const { signInWithGoogle, isSigningIn } = useAuth();
       >
         Sign In With Google
       </UiBtn>
-      <!-- <UiBtn
-        prepend-icon="mdi:apple"
-        size="sm"
-        class="w-full !bg-bg-apple !text-text-dark"
-        @click="signInWithGoogle"
-        :is-loading="isSigningIn"
-      >
-        Sign In With Apple
-      </UiBtn> -->
     </div>
   </div>
 </template>
