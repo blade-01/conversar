@@ -17,7 +17,11 @@ const { mainSchema } = useValidations();
 
 const chatInput = ref<InstanceType<typeof UiInputChat> | null>(null);
 
-const props = defineProps<{ title: string; message?: string; description?: string }>();
+const props = defineProps<{
+  title: string | undefined;
+  message?: string;
+  description?: string;
+}>();
 
 const memberSheet = ref(false);
 
@@ -187,10 +191,11 @@ onMounted(() => {
               <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
             </div>
             <h1 class="text-xl lg:text-2xl font-bold text-style mb-1">
-              {{ message || `Welcome to ${title || "..."} channel` }}
+              Welcome to <span class="capitalize">{{ title || "..." }}</span> channel
             </h1>
             <p class="text-sm lg:text-base text-style">
-              {{ description || `This is the start of ${title || "..."} channel` }}
+              This is the start of
+              <span class="capitalize">{{ title || "..." }}</span> channel
             </p>
           </div>
           <div class="mt-5 mb-[80px] lg:mb-0">
