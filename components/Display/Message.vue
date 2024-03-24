@@ -161,17 +161,17 @@ useShortcut({
         <p class="text-style text-sm xl:text-base !font-normal" v-else>
           {{ message?.message }}
         </p>
-        <div class="text-xs !p-0 !m-0" v-if="isEditing">
+        <div class="text-xs !p-0 !m-0 flex" v-if="isEditing">
           escape to
           <UiBtn
-            class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs !inline"
+            class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs h-fit !px-1.5"
             @click="handleCancel"
             ref="cancelBtn"
             >cancel</UiBtn
           >
           • or click
           <UiBtn
-            class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs !inline"
+            class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs h-fit !px-1.5"
             @click="handleMessageUpdate"
             ref="saveBtn"
             >save</UiBtn
