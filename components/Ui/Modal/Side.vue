@@ -72,23 +72,28 @@ watch(
           <!-- Header  -->
           <slot name="header">
             <div
-              class="flex items-center w-full p-5 border-b dark:border-b-gray-500"
-              :class="
-                position === 'left'
-                  ? 'justify-between'
-                  : 'gap-3 flex-row-reverse justify-end'
-              "
+              class="flex justify-between items-center p-5 border-b dark:border-b-gray-500"
             >
-              <slot name="title">
-                <h4 v-if="title" class="font-semibold dark:text-white text-gray-700">
-                  {{ title }}
-                </h4>
-              </slot>
-              <slot name="close">
-                <button class="text-style pb-0.5" @click="handleClose">
-                  <Icon name="mdi:arrow-left" size="20" />
-                </button>
-              </slot>
+              <div
+                class="flex items-center w-full"
+                :class="
+                  position === 'left'
+                    ? 'justify-between'
+                    : 'gap-3 flex-row-reverse justify-end'
+                "
+              >
+                <slot name="title">
+                  <h4 v-if="title" class="font-semibold dark:text-white text-gray-700">
+                    {{ title }}
+                  </h4>
+                </slot>
+                <slot name="close">
+                  <button class="text-style pb-0.5" @click="handleClose">
+                    <Icon name="mdi:arrow-left" size="20" />
+                  </button>
+                </slot>
+              </div>
+              <slot name="add"> </slot>
             </div>
           </slot>
           <!-- ./ Header  -->
