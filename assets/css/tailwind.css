@@ -331,13 +331,13 @@
 
   /* DROPDOWN - MULTISELECT */
   .dropdown-checkbox-container {
-    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox rounded-md;
+    @apply bg-dropdown-checkbox dark:bg-bg-darkSidebarLink rounded-md;
   }
   .dropdown-checkbox {
-    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox;
+    @apply bg-dropdown-checkbox dark:bg-bg-darkSidebarLink;
   }
   .dropdown-token {
-    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox px-2.5;
+    @apply bg-bg-primary dark:bg-bg-dark px-2.5;
   }
   .dropdown-token-label {
     @apply text-text-secondary dark:text-text-dark pr-1;
