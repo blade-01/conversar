@@ -346,8 +346,9 @@
     @apply text-text-secondary dark:text-text-dark;
   }
 
-  #ModalBase[role="dialog"] {
-    @apply !bg-bg-primary dark:!bg-bg-dark;
+  /* DIALOG */
+  .absolute.inset-0.bg-black.opacity-75 {
+    @apply !bg-[#1213143D] dark:!bg-[rgba(0,0,0,0.5)];
   }
 
   .inline-block.align-bottom.bg-white.dark\:bg-gray-800.rounded-lg.px-4.pt-5.pb-4.text-left.overflow-hidden.shadow-xl.transform.transition-all.sm\:my-8.sm\:align-middle.sm\:w-full.sm\:p-6.sm\:max-w-lg {
