@@ -26,8 +26,11 @@ const visible = computed({
     v-model:visible="visible"
     unstyled
     :pt="{
+      mask: {
+        class: 'bg-[#1213143D] dark:bg-[rgba(0,0,0,0.5)]',
+      },
       root: {
-        class: ['bg-bg-primary dark:bg-bg-dark dialog rounded-lg shadow-xl', outerClass],
+        class: ['bg-bg-primary dark:bg-bg-dark rounded-lg shadow-xl', outerClass],
       },
       header: {
         class: [
