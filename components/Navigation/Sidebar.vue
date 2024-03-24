@@ -10,6 +10,8 @@ import {
   doc,
 } from "firebase/firestore";
 
+const { id } = useRoute().params;
+
 defineProps<{ nav: boolean }>();
 
 const { auth, user } = useAuth();
@@ -28,9 +30,19 @@ const { data: defaultChannel } = useCollection(
   query(collection(db, "channels"), where("id", "==", "introduction"))
 );
 
+// // Invited channels
+// Get the channels where the user is a member
+const { data: invitedChannels } = useCollection(
+  query(collection(db, "channels"), where("members", "array-contains", user.value.uid))
+);
+
 const channels = ref();
 watchEffect(() => {
-  channels.value = [...defaultChannel.value, ...userChannels.value];
+  channels.value = [
+    ...defaultChannel.value,
+    ...userChannels.value,
+    ...invitedChannels.value,
+  ];
 });
 
 const { links, toggleDropdown } = useSidebarUtils();
@@ -49,7 +61,7 @@ function createChannel() {
   channelModal.value = true;
 }
 
-async function handleSubmit(values: any, { resetForm }: any) {
+async function handleCreateChannel(values: any, { resetForm }: any) {
   if (values.channelName) {
     const channelExists = channels.value.find(
       (channel: any) => channel.name === values.channelName.toLowerCase()
@@ -111,8 +123,8 @@ async function logout() {
     </div>
     <div class="w-full">
       <div class="sidebar-header">
-        <PvAvatar :image="user.photoURL" shape="circle" />
-        <p>{{ user?.displayName }}</p>
+        <PvAvatar :image="user?.photoURL" shape="circle" />
+        <p>{{ truncateString(user?.displayName || "", 20) }}</p>
       </div>
       <div class="sidebar-content">
         <div class="flex flex-col gap-y-2">
@@ -176,7 +188,11 @@ async function logout() {
     header="Create Channel"
     outer-class="w-[90%] lg:w-[500px]"
   >
-    <Form :initial-values="{ switch: true }" @submit="handleSubmit" class="p-4 w-full">
+    <Form
+      :initial-values="{ switch: true }"
+      @submit="handleCreateChannel"
+      class="p-4 w-full"
+    >
       <UiInputField
         name="channelName"
         label="CHANNEL NAME"
