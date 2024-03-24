@@ -1,65 +1,25 @@
 <script setup lang="ts">
 import { signOut } from "firebase/auth";
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  Timestamp,
-  setDoc,
-  doc,
-  collectionGroup,
-} from "firebase/firestore";
+import { Timestamp, setDoc, doc } from "firebase/firestore";
 
-const { id } = useRoute().params;
+const db = useFirestore();
 
 defineProps<{ nav: boolean }>();
 
 const { auth, user } = useAuth();
 
-const channelModal = ref(false);
-const comingSoon = ref(false);
-const isLoading = ref(false);
-
-const db = useFirestore();
-
-const { data: userChannels, pending } = useCollection(
-  query(collection(db, "channels"), where("id", "==", user.value.uid), orderBy("name"))
-);
-
-const { data: defaultChannel } = useCollection(
-  query(collection(db, "channels"), where("id", "==", "introduction"))
-);
-
-// Get the channels where the user is a member
-const { data: invitedChannels } = useCollection(
-  query(collectionGroup(db, "members"), where("uid", "==", user.value.uid))
-);
-
-const channels = ref();
-watchEffect(() => {
-  channels.value = [
-    ...defaultChannel.value,
-    ...userChannels.value,
-    // ...invitedChannels.value,
-  ];
-});
-
-const { links, toggleDropdown } = useSidebarUtils();
-
-const channelTaken = ref(false);
-const channelExceededModal = ref(false);
-const channelExceeded = computed(() => {
-  return userChannels.value.length === 2;
-});
-
-function createChannel() {
-  if (channelExceeded.value) {
-    channelExceededModal.value = true;
-    return;
-  }
-  channelModal.value = true;
-}
+const {
+  links,
+  toggleDropdown,
+  channels,
+  channelModal,
+  comingSoon,
+  isLoading,
+  channelTaken,
+  channelExceededModal,
+  createChannel,
+  pending,
+} = useSidebarUtils();
 
 async function handleCreateChannel(values: any, { resetForm }: any) {
   if (values.channelName) {
@@ -159,25 +119,30 @@ async function logout() {
                 <div v-if="!pending">
                   <DisplayLink
                     :channel="channel"
-                    v-for="channel in channels"
+                    v-for="channel in link.sub"
                     :key="channel.id"
+                    :is-editable="link.isEditable"
+                    :has-query="link.hasQuery"
                   />
                 </div>
                 <div v-else>
                   <UiLoaderLinks v-for="i in 3" :key="i" />
                 </div>
+                <div
+                  class="sidebar-item -mt-2"
+                  @click="createChannel"
+                  v-if="link.hasCreate"
+                >
+                  <span class="icon-style">
+                    <Icon name="mdi:plus" size="15" />
+                  </span>
+                  <span class="font-light text-text-secondary dark:text-text-darkSec"
+                    >Create Channel</span
+                  >
+                </div>
               </div>
             </div>
           </div>
-          <!-- <li>{{ invitedChannels }}</li> -->
-          <li class="sidebar-item -mt-2" @click="createChannel">
-            <span class="icon-style">
-              <Icon name="mdi:plus" size="15" />
-            </span>
-            <span class="font-light text-text-secondary dark:text-text-darkSec"
-              >Create Channel</span
-            >
-          </li>
         </div>
       </div>
     </div>
