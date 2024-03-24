@@ -4,4 +4,5 @@ interface MessageIndexData {
   message: string;
   createdAt: Timestamp;
   uid: string;
+  id: string;
 }
