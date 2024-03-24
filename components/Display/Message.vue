@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import UiBtn from "~/components/Ui/Btn/index.vue";
+
+const { escape } = useMagicKeys();
 
 const { id } = useRoute().params;
 
@@ -19,6 +22,32 @@ const { copy, copied } = useClipboard();
 const isLoading = ref(false);
 const isEditing = ref(false);
 const showOptions = ref(false);
+const shallowMessage = shallowRef(props?.message?.message);
+
+const options = ref([
+  {
+    icon: "bx:pencil",
+    title: "edit",
+    action: () => {
+      isEditing.value = !isEditing.value;
+    },
+    isActive: props?.message?.uid === user?.value?.uid,
+  },
+  {
+    icon: "mdi:content-copy",
+    title: "copy",
+    action: () => {
+      copy(props?.message?.message);
+    },
+    isActive: true,
+  },
+  {
+    icon: isLoading.value ? "bx:loader" : "bx:trash",
+    title: "delete",
+    action: () => handleMessageDelete(),
+    isActive: props?.message?.uid === user?.value?.uid,
+  },
+]);
 
 function handleMessageDelete() {
   $modal.show({
@@ -50,47 +79,51 @@ async function deleteMessage() {
     )
   );
   isLoading.value = false;
+  isEditing.value = false;
 }
 
 async function handleMessageUpdate() {
-  updateDoc(
-    doc(
-      db,
-      "channels",
-      (id as string).toLocaleLowerCase(),
-      "messages",
-      props?.message?.id
-    ),
-    {
-      message: props?.message?.message,
+  if (props?.message?.message.trim()) {
+    try {
+      await updateDoc(
+        doc(
+          db,
+          "channels",
+          (id as string).toLocaleLowerCase(),
+          "messages",
+          props?.message?.id
+        ),
+        {
+          message: props?.message?.message,
+        }
+      );
+      isEditing.value = false;
+      showOptions.value = false;
+      shallowMessage.value = props?.message?.message;
+    } catch (error: any) {
+      return Promise.reject(error);
     }
-  );
+  } else {
+    handleMessageDelete();
+  }
 }
 
-const options = ref([
-  {
-    icon: "bx:pencil",
-    title: "edit",
-    action: () => {
-      isEditing.value = true;
-    },
-    isActive: props?.message?.uid === user?.value?.uid,
+function handleCancel() {
+  isEditing.value = false;
+  props.message.message = shallowMessage.value;
+}
+
+// Save and Cancel
+const saveBtn = ref<InstanceType<typeof UiBtn> | null>(null);
+const cancelBtn = ref<InstanceType<typeof UiBtn> | null>(null);
+useShortcut({
+  esc() {
+    cancelBtn.value?.triggerClick();
   },
-  {
-    icon: "mdi:content-copy",
-    title: "copy",
-    action: () => {
-      copy(props?.message?.message);
-    },
-    isActive: true,
+  enter() {
+    saveBtn.value?.triggerClick();
   },
-  {
-    icon: isLoading.value ? "bx:loader" : "bx:trash",
-    title: "delete",
-    action: () => handleMessageDelete(),
-    isActive: props?.message?.uid === user?.value?.uid,
-  },
-]);
+});
 </script>
 
 <template>
@@ -99,7 +132,7 @@ const options = ref([
     @mouseleave="
       () => {
         showOptions = false;
-        isEditing = false;
+        handleCancel();
       }
     "
   >
@@ -115,24 +148,42 @@ const options = ref([
         </p>
       </div>
       <!-- MESSAGE -->
-      <textarea
-        type="text"
-        class="border border-border-primary dark:border-border-dark outline-none focus:border-border-topbar dark:focus:border-border-darkTopbar bg-bg-topbar dark:bg-bg-darkTopbar !w-full text-style px-2"
-        ref="inputField"
-        v-if="isEditing"
-        v-model="message.message"
-        @blur="handleMessageUpdate"
-        @keypress.enter="handleMessageUpdate"
-      />
-      <p class="text-style text-sm xl:text-base !font-normal" v-else>
-        {{ message?.message }}
-      </p>
+      <div>
+        <textarea
+          class="border border-border-primary dark:border-border-dark outline-none focus:border-border-topbar dark:focus:border-border-darkTopbar bg-bg-topbar dark:bg-bg-darkTopbar !w-full text-style p-2"
+          ref="inputField"
+          v-if="isEditing"
+          v-model="message.message"
+          @keypress.enter="handleMessageUpdate"
+          @click="showOptions = false"
+          cols="1000"
+        />
+        <p class="text-style text-sm xl:text-base !font-normal" v-else>
+          {{ message?.message }}
+        </p>
+        <div class="text-xs !p-0 !m-0" v-if="isEditing">
+          escape to
+          <UiBtn
+            class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs !inline"
+            @click="handleCancel"
+            ref="cancelBtn"
+            >cancel</UiBtn
+          >
+          • or click
+          <UiBtn
+            class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs !inline"
+            @click="handleMessageUpdate"
+            ref="saveBtn"
+            >save</UiBtn
+          >
+        </div>
+      </div>
       <!-- ./ MESSAGE -->
     </div>
     <!-- OPTIONS -->
     <div>
       <div
-        class="absolute right-5 -top-4 w-[70px] h-9 rounded-lg invisible bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5 group-hover:visible"
+        class="absolute z-20 right-5 -top-4 w-[70px] h-9 rounded-lg invisible bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5 group-hover:visible"
       >
         <Icon
           name="emojione-monotone:slightly-smiling-face"
@@ -147,7 +198,7 @@ const options = ref([
         />
       </div>
       <div
-        class="absolute right-[92px] -top-4 w-[144px] p-1.5 h-fit invisible rounded-lg bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex flex-col justify-center gap-1.5"
+        class="absolute z-20 right-[92px] -top-4 w-[144px] p-1.5 h-fit invisible rounded-lg bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex flex-col justify-center gap-1.5"
         :class="{ '!visible': showOptions }"
       >
         <div
