@@ -73,6 +73,7 @@ function toggleEdit() {
           v-model="channel.name"
           @blur.prevent.stop="handleChannelUpdate"
           @click.prevent.stop
+          @keypress.enter="handleChannelUpdate"
         />
         <span v-else>
           {{ truncateString(channel.name || "", 15) }}
