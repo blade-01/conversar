@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import UiInputChat from "~/components/Ui/Input/Chat.vue";
 const { id } = useRoute().params;
+const { type } = useRoute().query;
 
 const { mainSchema } = useValidations();
 
@@ -151,7 +152,14 @@ function addMembers() {
 
 const initialValues = computed(() => {
   return {
-    users: users.value,
+    users: users.value.map((user) => {
+      return {
+        uid: user.uid,
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+      };
+    }),
   };
 });
 
@@ -220,12 +228,16 @@ onMounted(() => {
         class="xl:basis-[var(--sidebar-width-lg)] 2xl:basis-[var(--sidebar-width-2xl)] hidden xl:block overflow-y-auto"
       >
         <div class="sticky top-0">
-          <div class="flex flex-col gap-5 pb-5">
+          <div class="flex flex-col gap-2 pb-5">
             <div
               class="flex justify-between items-center sticky top-0 bg-bg-primary dark:bg-bg-dark p-4"
             >
               <p class="uppercase text-sm font-medium text-style">Members</p>
-              <span class="icon-style" @click="addMembers" v-if="!introductionChannel">
+              <span
+                class="icon-style"
+                @click="addMembers"
+                v-if="!introductionChannel && !type"
+              >
                 <Icon name="mdi:plus" size="15" />
               </span>
             </div>
@@ -274,12 +286,15 @@ onMounted(() => {
             Oops! You don't have any members in this channel yet.
           </p>
         </div>
-        <template #footer>
-          <div class="flex gap-2.5 justify-end items-center" @click="addMembers">
+        <template #add>
+          <div
+            class="flex gap-2.5 justify-end items-center"
+            @click="addMembers"
+            v-if="!introductionChannel && !type"
+          >
             <span class="icon-style">
               <Icon name="mdi:plus" size="15" />
             </span>
-            <span class="text-style">Add member</span>
           </div>
         </template>
       </UiModalSide>
