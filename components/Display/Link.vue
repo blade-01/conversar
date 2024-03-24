@@ -6,9 +6,12 @@ interface Props {
   isEditable?: boolean;
   hasQuery?: boolean;
 }
+
 const props = withDefaults(defineProps<Props>(), {
   isEditable: true,
 });
+
+const shallowName = shallowRef(props?.channel?.name);
 
 const { $modal } = useNuxtApp();
 
@@ -44,15 +47,22 @@ async function deleteChannel() {
 }
 
 async function handleChannelUpdate() {
-  isEditing.value = false;
-  updateDoc(doc(db, "channels", props?.channel?.id.toLowerCase()), {
+  await updateDoc(doc(db, "channels", props?.channel?.id.toLowerCase()), {
     name: props?.channel.name,
   });
+  isEditing.value = false;
+  shallowName.value = props?.channel.name;
 }
 
 const inputField = ref<HTMLElement | null>(null);
-function toggleEdit() {
+
+function handleToggle() {
   isEditing.value = !isEditing.value;
+}
+
+function handleCancel() {
+  isEditing.value = false;
+  props.channel.name = shallowName.value;
 }
 </script>
 
@@ -70,7 +80,7 @@ function toggleEdit() {
       }"
       active-class="sidebar-active-link"
       class="sidebar-item mb-2 relative group"
-      @mouseleave="handleChannelUpdate"
+      @mouseleave="handleCancel"
     >
       <span class="icon-style">
         <Icon name="mdi:pound" size="15" />
@@ -84,7 +94,7 @@ function toggleEdit() {
           v-model="channel.name"
           @blur.prevent.stop="handleChannelUpdate"
           @click.prevent.stop
-          @keypress.enter="handleChannelUpdate"
+          @keypress.prevent.enter="handleChannelUpdate"
         />
         <span v-else>
           {{ truncateString(channel.name || "", 15) }}
@@ -97,7 +107,11 @@ function toggleEdit() {
           '!hidden': !isEditable,
         }"
       >
-        <Icon name="bx:pencil" size="15" @click.prevent.stop="toggleEdit" />
+        <Icon
+          :name="isEditing ? 'bx:check' : 'bx:pencil'"
+          size="15"
+          @click.prevent.stop="handleToggle"
+        />
         <Icon
           name="bx:trash"
           size="15"
