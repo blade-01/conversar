@@ -31,7 +31,7 @@ async function handleMessageSend() {
     try {
       resetForm.value?.reset();
       await addDoc(
-        collection(db, "channels", props.title.toLocaleLowerCase(), "messages"),
+        collection(db, "channels", (id as string).toLocaleLowerCase(), "messages"),
         {
           message: chat.value,
           createdAt: Timestamp.now(),
@@ -118,7 +118,7 @@ const memberExceededModal = ref(false);
 const memberModal = ref(false);
 
 const membersCollectionRef = collection(
-  doc(db, "channels", props.title.toLocaleLowerCase()),
+  doc(db, "channels", (id as string).toLocaleLowerCase()),
   "members"
 );
 
