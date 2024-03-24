@@ -28,7 +28,8 @@ export default () => {
         {
           name: user.displayName,
           email: user.email,
-          avatar: user.photoURL
+          avatar: user.photoURL,
+          uid: user.uid
         },
         { merge: true }
       );

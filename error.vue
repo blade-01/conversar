@@ -36,6 +36,7 @@ const { setTheme } = useTheme();
       <p class="text-base md:text-lg">
         We can't seem to find the page you are looking for.
       </p>
+      <p class="text-xs italic md:text-sm break-all">({{ error.message }})</p>
     </div>
     <div class="flex justify-center mt-8">
       <UiBtn

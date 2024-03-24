@@ -3,7 +3,7 @@ import UiBtn from "~/components/Ui/Btn/index.vue";
 import useTheme from "~/composables/useTheme";
 const { setTheme } = useTheme();
 defineProps<{
-  title: any;
+  title?: any;
 }>();
 defineEmits<{
   (e: "toggleMembers"): void;

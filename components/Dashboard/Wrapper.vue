@@ -65,7 +65,7 @@ const { data: allUsers, pending: pendingUsers } = useCollection(
 );
 
 const filteredUsers = computed(() => {
-  return allUsers.value.filter((use) => use.id !== user.value.uid);
+  return allUsers.value.filter((use) => use.uid !== user.value.uid);
 });
 
 const { data: channelUsers, pending } = useCollection<{
@@ -105,12 +105,6 @@ const scrollToBottom = () => {
   });
 };
 
-onMounted(() => {
-  setTimeout(() => {
-    scrollToBottom();
-  }, 1000);
-});
-
 const memberExceeded = computed(() => {
   return users.value.length === 2;
 });
@@ -132,6 +126,7 @@ async function handleAddMembers(values: any, { resetForm }: any) {
           memberDocRef,
           {
             ...user,
+            channelId: (id as string).toLocaleLowerCase(),
           },
           { merge: true }
         );
@@ -158,6 +153,12 @@ const initialValues = computed(() => {
   return {
     users: users.value,
   };
+});
+
+onMounted(() => {
+  setTimeout(() => {
+    scrollToBottom();
+  }, 1000);
 });
 </script>
 
