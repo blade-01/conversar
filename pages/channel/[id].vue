@@ -11,6 +11,12 @@ const channel = useDocument(doc(db, "channels", id as string));
 const { data: messages, pending } = useCollection<MessageIndexData>(
   query(collection(db, "channels", id as string, "messages"), orderBy("createdAt"))
 );
+
+const title = computed(() => id.at(0)!.toUpperCase() + id.slice(1) + " Channel");
+
+useHead({
+  title: title.value,
+});
 </script>
 
 <template>

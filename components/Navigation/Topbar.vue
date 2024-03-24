@@ -30,7 +30,9 @@ const { toggleSidebar } = inject("collapsible") as {
           <span class="icon-style">
             <Icon name="mdi:pound" size="15" />
           </span>
-          <p class="font-bold text-style capitalize">{{ title }}</p>
+          <p class="font-bold text-style capitalize">
+            {{ truncateString(title || "", 20) || "..." }}
+          </p>
         </div>
         <div class="flex items-center gap-4">
           <Icon

@@ -331,18 +331,26 @@
 
   /* DROPDOWN - MULTISELECT */
   .dropdown-checkbox-container {
-    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox rounded-md;
+    @apply bg-dropdown-checkbox dark:bg-bg-darkSidebarLink rounded-md;
   }
   .dropdown-checkbox {
-    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox;
+    @apply bg-dropdown-checkbox dark:bg-bg-darkSidebarLink;
   }
   .dropdown-token {
-    @apply bg-dropdown-checkbox dark:bg-dropdown-darkCheckbox px-2.5;
+    @apply bg-bg-primary dark:bg-bg-dark px-2.5;
   }
   .dropdown-token-label {
     @apply text-text-secondary dark:text-text-dark pr-1;
   }
   .dropdown-token-icon {
     @apply text-text-secondary dark:text-text-dark;
+  }
+
+  #ModalBase[role="dialog"] {
+    @apply !bg-bg-primary dark:!bg-bg-dark;
+  }
+
+  .inline-block.align-bottom.bg-white.dark\:bg-gray-800.rounded-lg.px-4.pt-5.pb-4.text-left.overflow-hidden.shadow-xl.transform.transition-all.sm\:my-8.sm\:align-middle.sm\:w-full.sm\:p-6.sm\:max-w-lg {
+    @apply !bg-bg-primary dark:!bg-bg-dark;
   }
 }

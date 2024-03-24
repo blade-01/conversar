@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      titleTemplate: "%s | Conversar",
+      titleTemplate: "Conversar | %s",
       title: "Conversar",
       meta: [
         { charset: "utf-8" },
