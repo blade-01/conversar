@@ -8,6 +8,7 @@ import {
   Timestamp,
   setDoc,
   doc,
+  collectionGroup,
 } from "firebase/firestore";
 
 const { id } = useRoute().params;
@@ -30,10 +31,9 @@ const { data: defaultChannel } = useCollection(
   query(collection(db, "channels"), where("id", "==", "introduction"))
 );
 
-// // Invited channels
 // Get the channels where the user is a member
 const { data: invitedChannels } = useCollection(
-  query(collection(db, "channels"), where("members", "array-contains", user.value.uid))
+  query(collectionGroup(db, "members"), where("uid", "==", user.value.uid))
 );
 
 const channels = ref();
@@ -41,7 +41,7 @@ watchEffect(() => {
   channels.value = [
     ...defaultChannel.value,
     ...userChannels.value,
-    ...invitedChannels.value,
+    // ...invitedChannels.value,
   ];
 });
 
@@ -169,6 +169,7 @@ async function logout() {
               </div>
             </div>
           </div>
+          <!-- <li>{{ invitedChannels }}</li> -->
           <li class="sidebar-item -mt-2" @click="createChannel">
             <span class="icon-style">
               <Icon name="mdi:plus" size="15" />
