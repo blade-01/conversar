@@ -10,6 +10,7 @@ import {
   doc,
 } from "firebase/firestore";
 import UiInputChat from "~/components/Ui/Input/Chat.vue";
+const { id } = useRoute().params;
 
 const { mainSchema } = useValidations();
 
@@ -24,17 +25,13 @@ const chat = ref("");
 const resetForm = ref<HTMLFormElement | null>(null);
 const isLoading = ref(false);
 
-async function handleSubmit() {
+async function handleMessageSend() {
   isLoading.value = true;
   if (chat.value.trim()) {
     try {
       resetForm.value?.reset();
       await addDoc(
-        collection(
-          collection(db, "channels"),
-          props.title.toLocaleLowerCase(),
-          "messages"
-        ),
+        collection(db, "channels", props.title.toLocaleLowerCase(), "messages"),
         {
           message: chat.value,
           createdAt: Timestamp.now(),
@@ -57,18 +54,47 @@ const handleEnterPress = () => {
   if (!chat.value.trim()) {
     console.log("Empty chat, not submitting");
   } else {
-    handleSubmit();
+    handleMessageSend();
   }
 };
 
 const db = useFirestore();
-const { data: users, pending } = useCollection(
+
+const { data: allUsers, pending: pendingUsers } = useCollection(
   query(collection(db, "users"), orderBy("name"))
 );
 
+const filteredUsers = computed(() => {
+  return allUsers.value.filter((use) => use.id !== user.value.uid);
+});
+
+const { data: channelUsers, pending } = useCollection<{
+  uid: string;
+  name: string;
+  avatar: string;
+}>(
+  query(
+    collection(db, "channels", (id as string).toLocaleLowerCase(), "members"),
+    orderBy("name")
+  )
+);
+
+const users = computed(() => {
+  // Show users in the channel
+  if (channelUsers.value && (id as string).toLocaleLowerCase() !== "introduction") {
+    return channelUsers.value;
+  } else {
+    // Show all users
+    return allUsers.value;
+  }
+});
+
+const introductionChannel = computed(() => {
+  return (id as string).toLocaleLowerCase() === "introduction";
+});
+
 const contentWrapper = ref<HTMLElement | null>(null);
 
-// After a new message is sent, call this function
 const scrollToBottom = () => {
   nextTick(() => {
     const contentElement = contentWrapper.value;
@@ -86,33 +112,53 @@ onMounted(() => {
 });
 
 const memberExceeded = computed(() => {
-  return users.value.length === 3;
+  return users.value.length === 2;
 });
 const memberExceededModal = ref(false);
-
 const memberModal = ref(false);
+
+const membersCollectionRef = collection(
+  doc(db, "channels", props.title.toLocaleLowerCase()),
+  "members"
+);
+
 async function handleAddMembers(values: any, { resetForm }: any) {
-  if (values.channelName) {
-    try {
-      isLoading.value = true;
-      await setDoc(
-        doc(collection(db, "channels"), props.title.toLocaleLowerCase(), "messages"),
-        {
-          message: chat.value,
-          createdAt: Timestamp.now(),
-          uid: user.value.uid,
-          name: user.value.displayName,
-          avatar: user.value.photoURL,
-        }
-      );
-      resetForm();
-    } catch (error) {
-      return Promise.reject(error);
-    } finally {
-      isLoading.value = false;
-    }
+  try {
+    isLoading.value = true;
+    await Promise.all(
+      values.users.map(async (user: any) => {
+        const memberDocRef = doc(membersCollectionRef, user.id);
+        await setDoc(
+          memberDocRef,
+          {
+            ...user,
+          },
+          { merge: true }
+        );
+      })
+    );
+    resetForm();
+    memberModal.value = false;
+  } catch (error) {
+    return Promise.reject(error);
+  } finally {
+    isLoading.value = false;
   }
 }
+
+function addMembers() {
+  if (memberExceeded.value) {
+    memberExceededModal.value = true;
+    return;
+  }
+  memberModal.value = true;
+}
+
+const initialValues = computed(() => {
+  return {
+    users: users.value,
+  };
+});
 </script>
 
 <template>
@@ -150,7 +196,7 @@ async function handleAddMembers(values: any, { resetForm }: any) {
           ref="messageContainer"
         >
           <form
-            @submit.prevent="handleSubmit"
+            @submit.prevent="handleMessageSend"
             @keydown.enter.prevent="handleEnterPress"
             class="w-full"
             ref="resetForm"
@@ -178,25 +224,28 @@ async function handleAddMembers(values: any, { resetForm }: any) {
               class="flex justify-between items-center sticky top-0 bg-bg-primary dark:bg-bg-dark p-4"
             >
               <p class="uppercase text-sm font-medium text-style">Members</p>
-              <span class="icon-style" @click="memberModal = !memberModal">
+              <span class="icon-style" @click="addMembers" v-if="!introductionChannel">
                 <Icon name="mdi:plus" size="15" />
               </span>
             </div>
-            <div class="px-4 flex flex-col gap-5" v-if="!pending">
-              <div
-                v-for="user in users"
-                :key="user.uid"
-                class="flex gap-2.5 items-center"
-                v-if="!pending"
-              >
-                <PvAvatar :image="user.avatar" shape="circle" />
-                <p class="text-style text-sm">
-                  {{ truncateString(user.name || "", 20) }}
-                </p>
+            <div v-if="users?.length">
+              <div class="flex flex-col gap-1" v-if="!pending || !pendingUsers">
+                <DisplayMember
+                  v-for="user in users"
+                  :key="user.uid"
+                  :user="(user as MemberIndexData)"
+                />
+              </div>
+              <div class="px-4 flex flex-col gap-5" v-else>
+                <UiLoaderUsers v-for="i in 5" :key="i" />
               </div>
             </div>
-            <div class="px-4" v-else>
-              <UiLoaderUsers v-for="i in 5" :key="i" />
+            <div v-if="!users.length && !pending && !pendingUsers" class="px-4">
+              <p
+                class="text-sm text-center mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60"
+              >
+                Oops! You don't have any members in this channel yet.
+              </p>
             </div>
           </div>
         </div>
@@ -207,25 +256,25 @@ async function handleAddMembers(values: any, { resetForm }: any) {
     <!-- MEMBERS: MOBILE AND IPAD -->
     <div class="xl:hidden">
       <UiModalSide v-model="memberSheet" title="Members" size="sm">
-        <div class="flex flex-col gap-5">
-          <div
-            v-for="user in users"
-            :key="user.uid"
-            class="flex gap-2.5 items-center"
-            v-if="!pending"
-          >
-            <PvAvatar :image="user.avatar" shape="circle" />
-            <p class="text-style text-sm">
-              {{ truncateString(user.name || "", 20) }}
-            </p>
+        <div v-if="users?.length">
+          <div class="flex flex-col gap-5" v-if="!pending || !pendingUsers">
+            <DisplayMember
+              v-for="user in users"
+              :key="user.uid"
+              :user="(user as MemberIndexData)"
+            />
           </div>
-          <UiLoaderUsers v-for="i in 5" :key="i" v-else />
+          <div class="flex flex-col gap-5" v-else>
+            <UiLoaderUsers v-for="i in 5" :key="i" />
+          </div>
+        </div>
+        <div v-if="!users.length && !pending && !pendingUsers" class="px-4">
+          <p class="text-sm text-center mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
+            Oops! You don't have any members in this channel yet.
+          </p>
         </div>
         <template #footer>
-          <div
-            class="flex gap-2.5 justify-end items-center"
-            @click="memberModal = !memberModal"
-          >
+          <div class="flex gap-2.5 justify-end items-center" @click="addMembers">
             <span class="icon-style">
               <Icon name="mdi:plus" size="15" />
             </span>
@@ -243,15 +292,15 @@ async function handleAddMembers(values: any, { resetForm }: any) {
       outer-class="w-[90%] lg:w-[500px]"
     >
       <Form
-        :initial-values="{ users: [] }"
         @submit="handleAddMembers"
         :validation-schema="mainSchema"
+        :initial-values="initialValues"
         v-slot="{ errors }"
         class="p-4 w-full"
       >
         <UiInputMultiSelect
           name="users"
-          :options="users"
+          :options="filteredUsers"
           option-label="name"
           label="Select Members"
           filter
@@ -298,8 +347,8 @@ async function handleAddMembers(values: any, { resetForm }: any) {
           class="rounded-full border-[15px] border-border-topbar dark:border-border-darkTopbar"
         />
         <p class="text-sm mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
-          Oops! You've hit the member invite limit. Take a moment to organize your remove
-          the weak link in your members.
+          Oops! You've hit the member invite limit. Take a moment to your remove the weak
+          link amongst your members 🌚.
         </p>
       </div>
     </UiModalCenter>
