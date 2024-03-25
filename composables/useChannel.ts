@@ -3,17 +3,33 @@ import {
   query,
   where,
   orderBy,
-  Timestamp,
-  setDoc,
-  doc,
-  collectionGroup
+  collectionGroup,
+  deleteDoc,
+  updateDoc,
+  doc
 } from "firebase/firestore";
-export default () => {
-  const db = useFirestore();
+export default (props?: any) => {
+  // Variables
+  const { $modal } = useNuxtApp();
   const { user } = useAuth();
+  const db = useFirestore();
+  const channelModal = ref(false);
+  const comingSoon = ref(false);
+  const isLoading = ref(false);
+  const channelTaken = ref(false);
+  const channelExceededModal = ref(false);
+  const isEditing = ref(false);
+  const shallowName = shallowRef(props?.channel?.name);
+  const inputField = ref<HTMLElement | null>(null);
+
   // All channels
   const { data: allChannels } = useCollection(
     query(collection(db, "channels"), orderBy("name"))
+  );
+
+  // Default channel
+  const { data: defaultChannel } = useCollection(
+    query(collection(db, "channels"), where("id", "==", "introduction"))
   );
 
   // Channels created by the user
@@ -23,11 +39,6 @@ export default () => {
       where("id", "==", user.value.uid),
       orderBy("name")
     )
-  );
-
-  // Default channel
-  const { data: defaultChannel } = useCollection(
-    query(collection(db, "channels"), where("id", "==", "introduction"))
   );
 
   // Channels where the user is invited
@@ -47,11 +58,18 @@ export default () => {
     }
   });
 
+  // Combine default and user channels
   const channels = ref();
   watchEffect(() => {
     channels.value = [...defaultChannel.value, ...userChannels.value];
   });
 
+  // Channel exceeded
+  const channelExceeded = computed(() => {
+    return userChannels.value.length === 2;
+  });
+
+  // Sidebar links
   const links = ref<
     {
       name: string;
@@ -86,26 +104,71 @@ export default () => {
     }
   ]);
 
+  // Toggle dropdown
   const toggleDropdown = (item: any): void => {
     item.show = !item.show;
   };
 
-  const channelModal = ref(false);
-  const comingSoon = ref(false);
-  const isLoading = ref(false);
+  /**
+   * Channel CRUD
+   */
 
-  const channelTaken = ref(false);
-  const channelExceededModal = ref(false);
-  const channelExceeded = computed(() => {
-    return userChannels.value.length === 2;
-  });
-
+  // Create channel
   function createChannel() {
     if (channelExceeded.value) {
       channelExceededModal.value = true;
       return;
     }
     channelModal.value = true;
+  }
+
+  // Delete Channel
+  function handleChannelDelete() {
+    $modal.show({
+      type: "danger",
+      title: "Are you sure?",
+      body: "You won't be able to revert this!",
+      primary: {
+        label: "Delete",
+        theme: "red",
+        action: () => deleteChannel()
+      },
+      secondary: {
+        label: "Cancel",
+        theme: "white",
+        action: () => {}
+      }
+    });
+  }
+
+  async function deleteChannel() {
+    isLoading.value = true;
+    await deleteDoc(doc(db, "channels", props?.channel?.id.toLowerCase()));
+    isLoading.value = false;
+    useRouter().push({
+      name: "channel-id",
+      params: { id: "introduction" }
+    });
+  }
+
+  // Update Channel
+  async function handleChannelUpdate() {
+    await updateDoc(doc(db, "channels", props?.channel?.id.toLowerCase()), {
+      name: props?.channel.name
+    });
+    isEditing.value = false;
+    shallowName.value = props?.channel.name;
+  }
+
+  // Toggle edit state
+  function handleToggle() {
+    isEditing.value = !isEditing.value;
+  }
+
+  // Cancel edit
+  function handleCancel() {
+    isEditing.value = false;
+    props.channel.name = shallowName.value;
   }
 
   return {
@@ -125,6 +188,12 @@ export default () => {
     channelTaken,
     channelExceededModal,
     channelExceeded,
-    createChannel
+    createChannel,
+    handleCancel,
+    handleChannelUpdate,
+    handleChannelDelete,
+    handleToggle,
+    isEditing,
+    inputField
   };
 };

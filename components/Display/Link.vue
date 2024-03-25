@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
-const db = useFirestore();
 interface Props {
   channel: any;
   isEditable?: boolean;
@@ -11,59 +9,15 @@ const props = withDefaults(defineProps<Props>(), {
   isEditable: true,
 });
 
-const shallowName = shallowRef(props?.channel?.name);
-
-const { $modal } = useNuxtApp();
-
-const isEditing = ref(false);
-const isLoading = ref(false);
-
-function handleChannelDelete() {
-  $modal.show({
-    type: "danger",
-    title: "Are you sure?",
-    body: "You won't be able to revert this!",
-    primary: {
-      label: "Delete",
-      theme: "red",
-      action: () => deleteChannel(),
-    },
-    secondary: {
-      label: "Cancel",
-      theme: "white",
-      action: () => {},
-    },
-  });
-}
-
-async function deleteChannel() {
-  isLoading.value = true;
-  await deleteDoc(doc(db, "channels", props?.channel?.id.toLowerCase()));
-  isLoading.value = false;
-  useRouter().push({
-    name: "channel-id",
-    params: { id: "introduction" },
-  });
-}
-
-async function handleChannelUpdate() {
-  await updateDoc(doc(db, "channels", props?.channel?.id.toLowerCase()), {
-    name: props?.channel.name,
-  });
-  isEditing.value = false;
-  shallowName.value = props?.channel.name;
-}
-
-const inputField = ref<HTMLElement | null>(null);
-
-function handleToggle() {
-  isEditing.value = !isEditing.value;
-}
-
-function handleCancel() {
-  isEditing.value = false;
-  props.channel.name = shallowName.value;
-}
+const {
+  handleCancel,
+  isEditing,
+  handleChannelUpdate,
+  handleToggle,
+  handleChannelDelete,
+  isLoading,
+  inputField,
+} = useChannel(props);
 </script>
 
 <template>
