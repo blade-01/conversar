@@ -46,6 +46,7 @@ async function handleMessageSend() {
         }
       );
       chatInput?.value?.reduceChatBoxHeight();
+      chatInput?.value?.closePopup();
     } catch (error) {
       return Promise.reject(error);
     } finally {
