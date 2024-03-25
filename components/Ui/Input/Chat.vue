@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-const props = defineProps<{
+defineProps<{
   modelValue: string;
   appendIcon?: string;
   innerClasses?: string;
@@ -18,28 +18,8 @@ const emits = defineEmits<{
   (event: "update:modelValue", value: string): void;
 }>();
 
+// Variables
 const chatInput = ref<HTMLElement | null>(null);
-onMounted(() => {
-  const inputElement = chatInput.value;
-  if (inputElement) {
-    inputElement.addEventListener("input", (e: Event) => {
-      inputElement.style.height = "50px";
-      inputElement.style.height = `${inputElement.scrollHeight}px`;
-
-      if (inputElement.scrollHeight > 200) {
-        inputElement.style.overflowY = "scroll";
-      } else {
-        inputElement.style.overflowY = "hidden";
-      }
-
-      const target = e.target as HTMLTextAreaElement;
-      if (!target.value) {
-        inputElement.style.height = "50px";
-      }
-    });
-  }
-});
-
 const activateButton = ref(false);
 const emojiPopup = ref(false);
 
@@ -47,6 +27,7 @@ function showEmojiSelector() {
   emojiPopup.value = !emojiPopup.value;
 }
 
+// Handle input changes
 function handleInput(event: Event) {
   activateButton.value = (event.target as HTMLTextAreaElement).value.length > 0;
   const textarea = event.target as HTMLTextAreaElement;
@@ -55,6 +36,24 @@ function handleInput(event: Event) {
   emits("update:modelValue", textarea.value);
 }
 
+// Reduce height after submission
+function reduceChatBoxHeight() {
+  const inputElement = chatInput.value;
+  if (inputElement) {
+    inputElement.style.height = "initial";
+    inputElement.style.overflowY = "hidden";
+    inputElement.focus();
+    emits("update:modelValue", "");
+    activateButton.value = false;
+  }
+}
+
+// Close Popup
+function closePopup() {
+  emojiPopup.value = false;
+}
+
+// Watch emoji popup
 watch(emojiPopup, (val) => {
   if (val) {
     setTimeout(() => {
@@ -80,21 +79,29 @@ watch(emojiPopup, (val) => {
   }
 });
 
-function reduceChatBoxHeight() {
+// Get popup on mounted
+onMounted(() => {
   const inputElement = chatInput.value;
   if (inputElement) {
-    inputElement.style.height = "initial"; // Set to default height
-    inputElement.style.overflowY = "hidden"; // Hide scrollbars
-    inputElement.focus();
-    emits("update:modelValue", "");
-    activateButton.value = false;
+    inputElement.addEventListener("input", (e: Event) => {
+      inputElement.style.height = "50px";
+      inputElement.style.height = `${inputElement.scrollHeight}px`;
+
+      if (inputElement.scrollHeight > 200) {
+        inputElement.style.overflowY = "scroll";
+      } else {
+        inputElement.style.overflowY = "hidden";
+      }
+
+      const target = e.target as HTMLTextAreaElement;
+      if (!target.value) {
+        inputElement.style.height = "50px";
+      }
+    });
   }
-}
+});
 
-function closePopup() {
-  emojiPopup.value = false;
-}
-
+// Expose functions
 defineExpose({
   reduceChatBoxHeight,
   closePopup,
