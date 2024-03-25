@@ -2,21 +2,29 @@
 import { collection } from "firebase/firestore";
 import UiBtn from "~/components/Ui/Btn/index.vue";
 import useTheme from "~/composables/useTheme";
+
 const { setTheme } = useTheme();
+
 defineProps<{
   title?: any;
 }>();
+
 defineEmits<{
   (e: "toggleMembers"): void;
 }>();
+
 const { toggleSidebar } = inject("collapsible") as {
   toggleSidebar: () => void;
 };
+
+// Users avatars Collection
 const db = useFirestore();
 const users = useCollection(collection(db, "users"));
+
 const avatars = computed(() => {
   return users.value?.map((user) => user.avatar)?.splice(0, 3);
 });
+
 const remainingUsers = computed(() => {
   return users.value?.length - 3;
 });

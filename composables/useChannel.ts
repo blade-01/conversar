@@ -6,6 +6,8 @@ import {
   collectionGroup,
   deleteDoc,
   updateDoc,
+  setDoc,
+  Timestamp,
   doc
 } from "firebase/firestore";
 export default (props?: any) => {
@@ -112,8 +114,38 @@ export default (props?: any) => {
   /**
    * Channel CRUD
    */
-
   // Create channel
+  async function handleCreateChannel(values: any, { resetForm }: any) {
+    if (values.channelName) {
+      const channelExists = channels.value.find(
+        (channel: any) => channel.name === values.channelName.toLowerCase()
+      );
+      if (channelExists) {
+        channelTaken.value = true;
+        return;
+      }
+      try {
+        isLoading.value = true;
+        await setDoc(
+          doc(db, "channels", values.channelName.toLowerCase()),
+          {
+            name: values.channelName.toLowerCase(),
+            id: user.value.uid,
+            createdAt: Timestamp.now()
+          },
+          { merge: true }
+        );
+        resetForm();
+        channelModal.value = false;
+      } catch (error) {
+        return Promise.reject(error);
+      } finally {
+        isLoading.value = false;
+        channelTaken.value = false;
+      }
+    }
+  }
+
   function createChannel() {
     if (channelExceeded.value) {
       channelExceededModal.value = true;
@@ -194,6 +226,7 @@ export default (props?: any) => {
     handleChannelDelete,
     handleToggle,
     isEditing,
-    inputField
+    inputField,
+    handleCreateChannel
   };
 };
