@@ -6,13 +6,14 @@ definePageMeta({
 });
 const { id } = useRoute().params;
 
+// Channel and messages Collection
 const db = useFirestore();
 const channel = useDocument(doc(db, "channels", id as string));
 const { data: messages, pending } = useCollection<MessageIndexData>(
   query(collection(db, "channels", id as string, "messages"), orderBy("createdAt"))
 );
 
-const title = computed(() => id.at(0)!.toUpperCase() + id.slice(1) + " Channel");
+const title = computed(() => capitalizeFirstLetter(id as string) + " Channel");
 
 useHead({
   title: title.value,
