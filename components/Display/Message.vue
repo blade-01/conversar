@@ -15,6 +15,7 @@ const {
   options,
   copied,
   isLoading,
+  reactToMessage,
 } = useMessage(props);
 
 // Save and Cancel shortcut
@@ -95,14 +96,15 @@ useShortcut({
           name="emojione-monotone:slightly-smiling-face"
           size="15"
           class="cursor-pointer"
-          @click="
+          @click="reactToMessage"
+        />
+        <!-- @click="
             () => {
               isEditing = true;
               inputField?.focus();
               emojiPopup = !emojiPopup;
             }
-          "
-        />
+          " -->
         <Icon
           name="mdi:dots-vertical"
           size="15"
@@ -116,6 +118,7 @@ useShortcut({
       >
         <div
           class="flex gap-1.5 items-center hover:text-style hover:bg-bg-sidebarLink dark:hover:bg-bg-darkSidebarLink cursor-pointer py-1 px-2.5 rounded-[4px] text-text-primary/[0.64] dark:text-white/[0.64]"
+          :class="{ '!text-[#C62828]': option.title === 'delete' }"
           v-for="option in options"
           :key="option.title"
           @click="option.action()"

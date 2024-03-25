@@ -4,14 +4,16 @@ import {
   deleteDoc,
   updateDoc,
   doc,
-  Timestamp
+  Timestamp,
+  query,
+  orderBy
 } from "firebase/firestore";
 import useValidations from "~/composables/useValidations";
 import UiInputChat from "~/components/Ui/Input/Chat.vue";
 
 export default (props?: any) => {
   // Variables
-  const { $modal } = useNuxtApp();
+  const { $modal, $toast } = useNuxtApp();
   const { id } = useRoute().params;
   const { mainSchema } = useValidations();
   const { user } = useAuth();
@@ -73,6 +75,42 @@ export default (props?: any) => {
   /**
    * Message/Chat CRUD
    */
+
+  // Get Messages
+  const { data: messages, pending } = useCollection<MessageIndexData>(
+    query(
+      collection(db, "channels", id as string, "messages"),
+      orderBy("createdAt")
+    )
+  );
+
+  const title = computed(
+    () => capitalizeFirstLetter(id as string) + " Channel"
+  );
+
+  // Sort messages by day
+  const groupedMessages = computed(() => {
+    const groups = [];
+    let lastDate = null;
+
+    for (const message of messages.value || []) {
+      // If date is today, show "Today" instead of date
+      const messageDate = isDateToday(message.createdAt?.toDate())
+        ? "Today"
+        : formatDate(message.createdAt?.toDate(), "MMM D, YYYY");
+      if (messageDate !== lastDate) {
+        groups.push({
+          date: messageDate,
+          messages: [message]
+        });
+        lastDate = messageDate;
+      } else {
+        groups[groups.length - 1].messages.push(message);
+      }
+    }
+    return groups;
+  });
+
   // Send Message
   async function handleMessageSend() {
     isLoading.value = true;
@@ -103,6 +141,15 @@ export default (props?: any) => {
         scrollToBottom();
       }
     }
+  }
+
+  // React to message
+  function reactToMessage() {
+    $toast.show({
+      type: "info",
+      title: "🚨🚨🚨",
+      message: "🤖 Whoops! Looks like our reaction emojis took a vacation."
+    });
   }
 
   // Enter keypress
@@ -236,6 +283,11 @@ export default (props?: any) => {
     handleMessageUpdate,
     inputField,
     options,
-    copied
+    copied,
+    messages,
+    pending,
+    title,
+    groupedMessages,
+    reactToMessage
   };
 };
