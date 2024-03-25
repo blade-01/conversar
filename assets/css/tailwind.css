@@ -17,7 +17,7 @@
 
   html,
   body {
-    @apply overflow-hidden md:overflow-auto;
+    /* @apply overflow-hidden md:overflow-auto; */
   }
 
   :root {
