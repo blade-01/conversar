@@ -1,10 +1,13 @@
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 export default () => {
+  // Variables
   const provider = new GoogleAuthProvider();
   const isSigningIn = ref(false);
   const auth: any = useFirebaseAuth();
   const user: any = useCurrentUser(auth);
+
+  // Sign in with Google
   async function signInWithGoogle() {
     isSigningIn.value = true;
     try {
@@ -20,6 +23,7 @@ export default () => {
     }
   }
 
+  // Update user list
   async function updateUserList(user: any) {
     const db = useFirestore();
     try {
@@ -38,6 +42,7 @@ export default () => {
     }
   }
 
+  // Logout
   async function logout() {
     await signOut(auth);
     useRouter().push("/auth");
