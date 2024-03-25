@@ -55,13 +55,13 @@ async function handleMessageSend() {
   }
 }
 
-const handleEnterPress = () => {
+function handleEnterPress() {
   if (!chat.value.trim()) {
     console.log("Empty chat, not submitting");
   } else {
     handleMessageSend();
   }
-};
+}
 
 const db = useFirestore();
 
@@ -100,7 +100,7 @@ const introductionChannel = computed(() => {
 
 const contentWrapper = ref<HTMLElement | null>(null);
 
-const scrollToBottom = () => {
+function scrollToBottom() {
   nextTick(() => {
     const contentElement = contentWrapper.value;
     if (contentElement) {
@@ -108,7 +108,7 @@ const scrollToBottom = () => {
       contentElement.scrollTo({ top: contentElement.scrollHeight });
     }
   });
-};
+}
 
 const memberExceeded = computed(() => {
   return users.value.length === 2;

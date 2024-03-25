@@ -18,7 +18,13 @@ export default defineNuxtConfig({
             "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         }
       ],
-      link: [{ rel: "icon", href: "/favicon.ico" }]
+      link: [{ rel: "icon", href: "/favicon.ico" }],
+      script: [
+        {
+          type: "module",
+          src: "https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"
+        }
+      ]
     }
   },
   devtools: { enabled: true },
@@ -132,6 +138,15 @@ export default defineNuxtConfig({
     auth: {
       enabled: true,
       sessionCookie: true
+    }
+  },
+
+  /**
+   * Compiler configuration
+   */
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => tag.startsWith("emoji-")
     }
   }
 });

@@ -88,21 +88,28 @@ async function logout() {
       </div>
       <div class="sidebar-content">
         <div class="flex flex-col gap-y-2">
-          <div v-for="(link, index) in links" :key="index" class="truncate">
+          <div
+            v-for="(link, index) in links"
+            :key="index"
+            v-if="links?.length"
+            class="truncate"
+          >
             <div>
               <div
                 class="flex items-center justify-between sidebar-item hover:!bg-transparent mb-2"
                 @click="toggleDropdown(link)"
               >
                 <p class="flex items-center gap-3 font-medium">
-                  <Icon v-if="link.icon" :name="`mdi:${link.icon}`" width="25" />
-                  <span class="text-sm uppercase text-style">{{ link.name }}</span>
+                  <Icon v-if="link?.icon" :name="`mdi:${link?.icon}`" width="25" />
+                  <span class="text-sm uppercase text-style" v-if="link?.name">{{
+                    link?.name
+                  }}</span>
                 </p>
                 <Icon
                   name="mdi:chevron-down"
                   width="20"
                   :class="
-                    link.show
+                    link?.show
                       ? 'transition-all ease-in duration-300 transform rotate-180'
                       : 'transition-all ease-out duration-300 transform rotate-40'
                   "
@@ -111,7 +118,7 @@ async function logout() {
               <div
                 class="flex flex-col"
                 :class="[
-                  link.show
+                  link?.show
                     ? 'transition-[max-height] max-h-[5000px] duration-200 ease-in'
                     : 'transition-[max-height] max-h-0 duration-300 ease-out overflow-hidden',
                 ]"
@@ -119,10 +126,10 @@ async function logout() {
                 <div v-if="!pending">
                   <DisplayLink
                     :channel="channel"
-                    v-for="channel in link.sub"
-                    :key="channel.id"
-                    :is-editable="link.isEditable"
-                    :has-query="link.hasQuery"
+                    v-for="channel in link?.sub"
+                    :key="channel?.id"
+                    :is-editable="link?.isEditable"
+                    :has-query="link?.hasQuery"
                   />
                 </div>
                 <div v-else>
@@ -131,7 +138,7 @@ async function logout() {
                 <div
                   class="sidebar-item -mt-2"
                   @click="createChannel"
-                  v-if="link.hasCreate"
+                  v-if="link?.hasCreate"
                 >
                   <span class="icon-style">
                     <Icon name="mdi:plus" size="15" />
