@@ -135,6 +135,10 @@
   dark:accent-accent-dark;
   }
 
+  .edit-input {
+    @apply border border-border-primary dark:border-border-dark outline-none focus:border-border-topbar dark:focus:border-border-darkTopbar bg-bg-topbar dark:bg-bg-darkTopbar w-full box-border text-style px-2 shadow-xl rounded-md;
+  }
+
   /* TEXT */
   .text-style {
     @apply text-text-primary dark:text-text-dark;
