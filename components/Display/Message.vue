@@ -23,6 +23,7 @@ const isLoading = ref(false);
 const isEditing = ref(false);
 const showOptions = ref(false);
 const shallowMessage = shallowRef(props?.message?.message);
+const inputField = ref<HTMLTextAreaElement | null>(null);
 
 const options = ref([
   {
@@ -84,6 +85,7 @@ async function deleteMessage() {
 
 async function handleMessageUpdate() {
   if (props?.message?.message.trim()) {
+    isLoading.value = true;
     try {
       await updateDoc(
         doc(
@@ -94,14 +96,17 @@ async function handleMessageUpdate() {
           props?.message?.id
         ),
         {
-          message: props?.message?.message,
+          message: inputField.value!.value || props?.message?.message,
         }
       );
-      isEditing.value = false;
-      showOptions.value = false;
-      shallowMessage.value = props?.message?.message;
     } catch (error: any) {
       return Promise.reject(error);
+    } finally {
+      isEditing.value = false;
+      isLoading.value = false;
+      showOptions.value = false;
+      emojiPopup.value = false;
+      shallowMessage.value = props?.message?.message;
     }
   } else {
     handleMessageDelete();
@@ -110,6 +115,9 @@ async function handleMessageUpdate() {
 
 function handleCancel() {
   isEditing.value = false;
+  isLoading.value = false;
+  showOptions.value = false;
+  emojiPopup.value = false;
   props.message.message = shallowMessage.value;
 }
 
@@ -124,6 +132,31 @@ useShortcut({
     saveBtn.value?.triggerClick();
   },
 });
+
+const emojiPopup = ref(false);
+
+watch(emojiPopup, (val) => {
+  if (val) {
+    setTimeout(() => {
+      document
+        .querySelector("emoji-picker")!
+        .addEventListener("emoji-click", (e: any) => {
+          const emoji = e.detail.unicode;
+          const textarea = inputField.value as HTMLTextAreaElement;
+          textarea.focus();
+
+          if (textarea) {
+            const cursorPosition = textarea.selectionStart;
+            const updatedText = insertAtCursor(textarea.value, emoji, cursorPosition);
+            textarea.value = updatedText;
+            textarea.focus();
+            const newPosition = cursorPosition + emoji.length;
+            textarea.setSelectionRange(newPosition, newPosition);
+          }
+        });
+    }, 1000);
+  }
+});
 </script>
 
 <template>
@@ -133,6 +166,7 @@ useShortcut({
       () => {
         showOptions = false;
         handleCancel();
+        emojiPopup = false;
       }
     "
   >
@@ -150,7 +184,7 @@ useShortcut({
       <!-- MESSAGE -->
       <div>
         <textarea
-          class="border border-border-primary dark:border-border-dark outline-none focus:border-border-topbar dark:focus:border-border-darkTopbar bg-bg-topbar dark:bg-bg-darkTopbar !w-full text-style p-2"
+          class="edit-input p-2"
           ref="inputField"
           v-if="isEditing"
           v-model="message.message"
@@ -174,6 +208,7 @@ useShortcut({
             class="!text-bg-secondary dark:!text-white cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent text-xs h-fit !px-1.5"
             @click="handleMessageUpdate"
             ref="saveBtn"
+            :is-loading="isLoading"
             >save</UiBtn
           >
         </div>
@@ -189,6 +224,13 @@ useShortcut({
           name="emojione-monotone:slightly-smiling-face"
           size="15"
           class="cursor-pointer"
+          @click="
+            () => {
+              isEditing = true;
+              inputField?.focus();
+              emojiPopup = !emojiPopup;
+            }
+          "
         />
         <Icon
           name="mdi:dots-vertical"
@@ -219,6 +261,13 @@ useShortcut({
       </div>
     </div>
     <!-- ./ OPTIONS -->
+    <!-- EMOJI PICKER -->
+    <Transition name="fade">
+      <div v-if="emojiPopup" class="absolute mx-auto -top-[400px] right-5">
+        <emoji-picker></emoji-picker>
+      </div>
+    </Transition>
+    <!-- ./ EMOJI PICKER -->
   </div>
 </template>
 
