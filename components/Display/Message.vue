@@ -1,127 +1,23 @@
 <script setup lang="ts">
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import UiBtn from "~/components/Ui/Btn/index.vue";
-
-const { escape } = useMagicKeys();
-
-const { id } = useRoute().params;
-
-const db = useFirestore();
-
-const { user } = useAuth();
-
-const { $modal } = useNuxtApp();
-
 const props = defineProps<{
   // @ts-ignore
   message: MessageIndexData;
 }>();
 
-const { copy, copied } = useClipboard();
+const {
+  showOptions,
+  handleCancel,
+  emojiPopup,
+  isEditing,
+  handleMessageUpdate,
+  inputField,
+  options,
+  copied,
+  isLoading,
+} = useMessage(props);
 
-const isLoading = ref(false);
-const isEditing = ref(false);
-const showOptions = ref(false);
-const shallowMessage = shallowRef(props?.message?.message);
-const inputField = ref<HTMLTextAreaElement | null>(null);
-
-const options = ref([
-  {
-    icon: "bx:pencil",
-    title: "edit",
-    action: () => {
-      isEditing.value = !isEditing.value;
-    },
-    isActive: props?.message?.uid === user?.value?.uid,
-  },
-  {
-    icon: "mdi:content-copy",
-    title: "copy",
-    action: () => {
-      copy(props?.message?.message);
-    },
-    isActive: true,
-  },
-  {
-    icon: isLoading.value ? "bx:loader" : "bx:trash",
-    title: "delete",
-    action: () => handleMessageDelete(),
-    isActive: props?.message?.uid === user?.value?.uid,
-  },
-]);
-
-function handleMessageDelete() {
-  $modal.show({
-    type: "danger",
-    title: "Are you sure?",
-    body: "You won't be able to revert this!",
-    primary: {
-      label: "Delete",
-      theme: "red",
-      action: () => deleteMessage(),
-    },
-    secondary: {
-      label: "Cancel",
-      theme: "white",
-      action: () => {},
-    },
-  });
-}
-
-async function deleteMessage() {
-  isLoading.value = true;
-  await deleteDoc(
-    doc(
-      db,
-      "channels",
-      (id as string).toLocaleLowerCase(),
-      "messages",
-      props?.message?.id
-    )
-  );
-  isLoading.value = false;
-  isEditing.value = false;
-}
-
-async function handleMessageUpdate() {
-  if (props?.message?.message.trim()) {
-    isLoading.value = true;
-    try {
-      await updateDoc(
-        doc(
-          db,
-          "channels",
-          (id as string).toLocaleLowerCase(),
-          "messages",
-          props?.message?.id
-        ),
-        {
-          message: inputField.value!.value || props?.message?.message,
-        }
-      );
-    } catch (error: any) {
-      return Promise.reject(error);
-    } finally {
-      isEditing.value = false;
-      isLoading.value = false;
-      showOptions.value = false;
-      emojiPopup.value = false;
-      shallowMessage.value = props?.message?.message;
-    }
-  } else {
-    handleMessageDelete();
-  }
-}
-
-function handleCancel() {
-  isEditing.value = false;
-  isLoading.value = false;
-  showOptions.value = false;
-  emojiPopup.value = false;
-  props.message.message = shallowMessage.value;
-}
-
-// Save and Cancel
+// Save and Cancel shortcut
 const saveBtn = ref<InstanceType<typeof UiBtn> | null>(null);
 const cancelBtn = ref<InstanceType<typeof UiBtn> | null>(null);
 useShortcut({
@@ -131,31 +27,6 @@ useShortcut({
   enter() {
     saveBtn.value?.triggerClick();
   },
-});
-
-const emojiPopup = ref(false);
-
-watch(emojiPopup, (val) => {
-  if (val) {
-    setTimeout(() => {
-      document
-        .querySelector("emoji-picker")!
-        .addEventListener("emoji-click", (e: any) => {
-          const emoji = e.detail.unicode;
-          const textarea = inputField.value as HTMLTextAreaElement;
-          textarea.focus();
-
-          if (textarea) {
-            const cursorPosition = textarea.selectionStart;
-            const updatedText = insertAtCursor(textarea.value, emoji, cursorPosition);
-            textarea.value = updatedText;
-            textarea.focus();
-            const newPosition = cursorPosition + emoji.length;
-            textarea.setSelectionRange(newPosition, newPosition);
-          }
-        });
-    }, 1000);
-  }
 });
 </script>
 
