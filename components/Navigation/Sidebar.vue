@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { signOut } from "firebase/auth";
 import { Timestamp, setDoc, doc } from "firebase/firestore";
 
 const db = useFirestore();
 
 defineProps<{ nav: boolean }>();
 
-const { auth, user } = useAuth();
+const { user, logout } = useAuth();
 
 const {
   links,
@@ -19,7 +18,7 @@ const {
   channelExceededModal,
   createChannel,
   pending,
-} = useSidebarUtils();
+} = useChannel();
 
 async function handleCreateChannel(values: any, { resetForm }: any) {
   if (values.channelName) {
@@ -51,20 +50,13 @@ async function handleCreateChannel(values: any, { resetForm }: any) {
     }
   }
 }
-
-async function logout() {
-  await signOut(auth);
-  useRouter().push("/auth");
-}
 </script>
 
 <template>
   <div class="sidebar" :class="{ 'sidebar-opened': nav }">
     <div class="sidebar-community">
       <div class="flex flex-col gap-2 items-center">
-        <div
-          class="bg-bg-secondary rounded-xl w-[52px] h-[52px] flex justify-center items-center"
-        >
+        <div class="sidebar--logo-style">
           <img src="~/assets/svg/logo-light.svg" alt="logo" class="w-7 h-8" />
         </div>
         <hr class="border-t border-t-[#2F2E31] w-[50%]" />
@@ -73,9 +65,7 @@ async function logout() {
         <Icon name="mdi:plus" size="20" class="text-[#23A559]" />
       </div>
       <div @click="logout" class="flex flex-col items-center gap-2 cursor-pointer">
-        <div
-          class="w-[50px] h-[50px] rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-style"
-        >
+        <div class="sidebar--logout-icon">
           <Icon name="mdi:logout" width="20" />
         </div>
         <p class="text-xs text-style">Log out</p>
@@ -96,7 +86,7 @@ async function logout() {
           >
             <div>
               <div
-                class="flex items-center justify-between sidebar-item hover:!bg-transparent mb-2"
+                class="sidebar-item sidebar-channel-header"
                 @click="toggleDropdown(link)"
               >
                 <p class="flex items-center gap-3 font-medium">
@@ -109,18 +99,14 @@ async function logout() {
                   name="mdi:chevron-down"
                   width="20"
                   :class="
-                    link?.show
-                      ? 'transition-all ease-in duration-300 transform rotate-180'
-                      : 'transition-all ease-out duration-300 transform rotate-40'
+                    link?.show ? 'sidebar--active-chevron' : 'sidebar--inactive-chevron'
                   "
                 ></Icon>
               </div>
               <div
                 class="flex flex-col"
                 :class="[
-                  link?.show
-                    ? 'transition-[max-height] max-h-[5000px] duration-200 ease-in'
-                    : 'transition-[max-height] max-h-0 duration-300 ease-out overflow-hidden',
+                  link?.show ? 'sidebar--active-collapse' : 'sidebar--inactive-collapse',
                 ]"
               >
                 <div v-if="!pending">
@@ -143,9 +129,7 @@ async function logout() {
                   <span class="icon-style">
                     <Icon name="mdi:plus" size="15" />
                   </span>
-                  <span class="font-light text-text-secondary dark:text-text-darkSec"
-                    >Create Channel</span
-                  >
+                  <span class="sidebar--create-channel">Create Channel</span>
                 </div>
               </div>
             </div>
@@ -266,6 +250,9 @@ async function logout() {
   @apply sticky top-0 text-style font-medium bg-bg-sidebar dark:bg-bg-darkSidebar w-full h-[var(--sidebar-height)] border-b border-b-border-topbar dark:border-b-border-darkTopbar p-4 flex items-center gap-2.5;
 }
 
+.sidebar-item.sidebar-channel-header {
+  @apply flex items-center justify-between hover:!bg-transparent mb-2;
+}
 .sidebar-content {
   @apply h-[calc(100vh-var(--sidebar-height))] py-6 px-4 overflow-y-auto;
 }
@@ -279,5 +266,33 @@ async function logout() {
 
 .sidebar-opened {
   @apply left-0;
+}
+
+.sidebar--logout-icon {
+  @apply w-[50px] h-[50px] rounded-full bg-bg-sidebarLink dark:bg-bg-darkSidebarLink flex justify-center items-center text-style;
+}
+
+.sidebar--logo-style {
+  @apply bg-bg-secondary rounded-xl w-[52px] h-[52px] flex justify-center items-center;
+}
+
+.sidebar--active-chevron {
+  @apply transition-all ease-in duration-300 transform rotate-180;
+}
+
+.sidebar--inactive-chevron {
+  @apply transition-all ease-out duration-300 transform rotate-[40deg];
+}
+
+.sidebar--active-collapse {
+  @apply transition-[max-height] max-h-[5000px] duration-200 ease-in;
+}
+
+.sidebar--inactive-collapse {
+  @apply transition-[max-height] max-h-0 duration-300 ease-out overflow-hidden;
+}
+
+.sidebar--create-channel {
+  @apply font-light text-text-secondary dark:text-text-darkSec;
 }
 </style>
