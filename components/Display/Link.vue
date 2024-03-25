@@ -88,7 +88,7 @@ function handleCancel() {
       <span class="font-light">
         <input
           type="text"
-          class="border border-border-primary dark:border-border-dark outline-none focus:border-border-topbar dark:focus:border-border-darkTopbar bg-bg-topbar dark:bg-bg-darkTopbar w-full box-border text-style px-2"
+          class="edit-input"
           ref="inputField"
           v-if="isEditing"
           v-model="channel.name"

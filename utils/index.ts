@@ -130,3 +130,22 @@ export function formatCurrency(
     currency
   }).format(amount);
 }
+
+/**
+ * Insert at cursor
+ * @param originalText
+ * @param emoji
+ * @param cursorPosition
+ */
+
+export function insertAtCursor(
+  originalText: any,
+  emoji: any,
+  cursorPosition: any
+) {
+  return (
+    originalText.substring(0, cursorPosition) +
+    emoji +
+    originalText.substring(cursorPosition, originalText.length)
+  );
+}
