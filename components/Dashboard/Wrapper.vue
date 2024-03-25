@@ -1,178 +1,37 @@
 <script setup lang="ts">
-import useValidations from "~/composables/useValidations";
-import {
-  collection,
-  addDoc,
-  Timestamp,
-  query,
-  orderBy,
-  setDoc,
-  doc,
-} from "firebase/firestore";
-import UiInputChat from "~/components/Ui/Input/Chat.vue";
-const { id } = useRoute().params;
-const { type } = useRoute().query;
-
-const { mainSchema } = useValidations();
-
-const chatInput = ref<InstanceType<typeof UiInputChat> | null>(null);
-
 const props = defineProps<{
   title: string | undefined;
   message?: string;
   description?: string;
 }>();
 
-const memberSheet = ref(false);
+const { type } = useRoute().query;
 
-const { user } = useAuth();
-const chat = ref("");
-const resetForm = ref<HTMLFormElement | null>(null);
-const isLoading = ref(false);
+const {
+  pendingUsers,
+  filteredUsers,
+  pending,
+  users,
+  introductionChannel,
+  memberExceededModal,
+  memberModal,
+  handleAddMembers,
+  addMembers,
+  initialValues,
+  isLoading,
+} = useMember();
 
-async function handleMessageSend() {
-  isLoading.value = true;
-  if (chat.value.trim()) {
-    try {
-      resetForm.value?.reset();
-      await addDoc(
-        collection(db, "channels", (id as string).toLocaleLowerCase(), "messages"),
-        {
-          message: chat.value,
-          createdAt: Timestamp.now(),
-          uid: user.value.uid,
-          name: user.value.displayName,
-          avatar: user.value.photoURL,
-        }
-      );
-      chatInput?.value?.reduceChatBoxHeight();
-      chatInput?.value?.closePopup();
-    } catch (error) {
-      return Promise.reject(error);
-    } finally {
-      isLoading.value = false;
-      scrollToBottom();
-    }
-  }
-}
-
-function handleEnterPress() {
-  if (!chat.value.trim()) {
-    console.log("Empty chat, not submitting");
-  } else {
-    handleMessageSend();
-  }
-}
-
-const db = useFirestore();
-
-const { data: allUsers, pending: pendingUsers } = useCollection(
-  query(collection(db, "users"), orderBy("name"))
-);
-
-const filteredUsers = computed(() => {
-  return allUsers.value.filter((use) => use.uid !== user.value.uid);
-});
-
-const { data: channelUsers, pending } = useCollection<{
-  uid: string;
-  name: string;
-  avatar: string;
-}>(
-  query(
-    collection(db, "channels", (id as string).toLocaleLowerCase(), "members"),
-    orderBy("name")
-  )
-);
-
-const users = computed(() => {
-  // Show users in the channel
-  if (channelUsers.value && (id as string).toLocaleLowerCase() !== "introduction") {
-    return channelUsers.value;
-  } else {
-    // Show all users
-    return allUsers.value;
-  }
-});
-
-const introductionChannel = computed(() => {
-  return (id as string).toLocaleLowerCase() === "introduction";
-});
-
-const contentWrapper = ref<HTMLElement | null>(null);
-
-function scrollToBottom() {
-  nextTick(() => {
-    const contentElement = contentWrapper.value;
-    if (contentElement) {
-      // contentElement.scrollTop = contentElement.scrollHeight;
-      contentElement.scrollTo({ top: contentElement.scrollHeight });
-    }
-  });
-}
-
-const memberExceeded = computed(() => {
-  return users.value.length === 2;
-});
-const memberExceededModal = ref(false);
-const memberModal = ref(false);
-
-const membersCollectionRef = collection(
-  doc(db, "channels", (id as string).toLocaleLowerCase()),
-  "members"
-);
-
-async function handleAddMembers(values: any, { resetForm }: any) {
-  try {
-    isLoading.value = true;
-    await Promise.all(
-      values.users.map(async (user: any) => {
-        const memberDocRef = doc(membersCollectionRef, user.id);
-        await setDoc(
-          memberDocRef,
-          {
-            ...user,
-            channelId: (id as string).toLocaleLowerCase(),
-          },
-          { merge: true }
-        );
-      })
-    );
-    resetForm();
-    memberModal.value = false;
-  } catch (error) {
-    return Promise.reject(error);
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-function addMembers() {
-  if (memberExceeded.value) {
-    memberExceededModal.value = true;
-    return;
-  }
-  memberModal.value = true;
-}
-
-const initialValues = computed(() => {
-  return {
-    users: users.value.map((user) => {
-      return {
-        uid: user.uid,
-        name: user.name,
-        avatar: user.avatar,
-        email: user.email,
-      };
-    }),
-  };
-});
-
-onMounted(() => {
-  setTimeout(() => {
-    scrollToBottom();
-  }, 1000);
-});
+const {
+  mainSchema,
+  contentWrapper,
+  chatInput,
+  memberSheet,
+  chat,
+  resetForm,
+  isLoading: messageLoading,
+  handleMessageSend,
+  handleEnterPress,
+} = useMessage();
 </script>
 
 <template>
@@ -221,7 +80,7 @@ onMounted(() => {
               name="message"
               placeholder="Send a message"
               ref="chatInput"
-              :is-loading="isLoading"
+              :is-loading="messageLoading"
             />
           </form>
         </div>
