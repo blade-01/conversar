@@ -45,14 +45,12 @@ export default (props?: any) => {
 
   // Conditional display of users based on default channel
   const users = computed(() => {
-    // Show users in the channel
     if (
       channelUsers.value &&
       (id as string)?.toLocaleLowerCase() !== "introduction"
     ) {
       return channelUsers.value;
     } else {
-      // Show all users
       return allUsers.value;
     }
   });
