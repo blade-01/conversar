@@ -1,19 +1,11 @@
 <script setup lang="ts">
-import { doc, collection, query, orderBy } from "firebase/firestore";
 // @ts-ignore
 definePageMeta({
   middleware: ["auth"],
 });
-const { id } = useRoute().params;
 
-// Channel and messages Collection
-const db = useFirestore();
-const channel = useDocument(doc(db, "channels", id as string));
-const { data: messages, pending } = useCollection<MessageIndexData>(
-  query(collection(db, "channels", id as string, "messages"), orderBy("createdAt"))
-);
-
-const title = computed(() => capitalizeFirstLetter(id as string) + " Channel");
+const { pending, title, groupedMessages } = useMessage();
+const { channel } = useChannel();
 
 useHead({
   title: title.value,
@@ -22,26 +14,23 @@ useHead({
 
 <template>
   <DashboardWrapper :title="channel?.name">
-    <div v-if="!pending">
+    <div v-if="!pending" v-for="group in groupedMessages" :key="group.date">
       <!-- DATE -->
-      <div class="flex justify-between items-center gap-5 text-center mb-5">
-        <hr
-          class="border-t border-t-border-topbar dark:border-t-border-darkTopbar basis-full"
-        />
-        <span
-          class="text-text-secondary dark:text-text-darkSec basis-[180px] md:basis-[132px] text-sm"
-          >Jan 16th</span
+      <div
+        class="relative before:absolute before:top-1/2 before:-translate-y-1/2 before:left-0 before:content-[''] before:bg-border-topbar dark:before:bg-border-darkTopbar before:h-[1px] before:w-full text-center"
+      >
+        <p
+          class="text-sm text-text-secondary dark:text-text-darkSec bg-bg-primary dark:bg-bg-dark inline relative z-20 px-2"
         >
-        <hr
-          class="border-t border-t-border-topbar dark:border-border-darkTopbar basis-full"
-        />
+          {{ group.date }}
+        </p>
       </div>
       <!-- ./ DATE -->
 
       <div class="my-5 flex flex-col gap-1">
         <!-- MESSAGE DATA -->
         <DisplayMessage
-          v-for="message in messages"
+          v-for="message in group.messages"
           :key="message.id"
           :message="message"
           :ref="message.id"
