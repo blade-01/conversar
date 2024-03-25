@@ -1,35 +1,9 @@
 <script setup lang="ts">
-import { doc, deleteDoc } from "firebase/firestore";
-const db = useFirestore();
-const { $modal } = useNuxtApp();
 const { id } = useRoute().params;
 const props = defineProps<{
   user: MemberIndexData;
 }>();
-
-function handleMemberDelete() {
-  $modal.show({
-    type: "danger",
-    title: "Are you sure?",
-    body: "You won't be able to revert this!",
-    primary: {
-      label: "Delete",
-      theme: "red",
-      action: () => deleteMember(),
-    },
-    secondary: {
-      label: "Cancel",
-      theme: "white",
-      action: () => {},
-    },
-  });
-}
-
-async function deleteMember() {
-  await deleteDoc(
-    doc(db, "channels", (id as string).toLocaleLowerCase(), "members", props.user?.id)
-  );
-}
+const { handleMemberDelete } = useMember(props);
 </script>
 
 <template>
@@ -46,7 +20,7 @@ async function deleteMember() {
       class="invisible cursor-pointer mb-1.5"
       :class="{ 'group-hover:visible': id !== 'introduction' }"
     >
-      <Icon name="bx:trash" size="18" @click="handleMemberDelete" />
+      <Icon name="bx:trash" size="18" @click="handleMemberDelete(id as string)" />
     </div>
   </div>
 </template>
