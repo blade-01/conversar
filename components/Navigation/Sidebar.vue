@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { Timestamp, setDoc, doc } from "firebase/firestore";
-
-const db = useFirestore();
-
 defineProps<{ nav: boolean }>();
 
 const { user, logout } = useAuth();
@@ -10,7 +6,6 @@ const { user, logout } = useAuth();
 const {
   links,
   toggleDropdown,
-  channels,
   channelModal,
   comingSoon,
   isLoading,
@@ -18,38 +13,8 @@ const {
   channelExceededModal,
   createChannel,
   pending,
+  handleCreateChannel,
 } = useChannel();
-
-async function handleCreateChannel(values: any, { resetForm }: any) {
-  if (values.channelName) {
-    const channelExists = channels.value.find(
-      (channel: any) => channel.name === values.channelName.toLowerCase()
-    );
-    if (channelExists) {
-      channelTaken.value = true;
-      return;
-    }
-    try {
-      isLoading.value = true;
-      await setDoc(
-        doc(db, "channels", values.channelName.toLowerCase()),
-        {
-          name: values.channelName.toLowerCase(),
-          id: user.value.uid,
-          createdAt: Timestamp.now(),
-        },
-        { merge: true }
-      );
-      resetForm();
-      channelModal.value = false;
-    } catch (error) {
-      return Promise.reject(error);
-    } finally {
-      isLoading.value = false;
-      channelTaken.value = false;
-    }
-  }
-}
 </script>
 
 <template>
