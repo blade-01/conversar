@@ -67,9 +67,12 @@ export default (props?: any) => {
   }
 
   onMounted(() => {
-    setTimeout(() => {
-      scrollToBottom();
-    }, 1000);
+    watch(
+      () => pending.value,
+      () => {
+        scrollToBottom();
+      }
+    );
   });
 
   /**

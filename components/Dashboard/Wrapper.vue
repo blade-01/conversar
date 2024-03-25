@@ -38,14 +38,12 @@ const {
   <div>
     <NavigationTopbar :title="title" @toggle-members="memberSheet = !memberSheet" />
     <!-- CHATS WRAPPER -->
-    <div
-      class="xl:flex md:h-[calc(100vh-var(--sidebar-height))] overflow-hidden md:overflow-auto break-all"
-    >
+    <div class="xl:flex h-[calc(100vh-var(--sidebar-height))] overflow-auto break-all">
       <div
-        class="relative h-[calc(100vh-142px)] md:h-full md:flex md:flex-col overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+        class="relative h-full flex flex-col overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
       >
         <!-- CONTENT WRAPPER -->
-        <div class="py-4 flex-1 md:overflow-y-auto" ref="contentWrapper">
+        <div class="py-4 flex-1 overflow-y-auto" ref="contentWrapper">
           <div class="px-4">
             <div class="icon-style h-12 w-12 lg:h-16 lg:w-16 mb-3">
               <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
@@ -58,7 +56,7 @@ const {
               <span class="capitalize">{{ title || "..." }}</span> channel
             </p>
           </div>
-          <div class="mt-5 mb-[80px] lg:mb-0">
+          <div class="mt-5 mb-0">
             <slot />
           </div>
         </div>
@@ -66,7 +64,7 @@ const {
 
         <!-- INPUT WRAPPER -->
         <div
-          class="fixed md:sticky w-[inherit] left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4 message-container"
+          class="sticky w-[inherit] left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4 message-container"
           ref="messageContainer"
         >
           <form
