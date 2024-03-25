@@ -1,4 +1,4 @@
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 export default () => {
   const provider = new GoogleAuthProvider();
@@ -38,5 +38,10 @@ export default () => {
     }
   }
 
-  return { signInWithGoogle, isSigningIn, user, auth };
+  async function logout() {
+    await signOut(auth);
+    useRouter().push("/auth");
+  }
+
+  return { signInWithGoogle, isSigningIn, user, auth, logout };
 };
