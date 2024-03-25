@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 export default (props?: any) => {
   // Variables
+  const { id } = useRoute().params;
   const { $modal } = useNuxtApp();
   const { user } = useAuth();
   const db = useFirestore();
@@ -114,6 +115,9 @@ export default (props?: any) => {
   /**
    * Channel CRUD
    */
+  // Get channel
+  const channel = useDocument(doc(db, "channels", id as string));
+
   // Create channel
   async function handleCreateChannel(values: any, { resetForm }: any) {
     if (values.channelName) {
@@ -227,6 +231,7 @@ export default (props?: any) => {
     handleToggle,
     isEditing,
     inputField,
-    handleCreateChannel
+    handleCreateChannel,
+    channel
   };
 };
