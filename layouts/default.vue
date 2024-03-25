@@ -1,6 +1,6 @@
 <script setup lang="ts">
-// const { nav } = storeToRefs(useMainStore());
 const nav = ref<boolean>(false);
+
 const toggleSidebar = () => {
   nav.value = !nav.value;
 };
@@ -9,6 +9,7 @@ provide("collapsible", {
   nav,
   toggleSidebar,
 });
+
 watch(
   () => useRoute().path,
   () => {
