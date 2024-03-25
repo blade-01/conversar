@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { collection } from "firebase/firestore";
 import UiBtn from "~/components/Ui/Btn/index.vue";
 import useTheme from "~/composables/useTheme";
 const { setTheme } = useTheme();
@@ -11,6 +12,14 @@ defineEmits<{
 const { toggleSidebar } = inject("collapsible") as {
   toggleSidebar: () => void;
 };
+const db = useFirestore();
+const users = useCollection(collection(db, "users"));
+const avatars = computed(() => {
+  return users.value?.map((user) => user.avatar)?.splice(0, 3);
+});
+const remainingUsers = computed(() => {
+  return users.value?.length - 3;
+});
 </script>
 
 <template>
@@ -44,10 +53,19 @@ const { toggleSidebar } = inject("collapsible") as {
             @click="setTheme($colorMode.preference === 'dark' ? 'light' : 'dark')"
           />
           <div
-            class="flex gap-2 items-center cursor-pointer lg:cursor-auto"
+            class="flex items-center cursor-pointer lg:cursor-auto"
             @click="$emit('toggleMembers')"
           >
-            <img src="~/assets/svg/members.svg" alt="members_avatar" />
+            <img
+              v-for="avatar in avatars"
+              :key="avatar"
+              :src="avatar"
+              alt="members_avatar"
+              class="rounded-full w-6 h-6 -ml-1.5"
+            />
+            <span class="text-sm text-text-primary/80 dark:text-white/80 pl-1"
+              >+{{ remainingUsers }}</span
+            >
           </div>
         </div>
       </div>
