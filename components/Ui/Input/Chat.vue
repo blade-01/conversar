@@ -5,16 +5,6 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import UiBtn from "~/components/Ui/Btn/index.vue";
-
-const emojiBtnRef = ref<InstanceType<typeof UiBtn> | null>();
-
-useShortcut({
-  esc() {
-    emojiBtnRef.value?.triggerClick();
-  },
-});
-
 const props = defineProps<{
   modelValue: string;
   appendIcon?: string;
@@ -55,14 +45,6 @@ const emojiPopup = ref(false);
 
 function showEmojiSelector() {
   emojiPopup.value = !emojiPopup.value;
-}
-
-function insertAtCursor(originalText: any, emoji: any, cursorPosition: any) {
-  return (
-    originalText.substring(0, cursorPosition) +
-    emoji +
-    originalText.substring(cursorPosition, originalText.length)
-  );
 }
 
 function handleInput(event: Event) {
@@ -109,8 +91,13 @@ function reduceChatBoxHeight() {
   }
 }
 
+function closePopup() {
+  emojiPopup.value = false;
+}
+
 defineExpose({
   reduceChatBoxHeight,
+  closePopup,
 });
 </script>
 
@@ -126,6 +113,7 @@ defineExpose({
         ref="chatInput"
         :model-value="modelValue"
         @input="handleInput"
+        @click="emojiPopup = false"
       />
       <div
         class="absolute inset-y-0 right-0 flex items-center gap-2.5 pr-3 icon-button append m-0"
