@@ -363,4 +363,11 @@
     left: 50%;
     width: 80%;
   }
+
+  /* TAILVUE TOAST  */
+  .max-w-sm.relative.w-full.bg-white.dark\:bg-gray-800.shadow-lg.rounded-lg.pointer-events-auto.ring-1.ring-black.ring-opacity-5.overflow-hidden {
+    @apply bg-bg-primary dark:bg-bg-dark text-text-primary dark:text-text-dark;
+    position: absolute;
+    top: 20px;
+  }
 }
