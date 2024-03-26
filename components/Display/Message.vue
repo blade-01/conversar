@@ -8,7 +8,6 @@ const props = defineProps<{
 const {
   showOptions,
   handleCancel,
-  // emojiPopup,
   isEditing,
   handleMessageUpdate,
   inputField,
@@ -38,7 +37,6 @@ useShortcut({
       () => {
         showOptions = false;
         handleCancel();
-        // emojiPopup = false;
       }
     "
   >
@@ -99,13 +97,6 @@ useShortcut({
           class="cursor-pointer"
           @click="reactToMessage"
         />
-        <!-- @click="
-            () => {
-              isEditing = true;
-              inputField?.focus();
-              emojiPopup = !emojiPopup;
-            }
-          " -->
         <Icon
           name="mdi:dots-vertical"
           size="15"
@@ -136,13 +127,6 @@ useShortcut({
       </div>
     </div>
     <!-- ./ OPTIONS -->
-    <!-- EMOJI PICKER -->
-    <!-- <Transition name="fade">
-      <div v-if="emojiPopup" class="absolute mx-auto -top-[400px] right-5">
-        <emoji-picker></emoji-picker>
-      </div>
-    </Transition> -->
-    <!-- ./ EMOJI PICKER -->
   </div>
 </template>
 
