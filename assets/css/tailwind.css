@@ -17,7 +17,7 @@
 
   html,
   body {
-    /* @apply overflow-hidden md:overflow-auto; */
+    /* @apply h-full overflow-hidden md:overflow-auto; */
   }
 
   :root {
@@ -42,7 +42,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-[100vh] bg-bg-thumb;
+    @apply rounded-full bg-bg-thumb;
   }
 }
 

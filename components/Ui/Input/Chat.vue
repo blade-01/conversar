@@ -23,7 +23,7 @@ const chatInput = ref<HTMLElement | null>(null);
 const activateButton = ref(false);
 const emojiPopup = ref(false);
 
-function showEmojiSelector() {
+function toggleEmojiSelector() {
   emojiPopup.value = !emojiPopup.value;
 }
 
@@ -106,10 +106,26 @@ defineExpose({
   reduceChatBoxHeight,
   closePopup,
 });
+
+// Trigger close popup outside this component
+const target = ref<HTMLElement | null>(null);
+onClickOutside(target, closePopup);
+
+if (chatInput.value) {
+  chatInput.value!.addEventListener("focus", () => {
+    setTimeout(() => {
+      chatInput.value!.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "nearest",
+      });
+    }, 500); // Delay to account for the keyboard animation
+  });
+}
 </script>
 
 <template>
-  <div class="input-group !mb-0" :class="outerClasses">
+  <div class="input-group !mb-0" ref="target" :class="outerClasses">
     <div class="relative">
       <textarea
         v-bind="$attrs"
@@ -129,7 +145,7 @@ defineExpose({
           ref="emojiBtnRef"
           type="button"
           class="cursor-pointer !p-0 !m-0 outline-none border-none !bg-transparent h-fit"
-          @click="showEmojiSelector"
+          @click="toggleEmojiSelector"
         >
           <Icon
             name="emojione-monotone:slightly-smiling-face"
@@ -158,7 +174,9 @@ defineExpose({
     </div>
     <Transition name="fade">
       <div v-if="emojiPopup" class="absolute mx-auto -top-[400px] right-5">
-        <emoji-picker></emoji-picker>
+        <emoji-picker
+          :class="$colorMode.value === 'dark' ? 'dark' : 'light'"
+        ></emoji-picker>
       </div>
     </Transition>
   </div>

@@ -32,6 +32,24 @@ const {
   handleMessageSend,
   handleEnterPress,
 } = useMessage();
+
+const adjustChatContainerHeight = () => {
+  // const chatContainer = document.querySelector(".chat-container") as HTMLElement;
+  if (contentWrapper.value) {
+    contentWrapper.value.style.height = window.innerHeight + "px";
+  }
+};
+
+if (process.client) {
+  onMounted(() => {
+    adjustChatContainerHeight();
+    window.addEventListener("resize", adjustChatContainerHeight);
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener("resize", adjustChatContainerHeight);
+  });
+}
 </script>
 
 <template>
@@ -40,10 +58,13 @@ const {
     <!-- CHATS WRAPPER -->
     <div class="xl:flex h-[calc(100vh-var(--sidebar-height))] overflow-auto break-all">
       <div
-        class="relative h-full flex flex-col overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
+        class="relative h-full flex flex-col overflow-hidden md:overflow-y-auto w-full xl:border-r border-r-border-topbar dark:border-r-border-darkTopbar"
       >
         <!-- CONTENT WRAPPER -->
-        <div class="py-4 flex-1 overflow-y-auto" ref="contentWrapper">
+        <div
+          class="py-4 flex-1 overflow-y-auto h-auto content-wrapper"
+          ref="contentWrapper"
+        >
           <div class="px-4">
             <div class="icon-style h-12 w-12 lg:h-16 lg:w-16 mb-3">
               <Icon name="mdi:pound" class="text-2xl lg:text-3xl" />
@@ -235,4 +256,11 @@ const {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.content-wrapper {
+  -webkit-overflow-scrolling: touch;
+}
+.content-wrapper::-webkit-scrollbar {
+  /* @apply rounded-full bg-red-600; */
+}
+</style>
