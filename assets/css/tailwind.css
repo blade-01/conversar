@@ -17,7 +17,7 @@
 
   html,
   body {
-    @apply h-full overflow-hidden md:overflow-auto;
+    /* @apply h-full overflow-hidden md:overflow-auto; */
   }
 
   :root {

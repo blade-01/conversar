@@ -62,7 +62,7 @@ if (process.client) {
       >
         <!-- CONTENT WRAPPER -->
         <div
-          class="py-4 flex-1 overflow-y-auto h-auto content-wrapper"
+          class="py-4 flex-1 overflow-y-auto h-auto mb-10 lg:mb-0 content-wrapper"
           ref="contentWrapper"
         >
           <div class="px-4">
@@ -85,7 +85,7 @@ if (process.client) {
 
         <!-- INPUT WRAPPER -->
         <div
-          class="sticky w-[inherit] left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4 message-container"
+          class="fixed md:sticky w-[inherit] left-0 bottom-0 z-10 bg-bg-primary dark:bg-bg-dark p-4 message-container"
           ref="messageContainer"
         >
           <form
