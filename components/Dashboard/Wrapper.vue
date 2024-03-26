@@ -59,7 +59,7 @@ const {
               <span class="capitalize">{{ title || "..." }}</span> channel
             </p>
           </div>
-          <div class="mt-5 mb-[30%] md:mb-0">
+          <div class="mt-5 mb-[40%] md:mb-0">
             <slot />
           </div>
         </div>
