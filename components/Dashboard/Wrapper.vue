@@ -62,7 +62,7 @@ if (process.client) {
       >
         <!-- CONTENT WRAPPER -->
         <div
-          class="py-4 flex-1 overflow-y-auto h-auto mb-10 lg:mb-0 content-wrapper"
+          class="py-4 flex-1 overflow-y-auto h-auto mb-[100px] lg:mb-0 content-wrapper"
           ref="contentWrapper"
         >
           <div class="px-4">
