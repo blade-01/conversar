@@ -63,6 +63,7 @@ useShortcut({
           @keypress.enter="handleMessageUpdate"
           @click="showOptions = false"
           cols="1000"
+          :rows="message?.message?.split('\n')?.length + 1"
         />
         <p class="text-style text-sm xl:text-base !font-normal" v-else>
           {{ message?.message }}

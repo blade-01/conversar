@@ -32,24 +32,6 @@ const {
   handleMessageSend,
   handleEnterPress,
 } = useMessage();
-
-const adjustChatContainerHeight = () => {
-  // const chatContainer = document.querySelector(".chat-container") as HTMLElement;
-  if (contentWrapper.value) {
-    contentWrapper.value.style.height = window.innerHeight + "px";
-  }
-};
-
-if (process.client) {
-  onMounted(() => {
-    adjustChatContainerHeight();
-    window.addEventListener("resize", adjustChatContainerHeight);
-  });
-
-  onBeforeUnmount(() => {
-    window.removeEventListener("resize", adjustChatContainerHeight);
-  });
-}
 </script>
 
 <template>
@@ -62,7 +44,7 @@ if (process.client) {
       >
         <!-- CONTENT WRAPPER -->
         <div
-          class="py-4 flex-1 overflow-y-auto h-auto mb-[100px] lg:mb-0 content-wrapper"
+          class="py-4 flex-1 overflow-y-auto h-auto content-wrapper"
           ref="contentWrapper"
         >
           <div class="px-4">
@@ -77,7 +59,7 @@ if (process.client) {
               <span class="capitalize">{{ title || "..." }}</span> channel
             </p>
           </div>
-          <div class="mt-5 mb-0">
+          <div class="mt-5 mb-[100px] md:mb-0">
             <slot />
           </div>
         </div>

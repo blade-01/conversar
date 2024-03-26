@@ -110,18 +110,6 @@ defineExpose({
 // Trigger close popup outside this component
 const target = ref<HTMLElement | null>(null);
 onClickOutside(target, closePopup);
-
-if (chatInput.value) {
-  chatInput.value!.addEventListener("focus", () => {
-    setTimeout(() => {
-      chatInput.value!.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "nearest",
-      });
-    }, 500); // Delay to account for the keyboard animation
-  });
-}
 </script>
 
 <template>

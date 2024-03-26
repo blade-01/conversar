@@ -12,24 +12,6 @@ if (chatInput.value) {
     }, 500); // Delay to account for the keyboard animation
   });
 }
-
-const adjustChatContainerHeight = () => {
-  // const chatContainer = document.querySelector(".chat-container") as HTMLElement;
-  if (contentWrapper.value) {
-    contentWrapper.value.style.height = window.innerHeight + "px";
-  }
-};
-
-if (process.client) {
-  onMounted(() => {
-    adjustChatContainerHeight();
-    window.addEventListener("resize", adjustChatContainerHeight);
-  });
-
-  onBeforeUnmount(() => {
-    window.removeEventListener("resize", adjustChatContainerHeight);
-  });
-}
 </script>
 
 <template>
