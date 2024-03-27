@@ -89,7 +89,7 @@ useShortcut({
     <!-- OPTIONS -->
     <div>
       <div
-        class="absolute z-20 right-5 -top-4 w-[70px] h-9 rounded-lg invisible bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5 group-hover:visible"
+        class="absolute z-20 right-5 -top-4 w-[70px] h-9 rounded-lg invisible opacity-0 bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5 group-hover:visible group-hover:opacity-100"
       >
         <Icon
           name="emojione-monotone:slightly-smiling-face"
