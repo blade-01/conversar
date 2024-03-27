@@ -116,7 +116,13 @@ export default (props?: any) => {
    * Channel CRUD
    */
   // Get channel
-  const channel = useDocument(doc(db, "channels", id as string));
+  const { data: channel, pending: pendingChannel } = useDocument(
+    doc(db, "channels", (id as string) || "introduction")
+  );
+
+  const title = computed(
+    () => capitalizeFirstLetter(id as string) + " Channel"
+  );
 
   // Create channel
   async function handleCreateChannel(values: any, { resetForm }: any) {
@@ -207,6 +213,16 @@ export default (props?: any) => {
     props.channel.name = shallowName.value;
   }
 
+  // Reroute if id doesn't exist
+  onMounted(() => {
+    if (id === undefined || (!channel.value && !pendingChannel.value)) {
+      useRouter().push({
+        name: "channel-id",
+        params: { id: "introduction" }
+      });
+    }
+  });
+
   return {
     links,
     toggleDropdown,
@@ -232,6 +248,7 @@ export default (props?: any) => {
     isEditing,
     inputField,
     handleCreateChannel,
-    channel
+    channel,
+    title
   };
 };
