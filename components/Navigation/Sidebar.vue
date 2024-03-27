@@ -87,7 +87,7 @@ const {
                   <UiLoaderLinks v-for="i in 3" :key="i" />
                 </div>
                 <div
-                  class="sidebar-item -mt-2"
+                  class="sidebar-item mt-0.5"
                   @click="createChannel"
                   v-if="link?.hasCreate"
                 >
