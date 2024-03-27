@@ -191,7 +191,7 @@ const {
           display="chip"
         />
         <p class="text-xs mt-2.5 text-[rgba(4,4,4,0.8)] dark:text-white/60">
-          Each channel can have up to 2 members. Ensure you don't exceed this limit when
+          Each channel can have up to 5 members. Ensure you don't exceed this limit when
           adding users.
         </p>
 
