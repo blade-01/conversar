@@ -26,8 +26,8 @@ export default function () {
       )
       .test(
         "max",
-        "Channel should not exceed 2 members",
-        (value: any) => value.length <= 2
+        "Channel should not exceed 5 members",
+        (value: any) => value.length <= 5
       )
       .required(validation.required("Members field"))
   });
