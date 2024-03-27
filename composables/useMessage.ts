@@ -87,10 +87,6 @@ export default (props?: any) => {
     )
   );
 
-  const title = computed(
-    () => capitalizeFirstLetter(id as string) + " Channel"
-  );
-
   // Sort messages by day
   const groupedMessages = computed(() => {
     const groups = [];
@@ -289,7 +285,6 @@ export default (props?: any) => {
     copied,
     messages,
     pending,
-    title,
     groupedMessages,
     reactToMessage
   };

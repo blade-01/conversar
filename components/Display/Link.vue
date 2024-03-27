@@ -55,9 +55,9 @@ const {
         </span>
       </span>
       <div
-        class="absolute right-5 -top-4 w-[80px] h-9 rounded-lg invisible bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5"
+        class="absolute right-5 -top-4 w-[80px] h-9 rounded-lg invisible opacity-0 bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex justify-center items-center gap-2.5"
         :class="{
-          'group-hover:visible': channel?.id !== 'introduction',
+          'group-hover:visible group-hover:opacity-100': channel?.id !== 'introduction',
           '!hidden': !isEditable,
         }"
       >

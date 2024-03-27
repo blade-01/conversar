@@ -4,8 +4,8 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-const { pending, title, groupedMessages } = useMessage();
-const { channel } = useChannel();
+const { pending, groupedMessages } = useMessage();
+const { channel, title } = useChannel();
 
 useHead({
   title: title.value,
