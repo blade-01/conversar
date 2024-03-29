@@ -88,6 +88,6 @@ Just trying my hands out on new tools.
 
 I would like to express my gratitude to the following individuals:
 
-- **Friends and Family**: This wouldn't have been possible without support from friends and family, I really appreciate y'all.
+- **Friends and Family**: This wouldn't have been possible without support from friends and family, I really appreciate y'all, to my designer [Salisu Oluwaseun](https://www.behance.net/oluwaseunayomide), you did great man, thanks.
 
 - **Myself**: Lastly, I want to thank [me](https://www.youtube.com/watch?v=wGRF3GQ4Wdk).
