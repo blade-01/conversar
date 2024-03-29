@@ -36,6 +36,7 @@ export default (props?: any) => {
       title: "edit",
       action: () => {
         isEditing.value = !isEditing.value;
+        showOptions.value = false;
       },
       isActive: props?.message?.uid === user?.value?.uid
     },
@@ -154,7 +155,7 @@ export default (props?: any) => {
   // Enter keypress
   function handleEnterPress() {
     if (!chat.value.trim()) {
-      console.log("Empty chat, not submitting");
+      return;
     } else {
       handleMessageSend();
     }
@@ -208,7 +209,8 @@ export default (props?: any) => {
             props?.message?.id
           ),
           {
-            message: inputField.value!.value || props?.message?.message
+            message: inputField.value!.value || props?.message?.message,
+            isEdited: isEditing.value
           }
         );
       } catch (error: any) {
