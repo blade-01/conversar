@@ -5,4 +5,5 @@ interface MessageIndexData {
   createdAt: Timestamp;
   uid: string;
   id: string;
+  isEdited: boolean;
 }
