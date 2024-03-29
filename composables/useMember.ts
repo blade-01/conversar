@@ -62,7 +62,7 @@ export default (props?: any) => {
 
   // Members limit exceeded
   const memberExceeded = computed(() => {
-    return users.value.length === 2;
+    return users.value.length === 6;
   });
 
   // Members collection reference
@@ -75,13 +75,10 @@ export default (props?: any) => {
   async function handleAddMembers(values: any, { resetForm }: any) {
     isLoading.value = true;
     try {
+      // Add selected users to the members collection
       await Promise.all(
         values.users.map(async (user: any) => {
           const memberDocRef = doc(membersCollectionRef, user.uid);
-          console.log({
-            ...user,
-            channelId: (id as string)?.toLocaleLowerCase()
-          });
           await setDoc(
             memberDocRef,
             {
@@ -91,6 +88,17 @@ export default (props?: any) => {
             { merge: true }
           );
         })
+      );
+      // Add current user to the members collection
+      await setDoc(
+        doc(membersCollectionRef, user?.value?.uid),
+        {
+          uid: user?.value?.uid,
+          name: user?.value?.displayName,
+          avatar: user?.value?.photoURL,
+          email: user?.value?.email
+        },
+        { merge: true }
       );
       resetForm();
       memberModal.value = false;
