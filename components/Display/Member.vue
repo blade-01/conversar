@@ -4,6 +4,7 @@ const props = defineProps<{
   user: MemberIndexData;
 }>();
 const { handleMemberDelete } = useMember(props);
+const { user: currentUser } = useAuth();
 </script>
 
 <template>
@@ -19,6 +20,7 @@ const { handleMemberDelete } = useMember(props);
     <div
       class="invisible cursor-pointer mb-1.5"
       :class="{ 'group-hover:visible': id !== 'introduction' }"
+      v-if="user?.uid !== currentUser.uid"
     >
       <Icon name="bx:trash" size="18" @click="handleMemberDelete(id as string)" />
     </div>

@@ -8,8 +8,7 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         {
           name: "description",
-          content:
-            "Boost your productivity with Conversar - work smarter, not harder."
+          content: "Where Chat Meets Charm! ✨"
         },
         { name: "theme-color", content: "#1e1e2e" },
         {

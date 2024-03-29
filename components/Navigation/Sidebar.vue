@@ -52,6 +52,7 @@ const {
             <div>
               <div
                 class="sidebar-item sidebar-channel-header"
+                v-if="link?.sub?.length"
                 @click="toggleDropdown(link)"
               >
                 <p class="flex items-center gap-3 font-medium">
@@ -246,7 +247,7 @@ const {
 }
 
 .sidebar--inactive-chevron {
-  @apply transition-all ease-out duration-300 transform rotate-[40deg];
+  @apply transition-all ease-out duration-300 transform rotate-0;
 }
 
 .sidebar--active-collapse {

@@ -15,7 +15,7 @@ const { setTheme } = useTheme();
   <div
     class="flex justify-center items-center flex-col max-w-lg mx-auto text-center h-screen overflow-hidden bg-bg-primary dark:bg-bg-dark p-6"
   >
-    <div class="fixed top-5 right-5 lg:top-10 lg:right-10">
+    <div class="fixed top-5 right-5 lg:top-10 lg:right-10 z-50">
       <Icon
         :name="$colorMode.value === 'dark' ? 'mdi:weather-night' : 'mdi:weather-sunny'"
         size="23"
