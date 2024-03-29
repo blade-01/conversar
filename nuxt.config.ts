@@ -10,6 +10,48 @@ export default defineNuxtConfig({
           name: "description",
           content: "Where Chat Meets Charm! ✨"
         },
+        {
+          property: "og:type",
+          content: "website"
+        },
+        {
+          property: "og:url",
+          content: "https://conversar.vercel.app"
+        },
+        {
+          property: "og:title",
+          content: "Conversar | Where Chat Meets Charm! ✨"
+        },
+        {
+          property: "og:description",
+          content: "Where Chat Meets Charm! ✨"
+        },
+        {
+          property: "og:image",
+          content:
+            "https://res.cloudinary.com/bladencove/image/upload/v1711707623/site_logos/logo_chlj5u.svg"
+        },
+        {
+          property: "twitter:card",
+          content: "summary_large_image"
+        },
+        {
+          property: "twitter:url",
+          content: "https://conversar.vercel.app"
+        },
+        {
+          property: "twitter:title",
+          content: "Conversar | Where Chat Meets Charm! ✨"
+        },
+        {
+          property: "twitter:description",
+          content: "Where Chat Meets Charm! ✨"
+        },
+        {
+          property: "twitter:image",
+          content:
+            "https://res.cloudinary.com/bladencove/image/upload/v1711707623/site_logos/logo_chlj5u.svg"
+        },
         { name: "theme-color", content: "#1e1e2e" },
         {
           name: "viewport",
@@ -17,7 +59,11 @@ export default defineNuxtConfig({
             "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         }
       ],
-      link: [{ rel: "icon", href: "/favicon.ico" }],
+      link: [
+        { rel: "icon", href: "/favicon.ico" },
+        { rel: "canonical", href: "https://conversar.vercel.app" },
+        { rel: "home", href: "https://conversar.vercel.app" }
+      ],
       script: [
         {
           type: "module",
