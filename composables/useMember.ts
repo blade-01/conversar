@@ -121,14 +121,16 @@ export default (props?: any) => {
   // Get selected members
   const initialValues = computed(() => {
     return {
-      users: users.value.map((user) => {
-        return {
-          uid: user.uid,
-          name: user.name,
-          avatar: user.avatar,
-          email: user.email
-        };
-      })
+      users: users?.value
+        ?.map((user) => {
+          return {
+            uid: user.uid,
+            name: user.name,
+            avatar: user.avatar,
+            email: user.email
+          };
+        })
+        ?.filter((member) => member.uid !== user?.value?.uid)
     };
   });
 
