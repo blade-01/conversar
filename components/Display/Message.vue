@@ -66,6 +66,12 @@ useShortcut({
         <p class="text-style text-sm xl:text-base !font-normal" v-else>
           {{ message?.message }}
         </p>
+        <small
+          class="text-[10px] text-text-primary/[0.64] dark:text-white/[0.64] relative -top-2"
+          v-if="message?.isEdited"
+        >
+          (edited)
+        </small>
         <div class="text-xs !p-0 !m-0 flex" v-if="isEditing">
           escape to
           <UiBtn
@@ -105,7 +111,7 @@ useShortcut({
         />
       </div>
       <div
-        class="absolute z-20 right-[92px] -top-4 w-[144px] p-1.5 h-fit invisible rounded-lg bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex flex-col justify-center gap-1.5"
+        class="absolute z-30 right-[92px] -top-4 w-[144px] p-1.5 h-fit invisible rounded-lg bg-bg-topbar dark:bg-bg-darkTopbar border border-border-primary dark:border-border-dark text-style flex flex-col justify-center gap-1.5"
         :class="{ '!visible': showOptions }"
       >
         <div
